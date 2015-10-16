@@ -1,0 +1,19 @@
+{
+    "name": "ifp/sale-advert-search-client",
+    "description": "REST client for search.french-property.com",
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    },
+    "authors": [
+        {
+            "name": "Ingram Monk",
+            "email": "ingram.monk@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "IFP\\SaleAdvertSearchClient\\": "src/"
+        }
+    }
+}
