@@ -8,6 +8,6 @@ class SearchInputTest extends \TestCase
     {
         $this->visit('/')
             ->press('Search')
-            ->see('Whoops, looks like something went wrong.');
+            ->seeJson('{"errors":[{"title":"An error occurred on the server","detail":"Something went wrong, we are looking into it."}]}');
     }
 }
