@@ -1,6 +1,16 @@
 <?php
 
-Route::get('/sale-advert-search', 'SaleAdvertSearchController@index');
+Route::group(['namespace' => 'App\Http\Controllers'], function () {
+
+
+
+    Route::post('/sale-advert-search', 'SaleAdvertSearchController@index');
+
+
+
+
+
+});
 
 
 /*

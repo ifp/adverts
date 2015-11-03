@@ -1,6 +1,6 @@
 <?php
 
-namespace IFP\SaleAdvertSearchClient;
+namespace IFP\SaleAdvertSearch;
 
 use Illuminate\Support\ServiceProvider;
 
