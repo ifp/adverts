@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "IFP\\SaleAdvertSearchClient\\": "src/"
+            "IFP\\SaleAdvertSearch\\": "src/"
         }
     }
 }
