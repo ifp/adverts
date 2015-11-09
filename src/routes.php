@@ -1,15 +1,7 @@
 <?php
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
-
-
-
     Route::post('/sale-advert-search', 'SaleAdvertSearchController@index');
-
-
-
-
-
 });
 
 

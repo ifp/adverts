@@ -1,15 +1,15 @@
 <?php
 
-namespace IFP\SaleAdvertSearchClient\Tests;
+namespace IFP\SaleAdvertSearch\Tests;
 
 class SearchInputTest extends \TestCase
 {
     public function testItCanReceiveAndReturnInput()
     {
-        $this->withoutMiddleware();
+        //$this->withoutMiddleware();
 
         $this->visit('/')
             ->press('Search')
-            ->seeJson('{"errors":[{"title":"An error occurred on the server","detail":"Something went wrong, we are looking into it."}]}');
+            ->seeJson(json_decode('{"errors":[{"title":"An error occurred on the server","detail":"Something went wrong, we are looking into it."}]}', true));
     }
 }

@@ -1,6 +1,7 @@
 <h3>Property Search</h3>
 
 <form method="post" action="/sale-advert-search" class="modify_search">
+	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 	<div class="form-group">
 		<select id="Location" name="lcl[]" class="form-control">
 			<option value="" selected="selected">All of France</option>
