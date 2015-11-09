@@ -4,7 +4,7 @@ namespace IFP\SaleAdvertSearch;
 
 use Illuminate\Support\ServiceProvider;
 
-class SaleAdvertSearchClientServiceProvider extends ServiceProvider
+class SaleAdvertSearchServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -13,9 +13,9 @@ class SaleAdvertSearchClientServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        require base_path('vendor/ifp/sale-advert-search-client/src/routes.php');
+        require base_path('vendor/ifp/sale-advert-search/src/routes.php');
 
-        view()->addLocation(base_path('vendor/ifp/sale-advert-search-client/resources/views'));
+        view()->addLocation(base_path('vendor/ifp/sale-advert-search/resources/views'));
     }
 
     /**
