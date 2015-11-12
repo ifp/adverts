@@ -1,8 +1,6 @@
 <?php
 
-namespace IFP\SaleAdvertSearch\Tests;
-
-use IFP\SaleAdvertSearch\InputParser;
+use IFP\Adverts\Sales\InputParser;
 
 class InputParserTest extends \PHPUnit_Framework_TestCase
 {

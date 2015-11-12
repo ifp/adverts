@@ -1,6 +1,6 @@
 {
-    "name": "ifp/sale-advert-search",
-    "description": "REST client for search.french-property.com",
+    "name": "ifp/adverts",
+    "description": "REST client for french-property.com",
     "require-dev": {
         "phpunit/phpunit": "^4.8"
     },
@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "IFP\\SaleAdvertSearch\\": "src/"
+            "IFP\\Adverts\\": "src/"
         }
     }
 }

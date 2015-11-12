@@ -1,7 +1,5 @@
 <?php
 
-namespace IFP\SaleAdvertSearch\Tests;
-
 class SearchInputTest extends \TestCase
 {
     public function testItCanReceiveAndReturnInput()
