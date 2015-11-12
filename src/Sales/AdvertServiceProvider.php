@@ -13,7 +13,7 @@ class AdvertServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        require base_path('vendor/ifp/advert-search/src/routes.php');
+        require base_path('vendor/ifp/adverts/src/routes.php');
 
         view()->addLocation(base_path('vendor/ifp/adverts/resources/views'));
     }
