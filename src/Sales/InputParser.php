@@ -1,6 +1,6 @@
 <?php
 
-namespace IFP\SaleAdvertSearch;
+namespace IFP\Adverts\Sales;
 
 class InputParser
 {

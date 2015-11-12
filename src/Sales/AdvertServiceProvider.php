@@ -1,6 +1,6 @@
 <?php
 
-namespace IFP\Adverts;
+namespace IFP\Adverts\Sales;
 
 use Illuminate\Support\ServiceProvider;
 
