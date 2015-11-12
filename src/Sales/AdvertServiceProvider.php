@@ -4,7 +4,7 @@ namespace IFP\Adverts;
 
 use Illuminate\Support\ServiceProvider;
 
-class AdvertsServiceProvider extends ServiceProvider
+class AdvertServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
