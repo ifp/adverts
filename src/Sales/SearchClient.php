@@ -5,6 +5,7 @@ namespace IFP\Adverts\Sales;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use IFP\Adverts\InvalidApiTokenException;
+use IFP\Adverts\InvalidSearchCriteriaException;
 
 class SearchClient
 {
@@ -31,6 +32,9 @@ class SearchClient
             return json_decode((string) $response->getBody(), true);
         } catch (ClientException $e) {
             switch ($e->getCode()) {
+                case 400:
+                    throw new InvalidSearchCriteriaException($e);
+                    break;
                 case 401:
                     throw new InvalidApiTokenException;
                     break;

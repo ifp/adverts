@@ -1,6 +1,7 @@
 <?php
 
 use IFP\Adverts\InvalidApiTokenException;
+use IFP\Adverts\InvalidSearchCriteriaException;
 use IFP\Adverts\Sales\SearchClient;
 
 class SearchClientTest extends PHPUnit_Framework_TestCase
@@ -116,5 +117,24 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertCount(2, $results['data']);
+    }
+
+    public function testItThrowsAnExceptionWhenSearchingWithInvalidCriteria()
+    {
+        $base_url = 'http://search.french-property.app';
+        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+
+        $subject = new SearchClient($base_url, $token);
+
+        try {
+            $subject->search([
+                'minimum_price' => 'bananas',
+            ]);
+        } catch (InvalidSearchCriteriaException $e) {
+            $this->assertCount(1, $e->getErrors());
+            return;
+        }
+
+        $this->fail('Search succeeded despite invalid search criteria.');
     }
 }
