@@ -1,5 +1,6 @@
 <?php
 
+use IFP\Adverts\AdvertNotFoundException;
 use IFP\Adverts\InvalidApiTokenException;
 use IFP\Adverts\InvalidSearchCriteriaException;
 use IFP\Adverts\Sales\SearchClient;
@@ -36,7 +37,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
         $results = $subject->search([]);
 
-        $this->assertCount(5, $results['data']);
+        $this->assertCount(15, $results['data']);
     }
 
     public function testItCanSearchWithSimpleValueConstraints()
@@ -50,7 +51,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
             'minimum_price' => 150000,
         ]);
 
-        $this->assertCount(3, $results['data']);
+        $this->assertEquals(7636, $results['meta']['results']['total']);
     }
 
     public function testItCanSearchWithArrayConstraints()
@@ -64,7 +65,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
             'keywords_en_all' => ['bar', 'full'],
         ]);
 
-        $this->assertCount(2, $results['data']);
+        $this->assertEquals(75, $results['meta']['results']['total']);
     }
 
     public function testItCanSearchWithGeoConstraints()
@@ -82,7 +83,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $this->assertCount(3, $results['data']);
+        $this->assertEquals(1632, $results['meta']['results']['total']);
     }
 
     public function testItCanSortTheResults()
@@ -95,6 +96,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         $results = $subject->search([
             'sort_by' => 'price',
             'sort_direction' => 'desc',
+            'maximum_price' => 17900000,
         ]);
 
         $this->assertTrue($results['data'][0]['property']['price']['amount'] > $results['data'][1]['property']['price']['amount']);
@@ -112,11 +114,11 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         $subject = new SearchClient($base_url, $token);
 
         $results = $subject->search([
-            'start_page' => 2,
+            'start_page' => 3333,
             'page_size' => 3,
         ]);
 
-        $this->assertCount(2, $results['data']);
+        $this->assertCount(1, $results['data']);
     }
 
     public function testItThrowsAnExceptionWhenSearchingWithInvalidCriteria()
@@ -137,4 +139,41 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
         $this->fail('Search succeeded despite invalid search criteria.');
     }
+
+    public function testItCanFindAnAdvertById()
+    {
+        $base_url = 'http://search.french-property.app';
+        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+
+        $subject = new SearchClient($base_url, $token);
+
+        $result = $subject->find('leggett-FP-56593DSE53');
+
+        $this->assertEquals('FP-56593DSE53', $result['data']['advert']['reference']);
+        $this->assertEquals("Stunning renovation with plenty of original features, fully furnished with pool, leisure lake and enclosed pasture", $result['data']['property']['title_en']);
+        $this->assertEquals("Superb renovation to create a 4 bedroom family house with plenty of downstairs living space and large kitchen with large swimming pool and patio area to the rear, a leisure lake for fishing (approx 900m2) and a large enclosed field of about 2 acres. Is within a few km of the centre of lovely Cosse le Vivien and about 20km to the centre of the city of Laval to the North. Ideally placed for exploring the Mayenne and Brittany to the West this property would make a great family home or holiday property for personal use and/or rental", $result['data']['property']['description_en']);
+        $this->assertEquals("France, Pays de la Loire, Mayenne (53), Cossé-le-Vivien", $result['data']['property']['geo']['full_location']);
+        $this->assertEquals("224700", $result['data']['property']['price']['amount']);
+        $this->assertEquals("4", $result['data']['property']['room_totals']['bedrooms']);
+        $this->assertEquals('148', $result['data']['property']['floor_area']['size']);
+        $this->assertEquals('13202', $result['data']['property']['land_area']['size']);
+        $this->assertEquals(['swimming_pool'], $result['data']['property']['attributes']['external_features']);
+    }
+
+    public function testItThrowsAnExceptionWhenAnAdvertCannotBeFoundById()
+    {
+        $base_url = 'http://search.french-property.app';
+        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+
+        $subject = new SearchClient($base_url, $token);
+
+        try {
+            $subject->find('non-existent-id');
+        } catch (AdvertNotFoundException $e) {
+            return;
+        }
+
+        $this->fail('Search succeeded despite invalid search criteria.');
+    }
+
 }

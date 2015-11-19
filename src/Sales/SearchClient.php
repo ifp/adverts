@@ -4,6 +4,7 @@ namespace IFP\Adverts\Sales;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use IFP\Adverts\AdvertNotFoundException;
 use IFP\Adverts\InvalidApiTokenException;
 use IFP\Adverts\InvalidSearchCriteriaException;
 
@@ -19,6 +20,26 @@ class SearchClient
                 'Authorization' => 'Bearer ' . $token,
             ]
         ]);
+    }
+
+    public function find($id)
+    {
+        try {
+            $response = $this->client->get('adverts/sales/' . $id);
+
+            return json_decode((string) $response->getBody(), true);
+        } catch (ClientException $e) {
+            switch ($e->getCode()) {
+                case 401:
+                    throw new InvalidApiTokenException;
+                    break;
+                case 404:
+                    throw new AdvertNotFoundException($e);
+                    break;
+                default:
+                    throw $e;
+            }
+        }
     }
 
     public function search($params)
