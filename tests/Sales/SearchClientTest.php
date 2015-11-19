@@ -7,11 +7,6 @@ use IFP\Adverts\Sales\SearchClient;
 
 class SearchClientTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        //$this->markTestSkipped('Seed ES using testItCanSeedTheSearchEngineForAdvertSaleClientTesting in search.french-property.com');
-    }
-
     public function testItThrowsAnExceptionWhenUsingAnInvalidApiToken()
     {
         $base_url = 'http://search.french-property.app';
