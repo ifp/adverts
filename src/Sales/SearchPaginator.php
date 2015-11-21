@@ -131,6 +131,40 @@ class SearchPaginator
         return $this->makeFullUrl($this->previousPage());
     }
 
+    public function nextPagesUrl($number_of_pages)
+    {
+        $urls = [];
+
+        for($i = $this->currentPage()+1; $i <= $this->currentPage()+$number_of_pages; $i++)
+        {
+            if($i <= $this->totalPages()) {
+                $urls[] = [
+                    'page_number' => $i,
+                    'url' => $this->makeFullUrl($i),
+                ];
+            }
+        }
+
+        return $urls;
+    }
+
+    public function previousPagesUrl($number_of_pages)
+    {
+        $urls = [];
+
+        for($i = $this->currentPage()-$number_of_pages; $i <=$this->currentPage()-1; $i++)
+        {
+            if($i >= $this->firstPage()) {
+                $urls[] = [
+                    'page_number' => $i,
+                    'url' => $this->makeFullUrl($i),
+                ];
+            }
+        }
+
+        return $urls;
+    }
+
     private function makeFullUrl($start_page)
     {
         $query_vars = $this->search_criteria;

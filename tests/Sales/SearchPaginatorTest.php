@@ -371,6 +371,186 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=66', $subject->previousPageUrl());
     }
 
+    public function testPaginatorProvidesNextFivePageUrlsWhenGivenValidData()
+    {
+        $base_url = '/sale-advert-search';
+
+        $search_criteria = [
+            'title_en_any' => 'house with garden',
+            'keywords_en_any' => 'swimming pool',
+            'minimum_price' => 100000,
+            'maximum_price' => 150000,
+            'minimum_bedrooms' => 3,
+            'minimum_land_size' => 1000,
+            'page_size' => 15,
+            'start_page' => 67,
+        ];
+
+        $results = [
+            "total" => 9997,
+            "starting_from" => 991,
+            "finishing_at" => 1005,
+            "current_page" => 67,
+            "total_pages" => 667
+        ];
+
+        $subject = new SearchPaginator($base_url, $search_criteria, $results);
+
+        $assertion = [
+            [
+                'page_number' => 68,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=68'
+            ],
+            [
+                'page_number' => 69,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=69'
+            ],
+            [
+                'page_number' => 70,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=70'
+            ],
+            [
+                'page_number' => 71,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=71'
+            ],
+            [
+                'page_number' => 72,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=72'
+            ],
+        ];
+
+        $this->assertEquals($assertion, $subject->nextPagesUrl(5));
+    }
+
+    public function testPaginatorProvidesPreviousThreePageUrlsWhenGivenValidData()
+    {
+        $base_url = '/sale-advert-search';
+
+        $search_criteria = [
+            'title_en_any' => 'house with garden',
+            'keywords_en_any' => 'swimming pool',
+            'minimum_price' => 100000,
+            'maximum_price' => 150000,
+            'minimum_bedrooms' => 3,
+            'minimum_land_size' => 1000,
+            'page_size' => 15,
+            'start_page' => 67,
+        ];
+
+        $results = [
+            "total" => 9997,
+            "starting_from" => 991,
+            "finishing_at" => 1005,
+            "current_page" => 67,
+            "total_pages" => 667
+        ];
+
+        $subject = new SearchPaginator($base_url, $search_criteria, $results);
+
+        $assertion = [
+            [
+                'page_number' => 64,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=64'
+            ],
+            [
+                'page_number' => 65,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=65'
+            ],
+            [
+                'page_number' => 66,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=66'
+            ],
+        ];
+
+        $this->assertEquals($assertion, $subject->previousPagesUrl(3));
+    }
+
+    public function testPaginatorProvidesNextPageUrlsToLastPageWhenMoreThenRemainAreRequested()
+    {
+        $base_url = '/sale-advert-search';
+
+        $search_criteria = [
+            'title_en_any' => 'house with garden',
+            'keywords_en_any' => 'swimming pool',
+            'minimum_price' => 100000,
+            'maximum_price' => 150000,
+            'minimum_bedrooms' => 3,
+            'minimum_land_size' => 1000,
+            'page_size' => 15,
+            'start_page' => 67,
+        ];
+
+        $results = [
+            "total" => 9997,
+            "starting_from" => 991,
+            "finishing_at" => 1005,
+            "current_page" => 665,
+            "total_pages" => 667
+        ];
+
+        $subject = new SearchPaginator($base_url, $search_criteria, $results);
+
+        $assertion = [
+            [
+                'page_number' => 666,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=666'
+            ],
+            [
+                'page_number' => 667,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=667'
+            ],
+        ];
+
+        $this->assertEquals($assertion, $subject->nextPagesUrl(5));
+    }
+
+    public function testPaginatorProvidesPreviousPageUrlsToFirstPageWhenMoreThenExistAreRequested()
+    {
+        $base_url = '/sale-advert-search';
+
+        $search_criteria = [
+            'title_en_any' => 'house with garden',
+            'keywords_en_any' => 'swimming pool',
+            'minimum_price' => 100000,
+            'maximum_price' => 150000,
+            'minimum_bedrooms' => 3,
+            'minimum_land_size' => 1000,
+            'page_size' => 15,
+            'start_page' => 3,
+        ];
+
+        $results = [
+            "total" => 9997,
+            "starting_from" => 991,
+            "finishing_at" => 1005,
+            "current_page" => 5,
+            "total_pages" => 667
+        ];
+
+        $subject = new SearchPaginator($base_url, $search_criteria, $results);
+
+        $assertion = [
+            [
+                'page_number' => 1,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
+            ],
+            [
+                'page_number' => 2,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=2'
+            ],
+            [
+                'page_number' => 3,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=3'
+            ],
+            [
+                'page_number' => 4,
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=4'
+            ],
+        ];
+
+        $this->assertEquals($assertion, $subject->previousPagesUrl(10));
+    }
+
     private function assertAssocArrayValuesContain($message, $array)
     {
         $result = array_filter($array, function($item) use ($message) {
