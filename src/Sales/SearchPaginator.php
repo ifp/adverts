@@ -111,6 +111,11 @@ class SearchPaginator
         return $this->totalPages();
     }
 
+    public function currentPageUrl()
+    {
+        return $this->makeFullUrl($this->currentPage());
+    }
+
     public function firstPageUrl()
     {
         return $this->makeFullUrl($this->firstPage());
@@ -131,7 +136,7 @@ class SearchPaginator
         return $this->makeFullUrl($this->previousPage());
     }
 
-    public function nextPagesUrl($number_of_pages)
+    public function nextPagesUrls($number_of_pages)
     {
         $urls = [];
 
@@ -140,6 +145,7 @@ class SearchPaginator
             if($i <= $this->totalPages()) {
                 $urls[] = [
                     'page_number' => $i,
+                    'page_type' => 'next',
                     'url' => $this->makeFullUrl($i),
                 ];
             }
@@ -148,7 +154,7 @@ class SearchPaginator
         return $urls;
     }
 
-    public function previousPagesUrl($number_of_pages)
+    public function previousPagesUrls($number_of_pages)
     {
         $urls = [];
 
@@ -157,10 +163,90 @@ class SearchPaginator
             if($i >= $this->firstPage()) {
                 $urls[] = [
                     'page_number' => $i,
+                    'page_type' => 'previous',
                     'url' => $this->makeFullUrl($i),
                 ];
             }
         }
+
+        return $urls;
+    }
+
+    public function previousSetUrl($number_of_pages_in_scroll)
+    {
+        $previous_set_page_number = $this->currentPage() - $number_of_pages_in_scroll;
+
+        $urls = [];
+
+        if($previous_set_page_number >= 1) {
+            $urls[] = [
+                'page_number' => $previous_set_page_number,
+                'page_type' => 'previous_set',
+                'url' => $this->makeFullUrl($previous_set_page_number),
+            ];
+        }
+
+        return $urls;
+    }
+
+    public function nextSetUrl($number_of_pages_in_scroll)
+    {
+        $next_set_page_number = $this->currentPage() + $number_of_pages_in_scroll;
+
+        $urls = [];
+
+        if($next_set_page_number <= $this->totalPages()) {
+            $urls[] = [
+                'page_number' => $next_set_page_number,
+                'page_type' => 'next_set',
+                'url' => $this->makeFullUrl($next_set_page_number),
+            ];
+        }
+
+        return $urls;
+    }
+
+    public function scrollPagesUrls($number_of_pages_in_scroll)
+    {
+        $half_number_of_pages = (int)$number_of_pages_in_scroll/2;
+        $number_of_previous_pages = $half_number_of_pages;
+        $number_of_next_pages = $half_number_of_pages;
+
+        if($this->currentPage() <= $half_number_of_pages) {
+            $number_of_previous_pages = $this->currentPage()-1;
+            $number_of_next_pages += ($half_number_of_pages - $number_of_previous_pages);
+        }
+
+        if($this->currentPage() >= ($this->totalPages() - $half_number_of_pages)) {
+            $number_of_next_pages = $this->totalPages() - $this->currentPage();
+            $number_of_previous_pages += ($half_number_of_pages - $number_of_next_pages);
+        }
+
+        $urls[] = [
+            'page_number' => $this->firstPage(),
+            'page_type' => 'first',
+            'url' => $this->firstPageUrl(),
+        ];
+
+        $urls = array_merge($urls, $this->previousSetUrl($number_of_pages_in_scroll));
+
+        $urls = array_merge($urls, $this->previousPagesUrls($number_of_previous_pages));
+
+        $urls[] = [
+            'page_number' => $this->currentPage(),
+            'page_type' => 'current',
+            'url' => $this->currentPageUrl(),
+        ];
+
+        $urls = array_merge($urls, $this->nextPagesUrls($number_of_next_pages));
+
+        $urls = array_merge($urls, $this->nextSetUrl($number_of_pages_in_scroll));
+
+        $urls[] = [
+            'page_number' => $this->lastPage(),
+            'page_type' => 'last',
+            'url' => $this->lastPageUrl(),
+        ];
 
         return $urls;
     }
