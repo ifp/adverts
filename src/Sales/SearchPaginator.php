@@ -140,7 +140,9 @@ class SearchPaginator
     {
         $urls = [];
 
-        for($i = $this->currentPage()+1; $i <= $this->currentPage()+$number_of_pages; $i++)
+        $end_page = $this->currentPage()+$number_of_pages;
+
+        for($i = $this->currentPage()+1; $i <= $end_page; $i++)
         {
             if($i <= $this->totalPages()) {
                 $urls[] = [
@@ -151,6 +153,14 @@ class SearchPaginator
             }
         }
 
+        if ($end_page < $this->totalPages()) {
+            $urls[] = [
+                'page_number' => $this->lastPage(),
+                'page_type' => 'last',
+                'url' => $this->lastPageUrl(),
+            ];
+        }
+
         return $urls;
     }
 
@@ -158,7 +168,18 @@ class SearchPaginator
     {
         $urls = [];
 
-        for($i = $this->currentPage()-$number_of_pages; $i <=$this->currentPage()-1; $i++)
+        $starting_page = $this->currentPage()-$number_of_pages;
+
+        if($starting_page > 1)
+        {
+            $urls[] = [
+                'page_number' => $this->firstPage(),
+                'page_type' => 'first',
+                'url' => $this->firstPageUrl(),
+            ];
+        }
+
+        for($i = $starting_page; $i <=$this->currentPage()-1; $i++)
         {
             if($i >= $this->firstPage()) {
                 $urls[] = [
@@ -172,63 +193,24 @@ class SearchPaginator
         return $urls;
     }
 
-    public function previousSetUrl($number_of_pages_in_scroll)
-    {
-        $previous_set_page_number = $this->currentPage() - $number_of_pages_in_scroll;
-
-        $urls = [];
-
-        if($previous_set_page_number >= 1) {
-            $urls[] = [
-                'page_number' => $previous_set_page_number,
-                'page_type' => 'previous_set',
-                'url' => $this->makeFullUrl($previous_set_page_number),
-            ];
-        }
-
-        return $urls;
-    }
-
-    public function nextSetUrl($number_of_pages_in_scroll)
-    {
-        $next_set_page_number = $this->currentPage() + $number_of_pages_in_scroll;
-
-        $urls = [];
-
-        if($next_set_page_number <= $this->totalPages()) {
-            $urls[] = [
-                'page_number' => $next_set_page_number,
-                'page_type' => 'next_set',
-                'url' => $this->makeFullUrl($next_set_page_number),
-            ];
-        }
-
-        return $urls;
-    }
-
     public function scrollPagesUrls($number_of_pages_in_scroll)
     {
         $half_number_of_pages = (int)$number_of_pages_in_scroll/2;
+
         $number_of_previous_pages = $half_number_of_pages;
         $number_of_next_pages = $half_number_of_pages;
 
-        if($this->currentPage() <= $half_number_of_pages) {
+        if ($this->currentPage() <= $half_number_of_pages) {
             $number_of_previous_pages = $this->currentPage()-1;
             $number_of_next_pages += ($half_number_of_pages - $number_of_previous_pages);
         }
 
-        if($this->currentPage() >= ($this->totalPages() - $half_number_of_pages)) {
+        if ($this->currentPage() >= ($this->totalPages() - $half_number_of_pages)) {
             $number_of_next_pages = $this->totalPages() - $this->currentPage();
             $number_of_previous_pages += ($half_number_of_pages - $number_of_next_pages);
         }
 
-        $urls[] = [
-            'page_number' => $this->firstPage(),
-            'page_type' => 'first',
-            'url' => $this->firstPageUrl(),
-        ];
-
-        $urls = array_merge($urls, $this->previousSetUrl($number_of_pages_in_scroll));
+        $urls = [];
 
         $urls = array_merge($urls, $this->previousPagesUrls($number_of_previous_pages));
 
@@ -239,14 +221,6 @@ class SearchPaginator
         ];
 
         $urls = array_merge($urls, $this->nextPagesUrls($number_of_next_pages));
-
-        $urls = array_merge($urls, $this->nextSetUrl($number_of_pages_in_scroll));
-
-        $urls[] = [
-            'page_number' => $this->lastPage(),
-            'page_type' => 'last',
-            'url' => $this->lastPageUrl(),
-        ];
 
         return $urls;
     }
