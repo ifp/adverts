@@ -88,7 +88,7 @@ class SearchPaginator
     public function nextPage()
     {
         if($this->currentPage() == $this->totalPages()) {
-            return $this->currentPage();
+            return false;
         }
         return $this->currentPage() + 1;
     }
@@ -96,7 +96,7 @@ class SearchPaginator
     public function previousPage()
     {
         if($this->currentPage() == 1) {
-            return 1;
+            return false;
         }
         return $this->currentPage() - 1;
     }
@@ -253,8 +253,12 @@ class SearchPaginator
 
     private function makeFullUrl($start_page)
     {
-        $query_vars = $this->search_criteria;
-        $query_vars['start_page'] = $start_page;
-        return $this->base_url. '?' . http_build_query($query_vars);
+        if($start_page) {
+            $query_vars = $this->search_criteria;
+            $query_vars['start_page'] = $start_page;
+            return $this->base_url. '?' . http_build_query($query_vars);
+        }
+
+        return false;
     }
 }

@@ -196,7 +196,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
 
         $subject = new SearchPaginator('', [], $results);
 
-        $this->assertEquals(4, $subject->nextPage());
+        $this->assertEquals(false, $subject->nextPage());
     }
 
     public function testItCanRetrieveItsPreviousPage()
@@ -226,7 +226,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
 
         $subject = new SearchPaginator('', [], $results);
 
-        $this->assertEquals(1, $subject->previousPage());
+        $this->assertEquals(false, $subject->previousPage());
     }
 
     public function testItCanRetrieveItsFirstPage()
@@ -369,6 +369,34 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $subject = new SearchPaginator($base_url, $search_criteria, $results);
 
         $this->assertEquals('/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=68', $subject->nextPageUrl());
+    }
+
+    public function testPaginatorDoesNotProvidesNextPageUrlWhenNextPageDOesNotExist()
+    {
+        $base_url = '/sale-advert-search';
+
+        $search_criteria = [
+            'title_en_any' => 'house with garden',
+            'keywords_en_any' => 'swimming pool',
+            'minimum_price' => 100000,
+            'maximum_price' => 150000,
+            'minimum_bedrooms' => 3,
+            'minimum_land_size' => 1000,
+            'page_size' => 15,
+            'start_page' => 667,
+        ];
+
+        $results = [
+            "total" => 9997,
+            "starting_from" => 991,
+            "finishing_at" => 1005,
+            "current_page" => 667,
+            "total_pages" => 667
+        ];
+
+        $subject = new SearchPaginator($base_url, $search_criteria, $results);
+
+        $this->assertEquals(false, $subject->nextPageUrl());
     }
 
     public function testPaginatorProvidesPreviousPageUrlWhenGivenValidData()
