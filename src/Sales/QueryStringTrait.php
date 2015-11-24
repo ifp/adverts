@@ -14,7 +14,7 @@ trait QueryStringTrait
     private function buildQueryStringParam($key, $value)
     {
         if (! is_array($value)) {
-            return $key . '=' . $value;
+            return $key . '=' . urlencode($value);
         }
 
         if ($this->isAssoc($value)) {

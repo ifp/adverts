@@ -29,23 +29,23 @@ class SearchPaginator
     {
         $fields = ['total', 'starting_from', 'finishing_at', 'current_page', 'total_pages'];
 
-        array_map(function($field) {
-            if(!isset($this->results[$field])) {
+        array_map(function ($field) {
+            if (!isset($this->results[$field])) {
                 $this->errors[] = [
                     "title" => "Invalid pagination data",
                     "detail" => "`${field}` was not set or is null.",
                 ];
-            } elseif(!is_numeric($this->results[$field])) {
-                    $this->errors[] = [
-                        "title" => "Invalid pagination data",
-                        "detail" => "`${field}` was not numeric.",
-                    ];
+            } elseif (!is_numeric($this->results[$field])) {
+                $this->errors[] = [
+                    "title" => "Invalid pagination data",
+                    "detail" => "`${field}` was not numeric.",
+                ];
             } else {
                 $this->results[$field] = (int)$this->results[$field];
             }
         }, $fields);
 
-        if(count($this->errors) > 0) {
+        if (count($this->errors) > 0) {
             throw new InvalidPaginationDataException($this->errors);
         }
     }
@@ -87,7 +87,7 @@ class SearchPaginator
 
     public function nextPage()
     {
-        if($this->currentPage() == $this->totalPages()) {
+        if ($this->currentPage() == $this->totalPages()) {
             return false;
         }
         return $this->currentPage() + 1;
@@ -95,7 +95,7 @@ class SearchPaginator
 
     public function previousPage()
     {
-        if($this->currentPage() == 1) {
+        if ($this->currentPage() == 1) {
             return false;
         }
         return $this->currentPage() - 1;
@@ -140,25 +140,34 @@ class SearchPaginator
     {
         $urls = [];
 
-        $end_page = $this->currentPage()+$number_of_pages;
+        if ($this->nextPage()) {
+            $end_page = $this->currentPage() + $number_of_pages;
 
-        for($i = $this->currentPage()+1; $i <= $end_page; $i++)
-        {
-            if($i <= $this->totalPages()) {
+            for ($i = $this->nextPage(); $i <= $end_page; $i++) {
+                if ($i <= $this->totalPages()) {
+                    $urls[] = [
+                        'page_number' => $i,
+                        'page_type' => 'upcoming',
+                        'url' => $this->makeFullUrl($i),
+                    ];
+                }
+            }
+
+            if ($this->nextPage() <= $this->lastPage()) {
                 $urls[] = [
-                    'page_number' => $i,
+                    'page_number' => $this->nextPage(),
                     'page_type' => 'next',
-                    'url' => $this->makeFullUrl($i),
+                    'url' => $this->nextPageUrl(),
                 ];
             }
-        }
 
-        if ($end_page < $this->totalPages()) {
-            $urls[] = [
-                'page_number' => $this->lastPage(),
-                'page_type' => 'last',
-                'url' => $this->lastPageUrl(),
-            ];
+            if ($end_page < $this->totalPages()) {
+                $urls[] = [
+                    'page_number' => $this->lastPage(),
+                    'page_type' => 'last',
+                    'url' => $this->lastPageUrl(),
+                ];
+            }
         }
 
         return $urls;
@@ -168,25 +177,34 @@ class SearchPaginator
     {
         $urls = [];
 
-        $starting_page = $this->currentPage()-$number_of_pages;
+        if ($this->previousPage()) {
 
-        if($starting_page > 1)
-        {
-            $urls[] = [
-                'page_number' => $this->firstPage(),
-                'page_type' => 'first',
-                'url' => $this->firstPageUrl(),
-            ];
-        }
+            $starting_page = $this->currentPage() - $number_of_pages;
 
-        for($i = $starting_page; $i <=$this->currentPage()-1; $i++)
-        {
-            if($i >= $this->firstPage()) {
+            if ($starting_page > 1) {
                 $urls[] = [
-                    'page_number' => $i,
-                    'page_type' => 'previous',
-                    'url' => $this->makeFullUrl($i),
+                    'page_number' => $this->firstPage(),
+                    'page_type' => 'first',
+                    'url' => $this->firstPageUrl(),
                 ];
+            }
+
+            if ($this->previousPage() >= $this->firstPage()) {
+                $urls[] = [
+                    'page_number' => $this->previousPage(),
+                    'page_type' => 'previous',
+                    'url' => $this->previousPageUrl(),
+                ];
+            }
+
+            for ($i = $starting_page; $i <= $this->previousPage(); $i++) {
+                if ($i >= $this->firstPage()) {
+                    $urls[] = [
+                        'page_number' => $i,
+                        'page_type' => 'preceding',
+                        'url' => $this->makeFullUrl($i),
+                    ];
+                }
             }
         }
 
@@ -195,13 +213,13 @@ class SearchPaginator
 
     public function scrollPagesUrls($number_of_pages_in_scroll)
     {
-        $half_number_of_pages = (int)$number_of_pages_in_scroll/2;
+        $half_number_of_pages = (int)($number_of_pages_in_scroll / 2);
 
         $number_of_previous_pages = $half_number_of_pages;
         $number_of_next_pages = $half_number_of_pages;
 
         if ($this->currentPage() <= $half_number_of_pages) {
-            $number_of_previous_pages = $this->currentPage()-1;
+            $number_of_previous_pages = $this->currentPage() - 1;
             $number_of_next_pages += ($half_number_of_pages - $number_of_previous_pages);
         }
 
@@ -227,10 +245,10 @@ class SearchPaginator
 
     private function makeFullUrl($start_page)
     {
-        if($start_page) {
+        if ($start_page) {
             $query_vars = $this->search_criteria;
             $query_vars['start_page'] = $start_page;
-            return $this->base_url. '?' . http_build_query($query_vars);
+            return $this->base_url . '?' . $this->buildQueryString($query_vars);
         }
 
         return false;

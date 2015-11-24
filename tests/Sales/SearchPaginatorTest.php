@@ -485,7 +485,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $subject->previousPageUrl());
     }
 
-    public function testPaginatorProvidesNextFivePageUrlsAndLastPageUrlsWhenGivenValidData()
+    public function testPaginatorProvidesNextFivePageUrlsAndNextAndLastPageUrlsWhenGivenValidData()
     {
         $base_url = '/sale-advert-search';
 
@@ -513,28 +513,33 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $assertion = [
             [
                 'page_number' => 68,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=68'
             ],
             [
                 'page_number' => 69,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=69'
             ],
             [
                 'page_number' => 70,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=70'
             ],
             [
                 'page_number' => 71,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=71'
             ],
             [
                 'page_number' => 72,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=72'
+            ],
+            [
+                'page_number' => 68,
+                'page_type' => 'next',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=68'
             ],
             [
                 'page_number' => 667,
@@ -578,18 +583,23 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
             ],
             [
-                'page_number' => 6,
+                'page_number' => 8,
                 'page_type' => 'previous',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=8'
+            ],
+            [
+                'page_number' => 6,
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=6'
             ],
             [
                 'page_number' => 7,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=7'
             ],
             [
                 'page_number' => 8,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=8'
             ],
         ];
@@ -625,13 +635,18 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $assertion = [
             [
                 'page_number' => 666,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=666'
             ],
             [
                 'page_number' => 667,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=667'
+            ],
+            [
+                'page_number' => 666,
+                'page_type' => 'next',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=666'
             ],
         ];
 
@@ -665,23 +680,28 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
 
         $assertion = [
             [
-                'page_number' => 1,
+                'page_number' => 4,
                 'page_type' => 'previous',
+                'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=4'
+            ],
+            [
+                'page_number' => 1,
+                'page_type' => 'preceding',
                 'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
             ],
             [
                 'page_number' => 2,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=2'
             ],
             [
                 'page_number' => 3,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=3'
             ],
             [
                 'page_number' => 4,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=4'
             ],
         ];
@@ -721,28 +741,33 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
             ],
             [
-                'page_number' => 650,
+                'page_number' => 654,
                 'page_type' => 'previous',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=654'
+            ],
+            [
+                'page_number' => 650,
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=650'
             ],
             [
                 'page_number' => 651,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=651'
             ],
             [
                 'page_number' => 652,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=652'
             ],
             [
                 'page_number' => 653,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=653'
             ],
             [
                 'page_number' => 654,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=654'
             ],
             [
@@ -752,28 +777,33 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
             ],
             [
                 'page_number' => 656,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=656'
             ],
             [
                 'page_number' => 657,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=657'
             ],
             [
                 'page_number' => 658,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=658'
             ],
             [
                 'page_number' => 659,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=659'
             ],
             [
                 'page_number' => 660,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=660'
+            ],
+            [
+                'page_number' => 656,
+                'page_type' => 'next',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=656'
             ],
             [
                 'page_number' => 667,
@@ -812,13 +842,18 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
 
         $assertion = [
             [
-                'page_number' => 1,
+                'page_number' => 2,
                 'page_type' => 'previous',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=2'
+            ],
+            [
+                'page_number' => 1,
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
             ],
             [
                 'page_number' => 2,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=2'
             ],
             [
@@ -828,43 +863,48 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
             ],
             [
                 'page_number' => 4,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=4'
             ],
             [
                 'page_number' => 5,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=5'
             ],
             [
                 'page_number' => 6,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=6'
             ],
             [
                 'page_number' => 7,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=7'
             ],
             [
                 'page_number' => 8,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=8'
             ],
             [
                 'page_number' => 9,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=9'
             ],
             [
                 'page_number' => 10,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=10'
             ],
             [
                 'page_number' => 11,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=11'
+            ],
+            [
+                'page_number' => 4,
+                'page_type' => 'next',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=4'
             ],
             [
                 'page_number' => 667,
@@ -908,43 +948,48 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
             ],
             [
-                'page_number' => 657,
+                'page_number' => 664,
                 'page_type' => 'previous',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=664'
+            ],
+            [
+                'page_number' => 657,
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=657'
             ],
             [
                 'page_number' => 658,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=658'
             ],
             [
                 'page_number' => 659,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=659'
             ],
             [
                 'page_number' => 660,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=660'
             ],
             [
                 'page_number' => 661,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=661'
             ],
             [
                 'page_number' => 662,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=662'
             ],
             [
                 'page_number' => 663,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=663'
             ],
             [
                 'page_number' => 664,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=664'
             ],
             [
@@ -954,13 +999,18 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
             ],
             [
                 'page_number' => 666,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=666'
             ],
             [
                 'page_number' => 667,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=667'
+            ],
+            [
+                'page_number' => 666,
+                'page_type' => 'next',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=666'
             ],
         ];
 
@@ -994,18 +1044,23 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
 
         $assertion = [
             [
-                'page_number' => 1,
+                'page_number' => 3,
                 'page_type' => 'previous',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=3'
+            ],
+            [
+                'page_number' => 1,
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
             ],
             [
                 'page_number' => 2,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=2'
             ],
             [
                 'page_number' => 3,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=3'
             ],
             [
@@ -1015,20 +1070,25 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
             ],
             [
                 'page_number' => 5,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=5'
             ],
             [
                 'page_number' => 6,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=6'
+            ],
+            [
+                'page_number' => 5,
+                'page_type' => 'next',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=5'
             ],
         ];
 
         $this->assertEquals($assertion, $subject->scrollPagesUrls(10));
     }
 
-    public function testPaginatorGeneratesNextUrlsAndLastUrlOnlyWhenCurrentPageIsFirstPage()
+    public function testPaginatorGeneratesUpcomingUrlsAndNextUrlAndLastUrlOnlyWhenCurrentPageIsFirstPage()
     {
         $base_url = '/sale-advert-search';
 
@@ -1061,23 +1121,28 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
             ],
             [
                 'page_number' => 2,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=2'
             ],
             [
                 'page_number' => 3,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=3'
             ],
             [
                 'page_number' => 4,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=4'
             ],
             [
                 'page_number' => 5,
-                'page_type' => 'next',
+                'page_type' => 'upcoming',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=5'
+            ],
+            [
+                'page_number' => 2,
+                'page_type' => 'next',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=2'
             ],
             [
                 'page_number' => 60,
@@ -1089,7 +1154,79 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(4));
     }
 
-    public function testPaginatorGeneratesPreviousUrlsAndFirstUrlOnlyWhenCurrentPageIsLastPage()
+
+    public function testPaginatorGeneratesCorrectUrlsWhenCurrentPageIsSecondPage()
+    {
+        $base_url = '/sale-advert-search';
+
+        $search_criteria = [
+            'title_en_any' => 'house with garden',
+            'keywords_en_any' => 'swimming pool',
+            'minimum_price' => 100000,
+            'maximum_price' => 150000,
+            'minimum_bedrooms' => 3,
+            'minimum_land_size' => 1000,
+            'page_size' => 15,
+            'start_page' => 1,
+        ];
+
+        $results = [
+            "total" => 90,
+            "starting_from" => 1,
+            "finishing_at" => 15,
+            "current_page" => 2,
+            "total_pages" => 60
+        ];
+
+        $subject = new SearchPaginator($base_url, $search_criteria, $results);
+
+        $assertion = [
+            [
+                'page_number' => 1,
+                'page_type' => 'previous',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
+            ],
+            [
+                'page_number' => 1,
+                'page_type' => 'preceding',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
+            ],
+            [
+                'page_number' => 2,
+                'page_type' => 'current',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=2'
+            ],
+            [
+                'page_number' => 3,
+                'page_type' => 'upcoming',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=3'
+            ],
+            [
+                'page_number' => 4,
+                'page_type' => 'upcoming',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=4'
+            ],
+            [
+                'page_number' => 5,
+                'page_type' => 'upcoming',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=5'
+            ],
+            [
+                'page_number' => 3,
+                'page_type' => 'next',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=3'
+            ],
+            [
+                'page_number' => 60,
+                'page_type' => 'last',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=60'
+            ],
+        ];
+
+        $this->assertEquals($assertion, $subject->scrollPagesUrls(4));
+    }
+
+    public function testPaginatorGeneratesCorrectUrlsWhenCurrentPageIsLastPage()
     {
         $base_url = '/sale-advert-search';
 
@@ -1121,14 +1258,70 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
             ],
             [
-                'page_number' => 56,
+                'page_number' => 59,
                 'page_type' => 'previous',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=59'
+            ],
+            [
+                'page_number' => 56,
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=56'
             ],
             [
                 'page_number' => 57,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=57'
+            ],
+            [
+                'page_number' => 58,
+                'page_type' => 'preceding',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=58'
+            ],
+            [
+                'page_number' => 59,
+                'page_type' => 'preceding',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=59'
+            ],
+            [
+                'page_number' => 60,
+                'page_type' => 'current',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=60'
+            ],
+        ];
+
+        $this->assertEquals($assertion, $subject->scrollPagesUrls(4));
+    }
+
+    public function testPaginatorGeneratesCorrectUrlsWhenCurrentPageIsSecondToLastPage()
+    {
+        $base_url = '/sale-advert-search';
+
+        $search_criteria = [
+            'title_en_any' => 'house with garden',
+            'keywords_en_any' => 'swimming pool',
+            'minimum_price' => 100000,
+            'maximum_price' => 150000,
+            'minimum_bedrooms' => 3,
+            'minimum_land_size' => 1000,
+            'page_size' => 15,
+            'start_page' => 6,
+        ];
+
+        $results = [
+            "total" => 90,
+            "starting_from" => 1,
+            "finishing_at" => 15,
+            "current_page" => 59,
+            "total_pages" => 60
+        ];
+
+        $subject = new SearchPaginator($base_url, $search_criteria, $results);
+
+        $assertion = [
+            [
+                'page_number' => 1,
+                'page_type' => 'first',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1'
             ],
             [
                 'page_number' => 58,
@@ -1136,13 +1329,33 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=58'
             ],
             [
+                'page_number' => 56,
+                'page_type' => 'preceding',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=56'
+            ],
+            [
+                'page_number' => 57,
+                'page_type' => 'preceding',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=57'
+            ],
+            [
+                'page_number' => 58,
+                'page_type' => 'preceding',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=58'
+            ],
+            [
                 'page_number' => 59,
-                'page_type' => 'previous',
+                'page_type' => 'current',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=59'
             ],
             [
                 'page_number' => 60,
-                'page_type' => 'current',
+                'page_type' => 'upcoming',
+                'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=60'
+            ],
+            [
+                'page_number' => 60,
+                'page_type' => 'next',
                 'url' => '/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=60'
             ],
         ];
@@ -1218,30 +1431,35 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
 
         $assertion = [
             [
-                'page_number' => 1,
+                'page_number' => 4,
                 'page_type' => 'previous',
+                'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&geo[lat]=47.123&geo[lon]=1.2345&geo[distance]=50km&page_size=15&start_page=4'
+            ],
+            [
+                'page_number' => 1,
+                'page_type' => 'preceding',
                 'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&geo[lat]=47.123&geo[lon]=1.2345&geo[distance]=50km&page_size=15&start_page=1'
             ],
             [
                 'page_number' => 2,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&geo[lat]=47.123&geo[lon]=1.2345&geo[distance]=50km&page_size=15&start_page=2'
             ],
             [
                 'page_number' => 3,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&geo[lat]=47.123&geo[lon]=1.2345&geo[distance]=50km&page_size=15&start_page=3'
             ],
             [
                 'page_number' => 4,
-                'page_type' => 'previous',
+                'page_type' => 'preceding',
                 'url' => 'http://localhost/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&geo[lat]=47.123&geo[lon]=1.2345&geo[distance]=50km&page_size=15&start_page=4'
             ],
         ];
 
         $outcome = $subject->previousPagesUrls(10);
 
-        $this->assertCount(4, $outcome);
+        $this->assertCount(5, $outcome);
         $this->assertEquals($assertion[0]['page_number'], $outcome[0]['page_number']);
         $this->assertUrlEquals($assertion[0]['url'], $outcome[0]['url']);
         $this->assertEquals($assertion[1]['page_number'], $outcome[1]['page_number']);
@@ -1250,6 +1468,8 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertUrlEquals($assertion[2]['url'], $outcome[2]['url']);
         $this->assertEquals($assertion[3]['page_number'], $outcome[3]['page_number']);
         $this->assertUrlEquals($assertion[3]['url'], $outcome[3]['url']);
+        $this->assertEquals($assertion[4]['page_number'], $outcome[4]['page_number']);
+        $this->assertUrlEquals($assertion[4]['url'], $outcome[4]['url']);
     }
 
     private function assertAssocArrayValuesContain($message, $array)
