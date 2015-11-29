@@ -26,7 +26,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
     public function testItCanSearchWithNoConstraints()
     {
         $base_url = 'http://search.french-property.app';
-        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
 
         $subject = new SearchClient($base_url, $token);
 
@@ -38,7 +38,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
     public function testItCanSearchWithSimpleValueConstraints()
     {
         $base_url = 'http://search.french-property.app';
-        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
 
         $subject = new SearchClient($base_url, $token);
 
@@ -52,7 +52,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
     public function testItCanSearchWithArrayConstraints()
     {
         $base_url = 'http://search.french-property.app';
-        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
 
         $subject = new SearchClient($base_url, $token);
 
@@ -66,7 +66,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
     public function testItCanSearchWithGeoConstraints()
     {
         $base_url = 'http://search.french-property.app';
-        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
 
         $subject = new SearchClient($base_url, $token);
 
@@ -84,7 +84,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
     public function testItCanSortTheResults()
     {
         $base_url = 'http://search.french-property.app';
-        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
 
         $subject = new SearchClient($base_url, $token);
 
@@ -104,7 +104,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
     public function testItCanSpecifyPageSizeAndStartPage()
     {
         $base_url = 'http://search.french-property.app';
-        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
 
         $subject = new SearchClient($base_url, $token);
 
@@ -119,7 +119,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionWhenSearchingWithInvalidCriteria()
     {
         $base_url = 'http://search.french-property.app';
-        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
 
         $subject = new SearchClient($base_url, $token);
 
@@ -138,7 +138,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
     public function testItCanFindAnAdvertById()
     {
         $base_url = 'http://search.french-property.app';
-        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
 
         $subject = new SearchClient($base_url, $token);
 
@@ -158,7 +158,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionWhenAnAdvertCannotBeFoundById()
     {
         $base_url = 'http://search.french-property.app';
-        $token = 'fWLWPfd0NJ62TKiYZLGlVswXu6YsbXkf';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
 
         $subject = new SearchClient($base_url, $token);
 
