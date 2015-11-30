@@ -5,7 +5,7 @@ use IFP\Adverts\Sales\SearchPaginator;
 
 class SearchPaginatorTest extends PHPUnit_Framework_TestCase
 {
-    public function testPaginatorThrowsWhenGivenNoResultsData()
+    public function testItThrowsWhenGivenNoResultsData()
     {
         $results = [];
 
@@ -23,7 +23,8 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
 
         $this->fail('Pagination succeeded despite invalid pagination criteria.');
     }
-    public function testPaginatorThrowsWhenGivenInvalidResultsData()
+
+    public function testItThrowsWhenGivenInvalidResultsData()
     {
         $results = [
             "total" => "997.7",
@@ -45,7 +46,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->fail('Pagination succeeded despite invalid pagination criteria.');
     }
 
-    public function testPaginatorCanSpecifyTotalNumberOfResultsGivenValidResultsData()
+    public function testItCanSpecifyTotalNumberOfResultsGivenValidResultsData()
     {
         $results = [
             "total" => 9997,
@@ -60,7 +61,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(9997, $subject->total());
     }
 
-    public function testPaginatorCanSpecifyStartingFromNumberOfPageGivenValidResultsData()
+    public function testItCanSpecifyStartingFromNumberOfPageGivenValidResultsData()
     {
         $results = [
             "total" => 9997,
@@ -75,7 +76,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(991, $subject->startingFrom());
     }
 
-    public function testPaginatorCanSpecifyFinishingAtNumberOfPageGivenValidResultsData()
+    public function testItCanSpecifyFinishingAtNumberOfPageGivenValidResultsData()
     {
         $results = [
             "total" => 9997,
@@ -90,7 +91,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1005, $subject->finishingAt());
     }
 
-    public function testPaginatorCanSpecifyCurrentPageNumberGivenValidResultsData()
+    public function testItCanSpecifyCurrentPageNumberGivenValidResultsData()
     {
         $results = [
             "total" => 9997.7,
@@ -105,7 +106,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(67, $subject->currentPage());
     }
 
-    public function testPaginatorCanSpecifyTotalNumberOfPagesGivenValidResultsData()
+    public function testItCanSpecifyTotalNumberOfPagesGivenValidResultsData()
     {
         $results = [
             "total" => 9997.7,
@@ -120,7 +121,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(667, $subject->totalPages());
     }
 
-    public function testPaginatorProvidesZeroesWhenGivenZeroedResultsData()
+    public function testItProvidesZeroesWhenGivenZeroedResultsData()
     {
         $results = [
             "total" => 0,
@@ -289,7 +290,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(8, $subject->lastPage());
     }
 
-    public function testPaginatorProvidesCurrentPageUrlWhenGivenValidData()
+    public function testItProvidesCurrentPageUrlWhenGivenValidData()
     {
         $base_url = '/sale-advert-search';
 
@@ -317,7 +318,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=67', $subject->currentPageUrl());
     }
 
-    public function testPaginatorProvidesFirstPageUrlWhenGivenValidData()
+    public function testItProvidesFirstPageUrlWhenGivenValidData()
     {
         $base_url = '/sale-advert-search';
 
@@ -345,7 +346,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=1', $subject->firstPageUrl());
     }
 
-    public function testPaginatorProvidesLastPageUrlWhenGivenValidData()
+    public function testItProvidesLastPageUrlWhenGivenValidData()
     {
         $base_url = '/sale-advert-search';
 
@@ -373,7 +374,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=667', $subject->lastPageUrl());
     }
 
-    public function testPaginatorProvidesNextPageUrlWhenGivenValidData()
+    public function testItProvidesNextPageUrlWhenGivenValidData()
     {
         $base_url = '/sale-advert-search';
 
@@ -401,7 +402,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=68', $subject->nextPageUrl());
     }
 
-    public function testPaginatorDoesNotProvideNextPageUrlWhenNextPageDoesNotExist()
+    public function testItDoesNotProvideNextPageUrlWhenNextPageDoesNotExist()
     {
         $base_url = '/sale-advert-search';
 
@@ -429,7 +430,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $subject->nextPageUrl());
     }
 
-    public function testPaginatorProvidesPreviousPageUrlWhenGivenValidData()
+    public function testItProvidesPreviousPageUrlWhenGivenValidData()
     {
         $base_url = '/sale-advert-search';
 
@@ -457,7 +458,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/sale-advert-search?title_en_any=house+with+garden&keywords_en_any=swimming+pool&minimum_price=100000&maximum_price=150000&minimum_bedrooms=3&minimum_land_size=1000&page_size=15&start_page=66', $subject->previousPageUrl());
     }
 
-    public function testPaginatorDoesNotProvidePreviousPageUrlWhenPreviousPageDoesNotExist()
+    public function testItDoesNotProvidePreviousPageUrlWhenPreviousPageDoesNotExist()
     {
         $base_url = '/sale-advert-search';
 
@@ -485,7 +486,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $subject->previousPageUrl());
     }
 
-    public function testPaginatorProvidesNextFivePageUrlsAndNextAndLastPageUrlsWhenGivenValidData()
+    public function testItProvidesNextFivePageUrlsAndNextAndLastPageUrlsWhenGivenValidData()
     {
         $base_url = '/sale-advert-search';
 
@@ -551,7 +552,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->nextPagesUrls(5));
     }
 
-    public function testPaginatorProvidesPreviousThreePageUrlsAndFirstPageUrlsWhenGivenValidData()
+    public function testItProvidesPreviousThreePageUrlsAndFirstPageUrlsWhenGivenValidData()
     {
         $base_url = '/sale-advert-search';
 
@@ -607,7 +608,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->previousPagesUrls(3));
     }
 
-    public function testPaginatorProvidesNextPageUrlsToLastPageWhenMoreThenRemainAreRequested()
+    public function testItProvidesNextPageUrlsToLastPageWhenMoreThenRemainAreRequested()
     {
         $base_url = '/sale-advert-search';
 
@@ -653,7 +654,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->nextPagesUrls(5));
     }
 
-    public function testPaginatorProvidesPreviousPageUrlsToFirstPageWhenMoreThenExistAreRequested()
+    public function testItProvidesPreviousPageUrlsToFirstPageWhenMoreThenExistAreRequested()
     {
         $base_url = 'http://localhost/sale-advert-search';
 
@@ -709,7 +710,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->previousPagesUrls(10));
     }
 
-    public function testPaginatorGeneratesUrlsInBothDirectionsFromAPageInTheMiddle()
+    public function testItGeneratesUrlsInBothDirectionsFromAPageInTheMiddle()
     {
         $base_url = '/sale-advert-search';
 
@@ -815,7 +816,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(10));
     }
 
-    public function testPaginatorGenerates10UrlsInBothDirectionsFrom3rdPageInTheResults()
+    public function testItGenerates10UrlsInBothDirectionsFrom3rdPageInTheResults()
     {
         $base_url = '/sale-advert-search';
 
@@ -916,7 +917,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(10));
     }
 
-    public function testPaginatorGenerates10UrlsInBothDirectionsFrom3rdToLastPageInTheResults()
+    public function testItGenerates10UrlsInBothDirectionsFrom3rdToLastPageInTheResults()
     {
         $base_url = '/sale-advert-search';
 
@@ -1017,7 +1018,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(10));
     }
 
-    public function testPaginatorGeneratesUrlsInBothDirectionsFromCurrentPageWhenMorePagesAreRequestedThanAvailable()
+    public function testItGeneratesUrlsInBothDirectionsFromCurrentPageWhenMorePagesAreRequestedThanAvailable()
     {
         $base_url = '/sale-advert-search';
 
@@ -1088,7 +1089,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(10));
     }
 
-    public function testPaginatorGeneratesUpcomingUrlsAndNextUrlAndLastUrlOnlyWhenCurrentPageIsFirstPage()
+    public function testItGeneratesUpcomingUrlsAndNextUrlAndLastUrlOnlyWhenCurrentPageIsFirstPage()
     {
         $base_url = '/sale-advert-search';
 
@@ -1154,8 +1155,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(4));
     }
 
-
-    public function testPaginatorGeneratesCorrectUrlsWhenCurrentPageIsSecondPage()
+    public function testItGeneratesCorrectUrlsWhenCurrentPageIsSecondPage()
     {
         $base_url = '/sale-advert-search';
 
@@ -1226,7 +1226,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(4));
     }
 
-    public function testPaginatorGeneratesCorrectUrlsWhenCurrentPageIsLastPage()
+    public function testItGeneratesCorrectUrlsWhenCurrentPageIsLastPage()
     {
         $base_url = '/sale-advert-search';
 
@@ -1292,7 +1292,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(4));
     }
 
-    public function testPaginatorGeneratesCorrectUrlsWhenCurrentPageIsSecondToLastPage()
+    public function testItGeneratesCorrectUrlsWhenCurrentPageIsSecondToLastPage()
     {
         $base_url = '/sale-advert-search';
 
@@ -1363,7 +1363,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(4));
     }
 
-    public function testPaginatorGeneratesASingleURLWhenCurrentPageIsTheOnlyPage()
+    public function testItGeneratesASingleURLWhenCurrentPageIsTheOnlyPage()
     {
         $base_url = '/sale-advert-search';
 
@@ -1399,7 +1399,7 @@ class SearchPaginatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($assertion, $subject->scrollPagesUrls(10));
     }
 
-    public function testPaginatorGeneratesArrayQueryStringVariablesCorrectly()
+    public function testItGeneratesArrayQueryStringVariablesCorrectly()
     {
         $base_url = 'http://localhost/sale-advert-search';
 
