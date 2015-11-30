@@ -215,22 +215,22 @@ class SearchPaginator
     {
         $half_number_of_pages = (int)($number_of_pages_in_scroll / 2);
 
-        $number_of_previous_pages = $half_number_of_pages;
-        $number_of_next_pages = $half_number_of_pages;
+        $number_of_preceding_pages = $half_number_of_pages;
+        $number_of_upcoming_pages = $half_number_of_pages;
 
         if ($this->currentPage() <= $half_number_of_pages) {
-            $number_of_previous_pages = $this->currentPage() - 1;
-            $number_of_next_pages += ($half_number_of_pages - $number_of_previous_pages);
+            $number_of_preceding_pages = $this->currentPage() - 1;
+            $number_of_upcoming_pages += ($half_number_of_pages - $number_of_preceding_pages);
         }
 
         if ($this->currentPage() >= ($this->totalPages() - $half_number_of_pages)) {
-            $number_of_next_pages = $this->totalPages() - $this->currentPage();
-            $number_of_previous_pages += ($half_number_of_pages - $number_of_next_pages);
+            $number_of_upcoming_pages = $this->totalPages() - $this->currentPage();
+            $number_of_preceding_pages += ($half_number_of_pages - $number_of_upcoming_pages);
         }
 
         $urls = [];
 
-        $urls = array_merge($urls, $this->previousPagesUrls($number_of_previous_pages));
+        $urls = array_merge($urls, $this->previousPagesUrls($number_of_preceding_pages));
 
         $urls[] = [
             'page_number' => $this->currentPage(),
@@ -238,7 +238,9 @@ class SearchPaginator
             'url' => $this->currentPageUrl(),
         ];
 
-        $urls = array_merge($urls, $this->nextPagesUrls($number_of_next_pages));
+        $urls = array_merge($urls, $this->nextPagesUrls($number_of_upcoming_pages));
+
+       // dd($urls);
 
         return $urls;
     }
