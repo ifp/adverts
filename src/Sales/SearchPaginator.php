@@ -247,6 +247,7 @@ class SearchPaginator
     {
         if ($start_page) {
             $query_vars = $this->search_criteria;
+            unset($query_vars['start_page']);
             $query_vars['start_page'] = $start_page;
             return $this->base_url . '?' . $this->buildQueryString($query_vars);
         }

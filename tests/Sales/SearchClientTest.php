@@ -135,6 +135,29 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         $this->fail('Search succeeded despite invalid search criteria.');
     }
 
+    //StartPageOutOfBoundsException
+    public function testItThrowsAnExceptionWhenTheSearchEngineReturnsA404()
+    {
+        $base_url = 'http://search.french-property.app';
+        $token = getenv('FPAPI_SEARCH_CLIENT_TOKEN');
+
+        $subject = new SearchClient($base_url, $token);
+
+        try {
+            $subject->search([
+                'minimum_price' => '1000000',
+                'page_size' => 100,
+                'start_page' => 10000
+            ]);
+        } catch (\Exception $e) {
+            print_r($e->getCode());
+            $this->assertCount(1, $e->getErrors());
+            return;
+        }
+
+        $this->fail('Search succeeded despite invalid search criteria.');
+    }
+
     public function testItCanFindAnAdvertById()
     {
         $base_url = 'http://search.french-property.app';
