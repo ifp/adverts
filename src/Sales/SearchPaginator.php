@@ -240,8 +240,6 @@ class SearchPaginator
 
         $urls = array_merge($urls, $this->nextPagesUrls($number_of_upcoming_pages));
 
-       // dd($urls);
-
         return $urls;
     }
 
