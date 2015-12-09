@@ -43,6 +43,11 @@ class SearchExpander
         return isset($this->search_criteria['maximum_bedrooms']) ? $this->search_criteria['maximum_bedrooms'] : null;
     }
 
+    public function minimumLandSize()
+    {
+        return isset($this->search_criteria['minimum_land_size']) ? $this->search_criteria['minimum_land_size'] : null;
+    }
+
     public function decreaseMinimumPriceByPercentage($percentage)
     {
         if (isset($this->search_criteria['minimum_price'])) {
@@ -71,6 +76,14 @@ class SearchExpander
     {
         if (isset($this->search_criteria['maximum_bedrooms'])) {
             $this->search_criteria['maximum_bedrooms'] = (int)($this->search_criteria['maximum_bedrooms']+$amount);
+        }
+        return $this;
+    }
+
+    public function decreaseMinimumLandSizeByPercentage($percentage)
+    {
+        if (isset($this->search_criteria['minimum_land_size'])) {
+            $this->search_criteria['minimum_land_size'] = (int)floor($this->search_criteria['minimum_land_size'] * (1 - ($percentage / 100)));
         }
         return $this;
     }
