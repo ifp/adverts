@@ -208,6 +208,51 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testTheMaximumLandSizeCanBeReturned()
+    {
+        $subject = new SearchExpander(null, ['maximum_land_size' => 250000]);
+
+        $this->assertEquals(250000, $subject->maximumLandSize());
+    }
+
+    public function testTheMaximumLandSizeReturnsNullIfNotSet()
+    {
+        $subject = new SearchExpander(null, []);
+
+        $this->assertEquals(null, $subject->maximumLandSize());
+    }
+
+    public function testTheMaximumLandSizeCriteriaIsIncreasedByASpecifiedPercentage()
+    {
+        $subject = new SearchExpander(null, ['maximum_land_size' => 100000]);
+
+        $this->assertEquals(120000, $subject->increaseMaximumLandSizeByPercentage(20)->maximumLandSize());
+    }
+
+    public function testTheMaximumLandSizeCriteriaIsIncreasedByASpecifiedPercentageAndRoundsUpToTheClosestInteger()
+    {
+        $subject = new SearchExpander(null, ['maximum_land_size' => 99997]);
+
+        $this->assertEquals(119997, $subject->increaseMaximumLandSizeByPercentage(20)->maximumLandSize());
+    }
+
+    public function testTheMaximumLandSizeCriteriaIsIgnoredWhenTryingToIncreaseItByPercentageIfItWasNotSuppliedInTheSearchCriteria()
+    {
+        $subject = new SearchExpander(null, []);
+
+        $this->assertEquals(null, $subject->increaseMaximumLandSizeByPercentage(20)->maximumLandSize());
+    }
+
+    public function testPropertiesWithMoreLandCanBeFoundWithTheOtherSearchCriteriaRemainingTheSame()
+    {
+        $subject = new SearchExpander('/sale-advert-search', ['title_en_any' => 'lake', 'maximum_land_size' => 100000, 'minimum_bedrooms' => 7]);
+
+        $this->assertEquals(
+            '/sale-advert-search?title_en_any=lake&maximum_land_size=125000&minimum_bedrooms=7',
+            $subject->increaseMaximumLandSizeByPercentage(25)->url()
+        );
+    }
+
     public function testSearchCriteriaCanBeResetToItsOriginalValues()
     {
         $subject = new SearchExpander('/sale-advert-search', ['minimum_price' => 100000, 'maximum_price' => 200000]);
