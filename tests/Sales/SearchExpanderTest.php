@@ -4,60 +4,156 @@ use IFP\Adverts\Sales\SearchExpander;
 
 class SearchExpanderTest extends PHPUnit_Framework_TestCase
 {
-    public function testTheMinimumPriceCriteriaIsReducedBy25Percent()
+    public function testTheMinimumPriceCanBeReturned()
     {
-        $subject = new SearchExpander(['minimum_price' => 100000]);
+        $subject = new SearchExpander(null, ['minimum_price' => 100000]);
 
-        $this->assertEquals(75000, $subject->reduceMinimumPrice());
+        $this->assertEquals(100000, $subject->minimumPrice());
     }
 
-    public function testTheMinimumPriceCriteriaIsReducedBy25PercentAndRoundsDownToTheClosestInteger()
+    public function testTheMinimumPriceReturnsNullIfNotSet()
     {
-        $subject = new SearchExpander(['minimum_price' => 99999]);
+        $subject = new SearchExpander(null, []);
 
-        $this->assertEquals(74999, $subject->reduceMinimumPrice());
+        $this->assertEquals(null, $subject->minimumPrice());
     }
 
-    public function testTheMinimumPriceCriteriaIsReducedByASpecifiedPercentage()
+    public function testTheMinimumPriceCriteriaIsDecreasedByASpecifiedPercentage()
     {
-        $subject = new SearchExpander(['minimum_price' => 100000]);
+        $subject = new SearchExpander(null, ['minimum_price' => 100000]);
 
-        $this->assertEquals(80000, $subject->reduceMinimumPriceByPercentage(20));
+        $this->assertEquals(80000, $subject->decreaseMinimumPriceByPercentage(20)->minimumPrice());
     }
 
-    public function testTheMinimumPriceCriteriaIsReducedByASpecifiedPercentageAndRoundsDownToTheClosestInteger()
+    public function testTheMinimumPriceCriteriaIsDecreasedByASpecifiedPercentageAndRoundsDownToTheClosestInteger()
     {
-        $subject = new SearchExpander(['minimum_price' => 99997]);
+        $subject = new SearchExpander(null, ['minimum_price' => 99997]);
 
-        $this->assertEquals(79997, $subject->reduceMinimumPriceByPercentage(20));
+        $this->assertEquals(79997, $subject->decreaseMinimumPriceByPercentage(20)->minimumPrice());
     }
 
-    public function testTheMaximumPriceCriteriaIsIncreasedBy25Percent()
+    public function testTheMinimumPriceCriteriaIsIgnoredWhenTryingToDecreaseItByPercentageIfItWasNotSuppliedInTheSearchCriteria()
     {
-        $subject = new SearchExpander(['maximum_price' => 100000]);
+        $subject = new SearchExpander(null, []);
 
-        $this->assertEquals(125000, $subject->increaseMaximumPrice());
+        $this->assertEquals(null, $subject->decreaseMinimumPriceByPercentage(20)->minimumPrice());
     }
 
-    public function testTheMaximumPriceCriteriaIsIncreasedBy25PercentAndRoundsUpToTheClosestInteger()
+    public function testCheaperPropertiesCanBeFoundWithTheOtherSearchCriteriaRemainingTheSame()
     {
-        $subject = new SearchExpander(['maximum_price' => 100003]);
+        $subject = new SearchExpander('/sale-advert-search', ['title_en_any' => 'lake', 'minimum_price' => 100000, 'minimum_bedrooms' => 7]);
 
-        $this->assertEquals(125004, $subject->increaseMaximumPrice());
+        $this->assertEquals(
+            '/sale-advert-search?title_en_any=lake&minimum_price=75000&minimum_bedrooms=7',
+            $subject->decreaseMinimumPriceByPercentage(25)->url()
+        );
+    }
+
+    public function testTheMaximumPriceCanBeReturned()
+    {
+        $subject = new SearchExpander(null, ['maximum_price' => 250000]);
+
+        $this->assertEquals(250000, $subject->maximumPrice());
+    }
+
+    public function testTheMaximumPriceReturnsNullIfNotSet()
+    {
+        $subject = new SearchExpander(null, []);
+
+        $this->assertEquals(null, $subject->maximumPrice());
     }
 
     public function testTheMaximumPriceCriteriaIsIncreasedByASpecifiedPercentage()
     {
-        $subject = new SearchExpander(['maximum_price' => 100000]);
+        $subject = new SearchExpander(null, ['maximum_price' => 100000]);
 
-        $this->assertEquals(120000, $subject->increaseMaximumPriceByPercentage(20));
+        $this->assertEquals(120000, $subject->increaseMaximumPriceByPercentage(20)->maximumPrice());
     }
 
     public function testTheMaximumPriceCriteriaIsIncreasedByASpecifiedPercentageAndRoundsUpToTheClosestInteger()
     {
-        $subject = new SearchExpander(['maximum_price' => 99997]);
+        $subject = new SearchExpander(null, ['maximum_price' => 99997]);
 
-        $this->assertEquals(119997, $subject->increaseMaximumPriceByPercentage(20));
+        $this->assertEquals(119997, $subject->increaseMaximumPriceByPercentage(20)->maximumPrice());
     }
 
+    public function testTheMaximumPriceCriteriaIsIgnoredWhenTryingToIncreaseItByPercentageIfItWasNotSuppliedInTheSearchCriteria()
+    {
+        $subject = new SearchExpander(null, []);
+
+        $this->assertEquals(null, $subject->increaseMaximumPriceByPercentage(20)->maximumPrice());
+    }
+
+    public function testMoreExpensivePropertiesCanBeFoundWithTheOtherSearchCriteriaRemainingTheSame()
+    {
+        $subject = new SearchExpander('/sale-advert-search', ['title_en_any' => 'lake', 'maximum_price' => 250000, 'minimum_bedrooms' => 3]);
+
+        $this->assertEquals(
+            '/sale-advert-search?title_en_any=lake&maximum_price=312500&minimum_bedrooms=3',
+            $subject->increaseMaximumPriceByPercentage(25)->url()
+        );
+    }
+
+    public function testTheMinimumBedroomsCanBeReturned()
+    {
+        $subject = new SearchExpander(null, ['minimum_bedrooms' => 3]);
+
+        $this->assertEquals(3, $subject->minimumBedrooms());
+    }
+
+    public function testTheMinimumBedroomsReturnsNullIfNotSet()
+    {
+        $subject = new SearchExpander(null, []);
+
+        $this->assertEquals(null, $subject->minimumBedrooms());
+    }
+
+    public function testTheMinimumBedroomsCriteriaIsDecreasedByACertainNumber()
+    {
+        $subject = new SearchExpander(null, ['minimum_bedrooms' => 3]);
+
+        $this->assertEquals(1, $subject->decreaseMinimumBedroomsByNumber(2)->minimumBedrooms());
+    }
+
+    public function testTheMinimumBedroomsCriteriaIsNotDecreasedIfTheMinimumNumberisAlready0()
+    {
+        $subject = new SearchExpander(null, ['minimum_bedrooms' => 0]);
+
+        $this->assertEquals(0, $subject->decreaseMinimumBedroomsByNumber(2)->minimumBedrooms());
+    }
+
+    public function testTheMaximumBedroomsCanBeReturned()
+    {
+        $subject = new SearchExpander(null, ['maximum_bedrooms' => 3]);
+
+        $this->assertEquals(3, $subject->maximumBedrooms());
+    }
+
+    public function testTheMaximumBedroomsReturnsNullIfNotSet()
+    {
+        $subject = new SearchExpander(null, []);
+
+        $this->assertEquals(null, $subject->maximumBedrooms());
+    }
+
+    public function testTheMaximumBedroomsCriteriaIsIncreasedByACertainNumber()
+    {
+        $subject = new SearchExpander(null, ['maximum_bedrooms' => 3]);
+
+        $this->assertEquals(5, $subject->increaseMaximumBedroomsByNumber(2)->maximumBedrooms());
+    }
+
+    public function testSearchCriteriaCanBeResetToItsOriginalValues()
+    {
+        $subject = new SearchExpander('/sale-advert-search', ['minimum_price' => 100000, 'maximum_price' => 200000]);
+
+        $subject->increaseMaximumPriceByPercentage(25);
+        $subject->decreaseMinimumPriceByPercentage(25);
+
+        $this->assertEquals(75000, $subject->minimumPrice());
+        $this->assertEquals(250000, $subject->maximumPrice());
+
+        $this->assertEquals(100000, $subject->reset()->minimumPrice());
+        $this->assertEquals(200000, $subject->reset()->maximumPrice());
+    }
 }
