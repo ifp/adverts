@@ -101,6 +101,12 @@ class SearchExpander
         return $this;
     }
 
+    public function removeKeywords()
+    {
+        unset($this->search_criteria['keywords_en_any']);
+        return $this;
+    }
+
     public function url()
     {
         return $this->base_url . '?' . $this->buildQueryString($this->search_criteria);
