@@ -6,10 +6,14 @@ class Currency
 {
     private $code;
     private $currencies;
+    private $rates;
 
-    public function __construct($code)
+    public function __construct($rates)
     {
-        $this->code = $code;
+        $this->rates = $rates;
+
+        $this->code = 'EUR';
+
         $this->currencies = [
             'EUR' => '€',
             'GBP' => '£',
@@ -19,6 +23,13 @@ class Currency
             'CHF' => 'Fr.',
             'ZAR' => 'R',
         ];
+    }
+
+    public function setCurrency($code)
+    {
+        if (array_key_exists($code, $this->currencies)) {
+            $this->code = $code;
+        }
     }
 
     public function code()
@@ -38,5 +49,15 @@ class Currency
     public function isCurrency($currency)
     {
         return $this->code() == $currency;
+    }
+
+    public function isNotCurrency($currency)
+    {
+        return !$this->isCurrency($currency);
+    }
+
+    public function convertFromEuros($amount = 0)
+    {
+        return (int)floor($amount * $this->rates[$this->code()]);
     }
 }
