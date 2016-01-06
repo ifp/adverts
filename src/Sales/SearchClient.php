@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\ClientException;
 use IFP\Adverts\AdvertNotFoundException;
 use IFP\Adverts\InvalidApiTokenException;
 use IFP\Adverts\InvalidSearchCriteriaException;
+use IFP\Adverts\StartPageOutOfBoundsException;
 
 class SearchClient
 {
@@ -60,11 +61,26 @@ class SearchClient
                 case 401:
                     throw new InvalidApiTokenException;
                     break;
+                case 404:
+                    $this->handle404($e);
+                    break;
                 default:
                     throw $e;
             }
         }
     }
 
+    private function handle404($e)
+    {
+        $errors = json_decode((string) $e->getResponse()->getBody(), true)['errors'];
+
+        foreach ($errors as $error) {
+            if ($error['title'] === 'Start Page Out Of Bounds') {
+                throw new StartPageOutOfBoundsException($error);
+            }
+        }
+
+        throw $e;
+    }
 }
 

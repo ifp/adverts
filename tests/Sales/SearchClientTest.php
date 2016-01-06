@@ -4,6 +4,7 @@ use IFP\Adverts\AdvertNotFoundException;
 use IFP\Adverts\InvalidApiTokenException;
 use IFP\Adverts\InvalidSearchCriteriaException;
 use IFP\Adverts\Sales\SearchClient;
+use IFP\Adverts\StartPageOutOfBoundsException;
 
 class SearchClientTest extends PHPUnit_Framework_TestCase
 {
@@ -135,7 +136,6 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         $this->fail('Search succeeded despite invalid search criteria.');
     }
 
-    //StartPageOutOfBoundsException
     public function testItThrowsAnExceptionWhenTheSearchEngineReturnsA404()
     {
         $base_url = 'http://search.french-property.app';
@@ -147,10 +147,10 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
             $subject->search([
                 'minimum_price' => '1000000',
                 'page_size' => 100,
-                'start_page' => 10000
+                'start_page' => 100
             ]);
-        } catch (\Exception $e) {
-            //$this->assertCount(1, $e->getErrors());
+        } catch (StartPageOutOfBoundsException $e) {
+            $this->assertEquals(5, $e->lastPage());
             return;
         }
 
