@@ -187,6 +187,36 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(100859, $subject->convertFromEuros(140083));
     }
 
+    public function testItCanConvertIntoEurosFromCurrencies()
+    {
+        $subject = new Currency([
+            'GBP' => 0.72,
+            'USD' => 1.09,
+            'CAD' => 1.49,
+            'AUD' => 1.5,
+            'CHF' => 1.08,
+            'ZAR' => 16.93,
+        ]);
+
+        $subject->setCurrency('GBP');
+        $this->assertEquals(138889, $subject->convertToEuros(100000));
+
+        $subject->setCurrency('USD');
+        $this->assertEquals(91743, $subject->convertToEuros(100000));
+
+        $subject->setCurrency('CAD');
+        $this->assertEquals(67114, $subject->convertToEuros(100000));
+
+        $subject->setCurrency('AUD');
+        $this->assertEquals(66667, $subject->convertToEuros(100000));
+
+        $subject->setCurrency('CHF');
+        $this->assertEquals(92593, $subject->convertToEuros(100000));
+
+        $subject->setCurrency('ZAR');
+        $this->assertEquals(5907, $subject->convertToEuros(100000));
+    }
+
     public function testItCanConvertInto0FromInvalidValues()
     {
         $subject = new Currency([

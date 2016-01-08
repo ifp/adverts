@@ -60,4 +60,9 @@ class Currency
     {
         return (int)floor($amount * $this->rates[$this->code()]);
     }
+
+    public function convertToEuros($amount = 0)
+    {
+        return (int)round($amount / $this->rates[$this->code()]);
+    }
 }
