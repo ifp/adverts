@@ -15,12 +15,14 @@ class DataFeedDownloader
         $this->url = $url;
     }
 
-    public function url()
+    public function data()
     {
-        return $this->url;
+        $this->download();
+
+        return $this->data;
     }
 
-    public function download()
+    private function download()
     {
         $this->curl->setOpt(CURLOPT_HEADER, false);
         $this->curl->setOpt(CURLOPT_RETURNTRANSFER, true);
@@ -36,8 +38,4 @@ class DataFeedDownloader
         }
     }
 
-    public function data()
-    {
-        return $this->data;
-    }
 }

@@ -12,7 +12,6 @@ class CurrencyBuilder
     public function __construct(DataFeedDownloader $data_feed_downloader)
     {
         $this->data_feed_downloader = $data_feed_downloader;
-        $this->data_feed_downloader->download();
         $this->rates = json_decode($this->data_feed_downloader->data(), true);
         $this->mapRateKeys();
     }
@@ -57,5 +56,10 @@ class CurrencyBuilder
         $required_rates['EUR'] = 1;
 
         return $required_rates;
+    }
+
+    public function build()
+    {
+        return new Currency($this->requiredRates());
     }
 }

@@ -15,33 +15,10 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
         $this->curl = Mockery::spy(Curl::class);
     }
 
-    public function testTheDataFeedUrlCanBeSet()
-    {
-        $data_feed_downloader = new DataFeedDownloader($this->curl, 'http://www.example.com');
-
-        $this->assertEquals('http://www.example.com', $data_feed_downloader->url());
-    }
-
-    public function testTheDataFeedCanBeDownloaded()
-    {
-        $this->curl->shouldReceive('getInfo')->andReturn(200);
-        $data_feed_downloader = new DataFeedDownloader($this->curl, 'http://www.example.com');
-
-        try {
-            $data_feed_downloader->download();
-        } catch (UnableToDownloadDataException $e) {
-            print_r($e->getMessage());
-            $this->fail('Exception thrown');
-        }
-        $this->assertEquals(true, true);
-    }
-
-    public function testTheDataFeedCanBeRetreivedAfterDownloading()
+    public function testTheDataFeedCanBeRetrievedAfterDownloading()
     {
         $this->curl->shouldReceive(['execute' => 'foo', 'getInfo' => 200]);
         $data_feed_downloader = new DataFeedDownloader($this->curl, 'http://www.example.com');
-
-        $data_feed_downloader->download();
 
         $this->assertEquals('foo', $data_feed_downloader->data());
     }
@@ -52,7 +29,7 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
         $data_feed_downloader = new DataFeedDownloader($this->curl, 'http://www.french-property.com/invalidfilename.txt');
 
         try {
-            $data_feed_downloader->download();
+            $data_feed_downloader->data();
         } catch (UnableToDownloadDataException $e) {
             $this->assertEquals(404, $e->getCode());
             return;
