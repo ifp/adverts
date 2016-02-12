@@ -47,7 +47,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
             'minimum_price' => 150000,
         ]);
 
-        $this->assertEquals(7635, $results['meta']['results']['total']);
+        $this->assertEquals(7636, $results['meta']['results']['total'], 'ensure seeded_test_adverts index has 997 adverts - http://192.168.10.10:9200/_cat/indices?v');
     }
 
     public function testItCanSearchWithArrayConstraints()
@@ -79,7 +79,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $this->assertEquals(1631, $results['meta']['results']['total']);
+        $this->assertEquals(1632, $results['meta']['results']['total'], 'ensure seeded_test_adverts index has 997 adverts - http://192.168.10.10:9200/_cat/indices?v');
     }
 
     public function testItCanSortTheResults()
@@ -114,7 +114,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
             'page_size' => 5,
         ]);
 
-        $this->assertCount(1, $results['data']);
+        $this->assertCount(2, $results['data'], 'ensure seeded_test_adverts index has 997 adverts - http://192.168.10.10:9200/_cat/indices?v');
     }
 
     public function testItThrowsAnExceptionWhenSearchingWithInvalidCriteria()
