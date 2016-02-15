@@ -56,13 +56,53 @@ class Currency
         return !$this->isCurrency($currency);
     }
 
-    public function convertFromEuros($amount = 0)
+    public function convertFromEuros($amount = 0, $code = null)
     {
-        return (int)floor($amount * $this->rates[$this->code()]);
+        if ($code === null) {
+            $code = $this->code();
+        }
+
+        return (int)floor($amount * $this->rates[$code]);
     }
 
-    public function convertToEuros($amount = 0)
+    public function convertToEuros($amount = 0, $code = null)
     {
-        return (int)round($amount / $this->rates[$this->code()]);
+        if ($code === null) {
+            $code = $this->code();
+        }
+
+        return (int)round($amount / $this->rates[$code]);
+    }
+
+    public function format($value, $currencies = [])
+    {
+        $formatted_currencies = '';
+
+        if (@$currencies[0] != 'EUR') {
+            if ($this->code() != 'EUR') {
+                array_unshift($currencies, $this->code());
+            }
+            array_unshift($currencies, 'EUR');
+        }
+
+        for ($i=0; $i<=count($currencies)-1; $i++) {
+            if ($i == 0) {
+                $formatted_currencies = $this->formatValueInCurrency($value, $currencies[$i]);
+            } else {
+                $formatted_currencies .= ' (~' . $this->formatValueInCurrency($value, $currencies[$i]). ')';
+            }
+        }
+
+        return $formatted_currencies;
+    }
+
+    private function formatValue($value)
+    {
+        return number_format($value, 0, '.', ',');
+    }
+
+    private function formatValueInCurrency($value_in_euros, $currency)
+    {
+        return $this->currencies[$currency] .  $this->formatValue($this->convertFromEuros($value_in_euros, $currency));
     }
 }
