@@ -294,6 +294,23 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
             $subject->format(100000, ['GBP', 'USD', 'CAD', 'AUD', 'CHF', 'ZAR']));
     }
 
+    public function testItFormatsThePriceForDisplayInMultipleCurrenciesIncludingTheCurrencyItIsSetTo()
+    {
+        $subject = new Currency([
+            'EUR' => 1,
+            'GBP' => 0.72,
+            'USD' => 1.09,
+            'CAD' => 1.49,
+            'AUD' => 1.5,
+            'CHF' => 1.08,
+            'ZAR' => 16.93,
+        ]);
+        $subject->setCurrency('GBP');
+
+        $this->assertEquals('€100,000 (~£72,000) (~$109,000) (~C$149,000) (~A$150,000) (~Fr.108,000) (~R1,693,000)',
+            $subject->format(100000, ['GBP', 'USD', 'CAD', 'AUD', 'CHF', 'ZAR']));
+    }
+
     public function testItFormatsThePriceForDisplayInCurrencyThatItIsSetToByDefault()
     {
         $subject = new Currency(['EUR' => 1, 'ZAR' => 16.93]);
