@@ -145,7 +145,7 @@ class Currency
         return number_format($value, 0, '.', ',');
     }
 
-    private function formatValueInCurrency($value_in_euros, $currency)
+    public function formatValueInCurrency($value_in_euros, $currency)
     {
         return $this->currencies[$currency] .  $this->formatValue($this->convertFromEuros($value_in_euros, $currency));
     }
