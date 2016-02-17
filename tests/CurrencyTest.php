@@ -4,318 +4,255 @@ use IFP\Adverts\Currency;
 
 class CurrencyTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->subject = new Currency([
+            'EUR' => 1,
+            'GBP' => 0.72,
+            'USD' => 1.09,
+            'CAD' => 1.49,
+            'AUD' => 1.5,
+            'CHF' => 1.08,
+            'ZAR' => 16.93,
+        ]);
+    }
+
     public function testTheCurrencyIsSetToEurosByDefault()
     {
-        $subject = new Currency([]);
-
-        $this->assertEquals('EUR', $subject->code());
-        $this->assertEquals('€', $subject->symbol());
+        $this->assertEquals('EUR', $this->subject->code());
+        $this->assertEquals('€', $this->subject->symbol());
     }
 
     public function testItCanSetTheCurrencyToEurosAndReturnTheEuroCodeAndHtmlEntitySymbol()
     {
-        $subject = new Currency([]);
-        $subject->setCurrency('EUR');
+        $this->subject->setCurrency('EUR');
 
-        $this->assertEquals('EUR', $subject->code());
-        $this->assertEquals('€', $subject->symbol());
+        $this->assertEquals('EUR', $this->subject->code());
+        $this->assertEquals('€', $this->subject->symbol());
     }
 
     public function testItCanSetTheCurrencyToBritishPoundsAndReturnTheBritishPoundCodeAndHtmlEntitySymbol()
     {
-        $subject = new Currency([]);
-        $subject->setCurrency('GBP');
+        $this->subject->setCurrency('GBP');
 
-        $this->assertEquals('GBP', $subject->code());
-        $this->assertEquals('£', $subject->symbol());
+        $this->assertEquals('GBP', $this->subject->code());
+        $this->assertEquals('£', $this->subject->symbol());
     }
 
     public function testItCanSetTheCurrencyToUsDollarsAndReturnTheUsDollarCodeAndHtmlEntitySymbol()
     {
-        $subject = new Currency([]);
-        $subject->setCurrency('USD');
+        $this->subject->setCurrency('USD');
 
-        $this->assertEquals('USD', $subject->code());
-        $this->assertEquals('$', $subject->symbol());
+        $this->assertEquals('USD', $this->subject->code());
+        $this->assertEquals('$', $this->subject->symbol());
     }
 
     public function testItCanSetTheCurrencyToCanadianDollarsAndReturnTheCanadianDollarCodeAndHtmlEntitySymbol()
     {
-        $subject = new Currency([]);
-        $subject->setCurrency('CAD');
+        $this->subject->setCurrency('CAD');
 
-        $this->assertEquals('CAD', $subject->code());
-        $this->assertEquals('C$', $subject->symbol());
+        $this->assertEquals('CAD', $this->subject->code());
+        $this->assertEquals('C$', $this->subject->symbol());
     }
 
     public function testItCanSetTheCurrencyToAustralianDollarsAndReturnTheAustralianDollarCodeAndHtmlEntitySymbol()
     {
-        $subject = new Currency([]);
-        $subject->setCurrency('AUD');
+        $this->subject->setCurrency('AUD');
 
-        $this->assertEquals('AUD', $subject->code());
-        $this->assertEquals('A$', $subject->symbol());
+        $this->assertEquals('AUD', $this->subject->code());
+        $this->assertEquals('A$', $this->subject->symbol());
     }
 
     public function testItCanSetTheCurrencyToSwissFrancAndReturnTheSwissFrancCodeAndHtmlEntitySymbol()
     {
-        $subject = new Currency([]);
-        $subject->setCurrency('CHF');
+        $this->subject->setCurrency('CHF');
 
-        $this->assertEquals('CHF', $subject->code());
-        $this->assertEquals('Fr.', $subject->symbol());
+        $this->assertEquals('CHF', $this->subject->code());
+        $this->assertEquals('Fr.', $this->subject->symbol());
     }
 
     public function testItCanSetTheCurrencyToSouthAfricanRandAndReturnTheSouthAfricanRandCodeAndHtmlEntitySymbol()
     {
-        $subject = new Currency([]);
-        $subject->setCurrency('ZAR');
+        $this->subject->setCurrency('ZAR');
 
-        $this->assertEquals('ZAR', $subject->code());
-        $this->assertEquals('R', $subject->symbol());
+        $this->assertEquals('ZAR', $this->subject->code());
+        $this->assertEquals('R', $this->subject->symbol());
     }
 
     public function testOnlyConfiguredCurrenciesCanBeSet()
     {
-        $subject = new Currency([]);
-        $subject->setCurrency('foo');
+        $this->subject->setCurrency('foo');
 
-        $this->assertEquals('EUR', $subject->code());
+        $this->assertEquals('EUR', $this->subject->code());
 
-        $subject->setCurrency('USD');
+        $this->subject->setCurrency('USD');
 
-        $this->assertEquals('USD', $subject->code());
+        $this->assertEquals('USD', $this->subject->code());
 
-        $subject->setCurrency(null);
+        $this->subject->setCurrency(null);
 
-        $this->assertEquals('USD', $subject->code());
+        $this->assertEquals('USD', $this->subject->code());
     }
 
     public function testItCanIdentifyWhetherACurrencyProvidedIsTheCurrencyThatHasBeenSet()
     {
-        $subject = new Currency([]);
+        $this->assertEquals(true, $this->subject->isCurrency('EUR'));
+        $this->assertEquals(false, $this->subject->isCurrency('GBP'));
+        $this->assertEquals(false, $this->subject->isCurrency('USD'));
+        $this->assertEquals(false, $this->subject->isCurrency('CAD'));
+        $this->assertEquals(false, $this->subject->isCurrency('AUD'));
+        $this->assertEquals(false, $this->subject->isCurrency('CHF'));
+        $this->assertEquals(false, $this->subject->isCurrency('ZAR'));
 
-        $this->assertEquals(true, $subject->isCurrency('EUR'));
-        $this->assertEquals(false, $subject->isCurrency('GBP'));
-        $this->assertEquals(false, $subject->isCurrency('USD'));
-        $this->assertEquals(false, $subject->isCurrency('CAD'));
-        $this->assertEquals(false, $subject->isCurrency('AUD'));
-        $this->assertEquals(false, $subject->isCurrency('CHF'));
-        $this->assertEquals(false, $subject->isCurrency('ZAR'));
+        $this->subject->setCurrency('AUD');
 
-        $subject = new Currency([]);
-        $subject->setCurrency('AUD');
-
-        $this->assertEquals(false, $subject->isCurrency('EUR'));
-        $this->assertEquals(false, $subject->isCurrency('GBP'));
-        $this->assertEquals(false, $subject->isCurrency('USD'));
-        $this->assertEquals(false, $subject->isCurrency('CAD'));
-        $this->assertEquals(true, $subject->isCurrency('AUD'));
-        $this->assertEquals(false, $subject->isCurrency('CHF'));
-        $this->assertEquals(false, $subject->isCurrency('ZAR'));
+        $this->assertEquals(false, $this->subject->isCurrency('EUR'));
+        $this->assertEquals(false, $this->subject->isCurrency('GBP'));
+        $this->assertEquals(false, $this->subject->isCurrency('USD'));
+        $this->assertEquals(false, $this->subject->isCurrency('CAD'));
+        $this->assertEquals(true, $this->subject->isCurrency('AUD'));
+        $this->assertEquals(false, $this->subject->isCurrency('CHF'));
+        $this->assertEquals(false, $this->subject->isCurrency('ZAR'));
     }
 
     public function testItCanIdentifyWhetherACurrencyProvidedIsNotTheCurrencyThatHasBeenSet()
     {
-        $subject = new Currency([]);
+        $this->assertEquals(false, $this->subject->isNotCurrency('EUR'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('GBP'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('USD'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('CAD'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('AUD'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('CHF'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('ZAR'));
 
-        $this->assertEquals(false, $subject->isNotCurrency('EUR'));
-        $this->assertEquals(true, $subject->isNotCurrency('GBP'));
-        $this->assertEquals(true, $subject->isNotCurrency('USD'));
-        $this->assertEquals(true, $subject->isNotCurrency('CAD'));
-        $this->assertEquals(true, $subject->isNotCurrency('AUD'));
-        $this->assertEquals(true, $subject->isNotCurrency('CHF'));
-        $this->assertEquals(true, $subject->isNotCurrency('ZAR'));
+        $this->subject->setCurrency('AUD');
 
-        $subject = new Currency([]);
-        $subject->setCurrency('AUD');
-
-        $this->assertEquals(true, $subject->isNotCurrency('EUR'));
-        $this->assertEquals(true, $subject->isNotCurrency('GBP'));
-        $this->assertEquals(true, $subject->isNotCurrency('USD'));
-        $this->assertEquals(true, $subject->isNotCurrency('CAD'));
-        $this->assertEquals(false, $subject->isNotCurrency('AUD'));
-        $this->assertEquals(true, $subject->isNotCurrency('CHF'));
-        $this->assertEquals(true, $subject->isNotCurrency('ZAR'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('EUR'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('GBP'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('USD'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('CAD'));
+        $this->assertEquals(false, $this->subject->isNotCurrency('AUD'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('CHF'));
+        $this->assertEquals(true, $this->subject->isNotCurrency('ZAR'));
     }
 
     public function testItCanConvertIntoEurosFromEuros()
     {
-        $subject = new Currency(['EUR' => 1]);
-
-        $this->assertEquals(100000, $subject->convertFromEuros(100000));
+        $this->assertEquals(100000, $this->subject->convertFromEuros(100000));
     }
 
     public function testItCanConvertIntoCurrenciesFromEuros()
     {
-        $subject = new Currency([
-            'GBP' => 0.72,
-            'USD' => 1.09,
-            'CAD' => 1.49,
-            'AUD' => 1.5,
-            'CHF' => 1.08,
-            'ZAR' => 16.93,
-        ]);
+        $this->subject->setCurrency('GBP');
+        $this->assertEquals(72000, $this->subject->convertFromEuros(100000));
 
-        $subject->setCurrency('GBP');
-        $this->assertEquals(72000, $subject->convertFromEuros(100000));
+        $this->subject->setCurrency('USD');
+        $this->assertEquals(109000, $this->subject->convertFromEuros(100000));
 
-        $subject->setCurrency('USD');
-        $this->assertEquals(109000, $subject->convertFromEuros(100000));
+        $this->subject->setCurrency('CAD');
+        $this->assertEquals(149000, $this->subject->convertFromEuros(100000));
 
-        $subject->setCurrency('CAD');
-        $this->assertEquals(149000, $subject->convertFromEuros(100000));
+        $this->subject->setCurrency('AUD');
+        $this->assertEquals(150000, $this->subject->convertFromEuros(100000));
 
-        $subject->setCurrency('AUD');
-        $this->assertEquals(150000, $subject->convertFromEuros(100000));
+        $this->subject->setCurrency('CHF');
+        $this->assertEquals(108000, $this->subject->convertFromEuros(100000));
 
-        $subject->setCurrency('CHF');
-        $this->assertEquals(108000, $subject->convertFromEuros(100000));
-
-        $subject->setCurrency('ZAR');
-        $this->assertEquals(1693000, $subject->convertFromEuros(100000));
+        $this->subject->setCurrency('ZAR');
+        $this->assertEquals(1693000, $this->subject->convertFromEuros(100000));
     }
 
     public function testItCanConvertIntoCurrenciesFromEurosAndRoundNumberDownToNearestInteger()
     {
-        $subject = new Currency([
-            'GBP' => 0.72,
-        ]);
-
-        $subject->setCurrency('GBP');
-        $this->assertEquals(72002, $subject->convertFromEuros(100003));
-        $this->assertEquals(100859, $subject->convertFromEuros(140083));
+        $this->subject->setCurrency('GBP');
+        $this->assertEquals(72002, $this->subject->convertFromEuros(100003));
+        $this->assertEquals(100859, $this->subject->convertFromEuros(140083));
     }
 
     public function testItCanConvertIntoEurosFromCurrencies()
     {
-        $subject = new Currency([
-            'GBP' => 0.72,
-            'USD' => 1.09,
-            'CAD' => 1.49,
-            'AUD' => 1.5,
-            'CHF' => 1.08,
-            'ZAR' => 16.93,
-        ]);
+        $this->subject->setCurrency('GBP');
+        $this->assertEquals(138889, $this->subject->convertToEuros(100000));
 
-        $subject->setCurrency('GBP');
-        $this->assertEquals(138889, $subject->convertToEuros(100000));
+        $this->subject->setCurrency('USD');
+        $this->assertEquals(91743, $this->subject->convertToEuros(100000));
 
-        $subject->setCurrency('USD');
-        $this->assertEquals(91743, $subject->convertToEuros(100000));
+        $this->subject->setCurrency('CAD');
+        $this->assertEquals(67114, $this->subject->convertToEuros(100000));
 
-        $subject->setCurrency('CAD');
-        $this->assertEquals(67114, $subject->convertToEuros(100000));
+        $this->subject->setCurrency('AUD');
+        $this->assertEquals(66667, $this->subject->convertToEuros(100000));
 
-        $subject->setCurrency('AUD');
-        $this->assertEquals(66667, $subject->convertToEuros(100000));
+        $this->subject->setCurrency('CHF');
+        $this->assertEquals(92593, $this->subject->convertToEuros(100000));
 
-        $subject->setCurrency('CHF');
-        $this->assertEquals(92593, $subject->convertToEuros(100000));
-
-        $subject->setCurrency('ZAR');
-        $this->assertEquals(5907, $subject->convertToEuros(100000));
+        $this->subject->setCurrency('ZAR');
+        $this->assertEquals(5907, $this->subject->convertToEuros(100000));
     }
 
     public function testItCanConvertInto0FromInvalidValues()
     {
-        $subject = new Currency([
-            'GBP' => 0.72,
-        ]);
-
-        $subject->setCurrency('GBP');
-        $this->assertEquals(0, $subject->convertFromEuros());
-        $this->assertEquals(0, $subject->convertFromEuros(null));
-        $this->assertEquals(0, $subject->convertFromEuros('foo'));
+        $this->subject->setCurrency('GBP');
+        $this->assertEquals(0, $this->subject->convertFromEuros());
+        $this->assertEquals(0, $this->subject->convertFromEuros(null));
+        $this->assertEquals(0, $this->subject->convertFromEuros('foo'));
     }
 
     public function testItFormatsThePriceForDisplayInEuros()
     {
-        $subject = new Currency(['EUR' => 1]);
-
-        $this->assertEquals('€125,000', $subject->format(125000));
+        $this->assertEquals('€125,000', $this->subject->format(125000));
     }
 
     public function testItFormatsThePriceForDisplayInBritishPounds()
     {
-        $subject = new Currency(['EUR' => 1, 'GBP' => 0.72]);
-
-        $this->assertEquals('€100,000 (~£72,000)', $subject->format(100000, ['GBP']));
+        $this->assertEquals('€100,000 (~£72,000)', $this->subject->format(100000, ['GBP']));
     }
 
     public function testItFormatsThePriceForDisplayInUsDollars()
     {
-        $subject = new Currency(['EUR' => 1, 'USD' => 1.09]);
-
-        $this->assertEquals('€100,000 (~$109,000)', $subject->format(100000, ['USD']));
+        $this->assertEquals('€100,000 (~$109,000)', $this->subject->format(100000, ['USD']));
     }
 
     public function testItFormatsThePriceForDisplayInCanadianDollars()
     {
-        $subject = new Currency(['EUR' => 1, 'CAD' => 1.49]);
-
-        $this->assertEquals('€100,000 (~C$149,000)', $subject->format(100000, ['CAD']));
+        $this->assertEquals('€100,000 (~C$149,000)', $this->subject->format(100000, ['CAD']));
     }
 
     public function testItFormatsThePriceForDisplayInAustralianDollars()
     {
-        $subject = new Currency(['EUR' => 1, 'AUD' => 1.5]);
-
-        $this->assertEquals('€100,000 (~A$150,000)', $subject->format(100000, ['AUD']));
+        $this->assertEquals('€100,000 (~A$150,000)', $this->subject->format(100000, ['AUD']));
     }
 
     public function testItFormatsThePriceForDisplayInSwissFrancs()
     {
-        $subject = new Currency(['EUR' => 1, 'CHF' => 1.08]);
-
-        $this->assertEquals('€100,000 (~Fr.108,000)', $subject->format(100000, ['CHF']));
+        $this->assertEquals('€100,000 (~Fr.108,000)', $this->subject->format(100000, ['CHF']));
     }
 
     public function testItFormatsThePriceForDisplayInSouthAfricanRand()
     {
-        $subject = new Currency(['EUR' => 1, 'ZAR' => 16.93]);
-
-        $this->assertEquals('€100,000 (~R1,693,000)', $subject->format(100000, ['ZAR']));
+        $this->assertEquals('€100,000 (~R1,693,000)', $this->subject->format(100000, ['ZAR']));
     }
 
     public function testItFormatsThePriceForDisplayInMultipleCurrencies()
     {
-        $subject = new Currency([
-            'EUR' => 1,
-            'GBP' => 0.72,
-            'USD' => 1.09,
-            'CAD' => 1.49,
-            'AUD' => 1.5,
-            'CHF' => 1.08,
-            'ZAR' => 16.93,
-        ]);
-
         $this->assertEquals('€100,000 (~£72,000) (~$109,000) (~C$149,000) (~A$150,000) (~Fr.108,000) (~R1,693,000)',
-            $subject->format(100000, ['GBP', 'USD', 'CAD', 'AUD', 'CHF', 'ZAR']));
+            $this->subject->format(100000, ['GBP', 'USD', 'CAD', 'AUD', 'CHF', 'ZAR']));
     }
 
     public function testItFormatsThePriceForDisplayInMultipleCurrenciesIncludingTheCurrencyItIsSetTo()
     {
-        $subject = new Currency([
-            'EUR' => 1,
-            'GBP' => 0.72,
-            'USD' => 1.09,
-            'CAD' => 1.49,
-            'AUD' => 1.5,
-            'CHF' => 1.08,
-            'ZAR' => 16.93,
-        ]);
-        $subject->setCurrency('GBP');
+        $this->subject->setCurrency('GBP');
 
         $this->assertEquals('€100,000 (~£72,000) (~$109,000) (~C$149,000) (~A$150,000) (~Fr.108,000) (~R1,693,000)',
-            $subject->format(100000, ['GBP', 'USD', 'CAD', 'AUD', 'CHF', 'ZAR']));
+            $this->subject->format(100000, ['GBP', 'USD', 'CAD', 'AUD', 'CHF', 'ZAR']));
     }
 
     public function testItFormatsThePriceForDisplayInCurrencyThatItIsSetToByDefault()
     {
-        $subject = new Currency(['EUR' => 1, 'ZAR' => 16.93]);
-        $subject->setCurrency('ZAR');
+        $this->subject->setCurrency('ZAR');
 
-        $this->assertEquals('€100,000 (~R1,693,000)', $subject->format(100000));
+        $this->assertEquals('€100,000 (~R1,693,000)', $this->subject->format(100000));
     }
 }

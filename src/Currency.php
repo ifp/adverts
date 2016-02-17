@@ -78,28 +78,53 @@ class Currency
     {
         $currencies = $this->removeEuros($currencies);
 
+        $currencies = $this->addCurrencyThatIsSet($currencies);
+
+        $converted_currencies = $this->convertCurrencies($value);
+
+        $filtered_converted_currencies = $this->filterCurrencies($converted_currencies, $currencies);
+
         $formatted_currencies = $this->formatValueInCurrency($value, 'EUR');
 
-        $converted_currencies = $this->convertCurrencies($value, $currencies);
+        $formatted_filtered_converted_currencies = $this->formatFilteredCurrencies($filtered_converted_currencies);
 
-        $converted_currencies = array_map(function ($value) {
-            return ' (~' . $value . ')';
-        }, $converted_currencies);
-
-        $formatted_currencies .= implode('', $converted_currencies);
+        $formatted_currencies .= implode('', $formatted_filtered_converted_currencies);
 
         return $formatted_currencies;
     }
 
-    public function convertCurrencies($value, $currencies)
+    private function formatFilteredCurrencies($filtered_converted_currencies)
+    {
+        return array_map(function ($value) {
+            return ' (~' . $value . ')';
+        }, $filtered_converted_currencies);
+    }
+
+    private function filterCurrencies($converted_currencies, $currencies)
+    {
+        return array_filter($converted_currencies, function ($currency_code) use ($currencies) {
+            return in_array($currency_code, $currencies);
+        }, ARRAY_FILTER_USE_KEY);
+    }
+
+    private function addCurrencyThatIsSet($currencies)
     {
         if((count($currencies) == 0) && ($this->code() != 'EUR')) {
             $currencies = [$this->code()];
         }
 
+        return $currencies;
+    }
+
+    public function convertCurrencies($value)
+    {
+        $currencies = $this->currencies;
+
+        unset($currencies['EUR']);
+
         $converted_currencies = [];
 
-        foreach ($currencies as $currency_code) {
+        foreach ($currencies as $currency_code => $currency_symbol) {
             $converted_currencies[$currency_code] = $this->formatValueInCurrency($value, $currency_code);
         }
 
