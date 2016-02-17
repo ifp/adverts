@@ -76,8 +76,36 @@ class Currency
 
     public function format($value, $currencies = [])
     {
-        $formatted_currencies = '';
+        $currencies = $this->prependEuros($currencies);
 
+        $converted_currencies = $this->convertCurrencies($value, $currencies);
+
+        $formatted_currencies = $this->formatValueInCurrency($value, 'EUR');
+
+        $converted_currencies = array_map(function ($value) {
+            return ' (~' . $value . ')';
+        }, $converted_currencies);
+
+        $formatted_currencies .= implode('', $converted_currencies);
+
+        return $formatted_currencies;
+    }
+
+    public function convertCurrencies($value, $currencies)
+    {
+        $converted_currencies = [];
+
+        for ($i=0; $i<=count($currencies)-1; $i++) {
+            if ($i > 0) {
+                $converted_currencies[$currencies[$i]] = $this->formatValueInCurrency($value, $currencies[$i]);
+            }
+        }
+
+        return $converted_currencies;
+    }
+
+    private function prependEuros($currencies)
+    {
         if (@$currencies[0] != 'EUR') {
             if ($this->code() != 'EUR') {
                 array_unshift($currencies, $this->code());
@@ -85,15 +113,7 @@ class Currency
             array_unshift($currencies, 'EUR');
         }
 
-        for ($i=0; $i<=count($currencies)-1; $i++) {
-            if ($i == 0) {
-                $formatted_currencies = $this->formatValueInCurrency($value, $currencies[$i]);
-            } else {
-                $formatted_currencies .= ' (~' . $this->formatValueInCurrency($value, $currencies[$i]). ')';
-            }
-        }
-
-        return $formatted_currencies;
+        return $currencies;
     }
 
     private function formatValue($value)
