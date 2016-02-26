@@ -74,6 +74,11 @@ class AreaConverter
         return $this->{$method_name}();
     }
 
+    public function tom²()
+    {
+        return $this->toSquareMetres();
+    }
+
     public function toSquareMetres()
     {
         if (!is_numeric($this->base_amount)) {
