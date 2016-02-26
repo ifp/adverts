@@ -20,6 +20,17 @@ class AreaConverter
         return $this->conversion_unit;
     }
 
+    public function conversionUnitAbbreviation()
+    {
+        if ($this->conversionUnit() == 'Acres') {
+            return 'ac';
+        } elseif ($this->conversionUnit() == 'Hectares') {
+            return 'ha';
+        }
+
+        return $this->conversion_unit;
+    }
+
     public function isUnit($unit)
     {
         return $this->conversion_unit == $unit;
@@ -70,12 +81,12 @@ class AreaConverter
         }
 
         if ($this->baseUnit() == 'Acres') {
-            return floor($this->base_amount * 4046.86);
+            return (int) floor($this->base_amount * 4046.86);
         } elseif ($this->baseUnit() == 'Hectares') {
-            return floor($this->base_amount * 10000);
+            return (int) floor($this->base_amount * 10000);
         }
 
-        return floor($this->base_amount);
+        return (int) floor($this->base_amount);
     }
 
     public function toAcres()

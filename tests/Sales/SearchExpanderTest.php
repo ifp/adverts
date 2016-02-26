@@ -253,13 +253,23 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testTheKeywordsCanBeRemoved()
+    public function testAnyKeywordsCanBeRemoved()
     {
         $subject = new SearchExpander('/sale-advert-search', ['title_en_any' => 'lake', 'maximum_land_size' => 100000, 'keywords_en_any' => 'lighthouse']);
 
         $this->assertEquals(
             '/sale-advert-search?title_en_any=lake&maximum_land_size=100000',
-            $subject->removeKeywords()->url()
+            $subject->removeAnyKeywords()->url()
+        );
+    }
+
+    public function testAllKeywordsCanBeRemoved()
+    {
+        $subject = new SearchExpander('/sale-advert-search', ['title_en_any' => 'lake', 'maximum_land_size' => 100000, 'keywords_en_all' => 'lighthouse,pool']);
+
+        $this->assertEquals(
+            '/sale-advert-search?title_en_any=lake&maximum_land_size=100000',
+            $subject->removeAllKeywords()->url()
         );
     }
 

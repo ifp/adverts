@@ -103,7 +103,20 @@ class SearchExpander
 
     public function removeKeywords()
     {
+        $this->removeAnyKeywords();
+        $this->removeAllKeywords();
+        return $this;
+    }
+
+    public function removeAnyKeywords()
+    {
         unset($this->search_criteria['keywords_en_any']);
+        return $this;
+    }
+
+    public function removeAllKeywords()
+    {
+        unset($this->search_criteria['keywords_en_all']);
         return $this;
     }
 

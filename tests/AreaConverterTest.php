@@ -6,6 +6,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
 {
     private function assertNumber($expected, $actual)
     {
+        //echo PHP_EOL . $expected . ' : ' . $actual . PHP_EOL;
         $number_of_expected_decimal_places = strlen(substr(strrchr($expected, "."), 1));
         $number_of_actual_decimal_places = strlen(substr(strrchr($actual, "."), 1));
 
@@ -17,7 +18,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
     {
         $area_converter = new AreaConverter();
 
-        $this->assertNumber(100, $area_converter->from(100, 'm²')->to('SquareMetres'));
+        $this->assertNumber(100, $area_converter->from("100", 'm²')->to('SquareMetres'));
     }
 
     public function testTheAreaCanBeConvertedFromSquareMetresToSquareMetresAndRoundedDownToNearestSquareMetre()
@@ -175,6 +176,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $area_converter = new AreaConverter();
 
         $this->assertEquals('m²', $area_converter->conversionUnit());
+        $this->assertEquals('m²', $area_converter->conversionUnitAbbreviation());
         $this->assertEquals(true, $area_converter->isUnit('m²'));
     }
 
@@ -185,6 +187,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $area_converter->selectConversionUnit('Acres');
 
         $this->assertEquals('Acres', $area_converter->conversionUnit());
+        $this->assertEquals('ac', $area_converter->conversionUnitAbbreviation());
         $this->assertEquals(true, $area_converter->isUnit('Acres'));
     }
 
@@ -195,6 +198,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $area_converter->selectConversionUnit('Hectares');
 
         $this->assertEquals('Hectares', $area_converter->conversionUnit());
+        $this->assertEquals('ha', $area_converter->conversionUnitAbbreviation());
         $this->assertEquals(true, $area_converter->isUnit('Hectares'));
     }
 
