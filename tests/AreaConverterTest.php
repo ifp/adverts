@@ -191,6 +191,18 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $area_converter->isUnit('Acres'));
     }
 
+    public function testTheConversionUnitCanBeSetToAcreInSingular()
+    {
+        $area_converter = new AreaConverter();
+
+        $area_converter->selectConversionUnit('Acres');
+        $area_converter->from(1, 'Acres');
+
+        $this->assertEquals('Acre', $area_converter->conversionUnit());
+        $this->assertEquals('ac', $area_converter->conversionUnitAbbreviation());
+        $this->assertEquals(true, $area_converter->isUnit('Acres'));
+    }
+
     public function testTheConversionUnitCanBeSetToHectares()
     {
         $area_converter = new AreaConverter();
@@ -198,6 +210,18 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $area_converter->selectConversionUnit('Hectares');
 
         $this->assertEquals('Hectares', $area_converter->conversionUnit());
+        $this->assertEquals('ha', $area_converter->conversionUnitAbbreviation());
+        $this->assertEquals(true, $area_converter->isUnit('Hectares'));
+    }
+
+    public function testTheConversionUnitCanBeSetToHectareInSingular()
+    {
+        $area_converter = new AreaConverter();
+
+        $area_converter->selectConversionUnit('Hectares');
+        $area_converter->from(1, 'Hectares');
+
+        $this->assertEquals('Hectare', $area_converter->conversionUnit());
         $this->assertEquals('ha', $area_converter->conversionUnitAbbreviation());
         $this->assertEquals(true, $area_converter->isUnit('Hectares'));
     }
