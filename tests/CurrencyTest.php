@@ -4,6 +4,8 @@ use IFP\Adverts\Currency;
 
 class CurrencyTest extends PHPUnit_Framework_TestCase
 {
+    private $subject;
+
     public function setUp()
     {
         parent::setUp();
@@ -200,59 +202,37 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->subject->convertFromEuros('foo'));
     }
 
-    public function testItFormatsThePriceForDisplayInEuros()
+    public function testItCanConvertIntoAllCurrencies()
     {
-        $this->assertEquals('€125,000', $this->subject->format(125000));
+        $this->subject->setCurrency('EUR');
+
+        $assertion = [
+            'EUR' => 100000,
+            'GBP' => 72000,
+            'USD' => 109000,
+            'CAD' => 149000,
+            'AUD' => 150000,
+            'CHF' => 108000,
+            'ZAR' => 1693000,
+        ];
+
+        $this->assertEquals($assertion, $this->subject->convertCurrenciesFromEuros(100000));
     }
 
-    public function testItFormatsThePriceForDisplayInBritishPounds()
+    public function testItCanConvertAndFormatIntoAllCurrencies()
     {
-        $this->assertEquals('€100,000 (~£72,000)', $this->subject->format(100000, ['GBP']));
-    }
+        $this->subject->setCurrency('EUR');
 
-    public function testItFormatsThePriceForDisplayInUsDollars()
-    {
-        $this->assertEquals('€100,000 (~$109,000)', $this->subject->format(100000, ['USD']));
-    }
+        $assertion = [
+            'EUR' => '€100,000',
+            'GBP' => '£72,000',
+            'USD' => '$109,000',
+            'CAD' => 'C$149,000',
+            'AUD' => 'A$150,000',
+            'CHF' => 'Fr.108,000',
+            'ZAR' => 'R1,693,000',
+        ];
 
-    public function testItFormatsThePriceForDisplayInCanadianDollars()
-    {
-        $this->assertEquals('€100,000 (~C$149,000)', $this->subject->format(100000, ['CAD']));
-    }
-
-    public function testItFormatsThePriceForDisplayInAustralianDollars()
-    {
-        $this->assertEquals('€100,000 (~A$150,000)', $this->subject->format(100000, ['AUD']));
-    }
-
-    public function testItFormatsThePriceForDisplayInSwissFrancs()
-    {
-        $this->assertEquals('€100,000 (~Fr.108,000)', $this->subject->format(100000, ['CHF']));
-    }
-
-    public function testItFormatsThePriceForDisplayInSouthAfricanRand()
-    {
-        $this->assertEquals('€100,000 (~R1,693,000)', $this->subject->format(100000, ['ZAR']));
-    }
-
-    public function testItFormatsThePriceForDisplayInMultipleCurrencies()
-    {
-        $this->assertEquals('€100,000 (~£72,000) (~$109,000) (~C$149,000) (~A$150,000) (~Fr.108,000) (~R1,693,000)',
-            $this->subject->format(100000, ['GBP', 'USD', 'CAD', 'AUD', 'CHF', 'ZAR']));
-    }
-
-    public function testItFormatsThePriceForDisplayInMultipleCurrenciesIncludingTheCurrencyItIsSetTo()
-    {
-        $this->subject->setCurrency('GBP');
-
-        $this->assertEquals('€100,000 (~£72,000) (~$109,000) (~C$149,000) (~A$150,000) (~Fr.108,000) (~R1,693,000)',
-            $this->subject->format(100000, ['GBP', 'USD', 'CAD', 'AUD', 'CHF', 'ZAR']));
-    }
-
-    public function testItFormatsThePriceForDisplayInCurrencyThatItIsSetToByDefault()
-    {
-        $this->subject->setCurrency('ZAR');
-
-        $this->assertEquals('€100,000 (~R1,693,000)', $this->subject->format(100000));
+        $this->assertEquals($assertion, $this->subject->formatCurrenciesFromEuros(100000));
     }
 }
