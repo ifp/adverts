@@ -43,10 +43,10 @@ class EnergyCertificateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(60.7, $subject->number());
 
         $subject = new DpeCertificate(['number' => 60.7654321]);
-        $this->assertNumber(60.76, $subject->number());
+        $this->assertNumber(60.7, $subject->number());
 
         $subject = new DpeCertificate(['number' => '60.7654321']);
-        $this->assertEquals(60.76, $subject->number());
+        $this->assertEquals(60.7, $subject->number());
 
         $subject = new DpeCertificate(['number' => null]);
         $this->assertEquals('?', $subject->number());

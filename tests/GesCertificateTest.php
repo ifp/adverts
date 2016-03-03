@@ -28,7 +28,7 @@ class GesCertificateTest extends PHPUnit_Framework_TestCase
         $subject = new GesCertificate(['number' => 1]);
         $this->assertEquals('A', $subject->letter());
 
-        $subject = new GesCertificate(['number' => 5.99]);
+        $subject = new GesCertificate(['number' => 5.9]);
         $this->assertEquals('A', $subject->letter());
     }
 
@@ -40,10 +40,10 @@ class GesCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testGesLetterIsSetToBWhenTheGesNumberIsBetween6And11()
     {
-        $subject = new GesCertificate(['number' => 6.01]);
+        $subject = new GesCertificate(['number' => 6.1]);
         $this->assertEquals('B', $subject->letter());
 
-        $subject = new GesCertificate(['number' => 10.99]);
+        $subject = new GesCertificate(['number' => 10.9]);
         $this->assertEquals('B', $subject->letter());
     }
 
@@ -55,10 +55,10 @@ class GesCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testGesLetterIsSetToCWhenTheGesNumberIsBetween11And21()
     {
-        $subject = new GesCertificate(['number' => 11.01]);
+        $subject = new GesCertificate(['number' => 11.1]);
         $this->assertEquals('C', $subject->letter());
 
-        $subject = new GesCertificate(['number' => 20.99]);
+        $subject = new GesCertificate(['number' => 20.9]);
         $this->assertEquals('C', $subject->letter());
     }
 
@@ -70,10 +70,10 @@ class GesCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testGesLetterIsSetToDWhenTheGesNumberIsBetween21And36()
     {
-        $subject = new GesCertificate(['number' => 21.01]);
+        $subject = new GesCertificate(['number' => 21.1]);
         $this->assertEquals('D', $subject->letter());
 
-        $subject = new GesCertificate(['number' => 35.99]);
+        $subject = new GesCertificate(['number' => 35.9]);
         $this->assertEquals('D', $subject->letter());
     }
 
@@ -85,10 +85,10 @@ class GesCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testGesLetterIsSetToEWhenTheGesNumberIsBetween36And56()
     {
-        $subject = new GesCertificate(['number' => 36.01]);
+        $subject = new GesCertificate(['number' => 36.1]);
         $this->assertEquals('E', $subject->letter());
 
-        $subject = new GesCertificate(['number' => 55.99]);
+        $subject = new GesCertificate(['number' => 55.9]);
         $this->assertEquals('E', $subject->letter());
     }
 
@@ -100,10 +100,10 @@ class GesCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testGesLetterIsSetToFWhenTheGesNumberIsBetween56And81()
     {
-        $subject = new GesCertificate(['number' => 56.01]);
+        $subject = new GesCertificate(['number' => 56.1]);
         $this->assertEquals('F', $subject->letter());
 
-        $subject = new GesCertificate(['number' => 80.99]);
+        $subject = new GesCertificate(['number' => 80.9]);
         $this->assertEquals('F', $subject->letter());
     }
 

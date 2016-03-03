@@ -32,6 +32,6 @@ class DpeCertificate extends EnergyCertificate
         $this->letter_thresholds['end']['F'] = 451;
 
         $this->letter_thresholds['start']['G'] = 451;
-        $this->letter_thresholds['end']['G'] = 1000;
+        $this->letter_thresholds['end']['G'] = 9999;
     }
 }

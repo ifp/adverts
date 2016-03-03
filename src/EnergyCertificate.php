@@ -29,7 +29,7 @@ abstract class EnergyCertificate
     protected function setNumber($values)
     {
         if ($this->isNumberValid($values)) {
-            $this->number = $this->roundDown($values['number'], 2);
+            $this->number = $this->roundDown($values['number'], 1);
 
             if ($this->number < $this->letterThresholdEnd('A')) {
                 $this->letter = 'A';

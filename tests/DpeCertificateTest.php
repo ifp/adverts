@@ -15,10 +15,10 @@ class DpeCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testDpeNumberIsSetWithValidDpeNumber()
     {
-        $subject = new DpeCertificate(['number' => 1000]);
-        $this->assertEquals(1000, $subject->number());
+        $subject = new DpeCertificate(['number' => 9999]);
+        $this->assertEquals(9999, $subject->number());
 
-        $subject = new DpeCertificate(['number' => 1001]);
+        $subject = new DpeCertificate(['number' => 10000]);
         $this->assertEquals('?', $subject->number());
     }
 
@@ -27,7 +27,7 @@ class DpeCertificateTest extends PHPUnit_Framework_TestCase
         $subject = new DpeCertificate(['number' => 1]);
         $this->assertEquals('A', $subject->letter());
 
-        $subject = new DpeCertificate(['number' => 50.99]);
+        $subject = new DpeCertificate(['number' => 50.9]);
         $this->assertEquals('A', $subject->letter());
     }
 
@@ -39,10 +39,10 @@ class DpeCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testDpeLetterIsSetToBWhenTheDpeNumberIsBetween51And91()
     {
-        $subject = new DpeCertificate(['number' => 51.01]);
+        $subject = new DpeCertificate(['number' => 51.1]);
         $this->assertEquals('B', $subject->letter());
 
-        $subject = new DpeCertificate(['number' => 90.99]);
+        $subject = new DpeCertificate(['number' => 90.9]);
         $this->assertEquals('B', $subject->letter());
     }
 
@@ -54,10 +54,10 @@ class DpeCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testDpeLetterIsSetToCWhenTheDpeNumberIsBetween91And151()
     {
-        $subject = new DpeCertificate(['number' => 91.01]);
+        $subject = new DpeCertificate(['number' => 91.1]);
         $this->assertEquals('C', $subject->letter());
 
-        $subject = new DpeCertificate(['number' => 150.99]);
+        $subject = new DpeCertificate(['number' => 150.9]);
         $this->assertEquals('C', $subject->letter());
     }
 
@@ -69,10 +69,10 @@ class DpeCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testDpeLetterIsSetToDWhenTheDpeNumberIsBetween151And231()
     {
-        $subject = new DpeCertificate(['number' => 151.01]);
+        $subject = new DpeCertificate(['number' => 151.1]);
         $this->assertEquals('D', $subject->letter());
 
-        $subject = new DpeCertificate(['number' => 230.99]);
+        $subject = new DpeCertificate(['number' => 230.9]);
         $this->assertEquals('D', $subject->letter());
     }
 
@@ -84,10 +84,10 @@ class DpeCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testDpeLetterIsSetToEWhenTheDpeNumberIsBetween231And331()
     {
-        $subject = new DpeCertificate(['number' => 231.01]);
+        $subject = new DpeCertificate(['number' => 231.1]);
         $this->assertEquals('E', $subject->letter());
 
-        $subject = new DpeCertificate(['number' => 330.99]);
+        $subject = new DpeCertificate(['number' => 330.9]);
         $this->assertEquals('E', $subject->letter());
     }
 
@@ -99,10 +99,10 @@ class DpeCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testDpeLetterIsSetToFWhenTheDpeNumberIsBetween331And451()
     {
-        $subject = new DpeCertificate(['number' => 331.01]);
+        $subject = new DpeCertificate(['number' => 331.1]);
         $this->assertEquals('F', $subject->letter());
 
-        $subject = new DpeCertificate(['number' => 450.99]);
+        $subject = new DpeCertificate(['number' => 450.9]);
         $this->assertEquals('F', $subject->letter());
     }
 
