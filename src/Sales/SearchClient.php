@@ -19,7 +19,12 @@ class SearchClient
     {
         $this->client = $client;
 
-
+//        $this->client = new Client([
+//            'base_uri' => $base_url,
+//            'headers' => [
+//                'Authorization' => 'Bearer ' . $token,
+//            ]
+//        ]);
     }
 
     public function find($id)
@@ -47,7 +52,8 @@ class SearchClient
         try {
             $query_string = $this->buildQueryString($params);
 
-            //print_r("|" . $query_string . "|");return;
+            //echo('REQUESTING: adverts/sales/search?' . $query_string);
+            //return;
             $response = $this->client->get('adverts/sales/search?' . $query_string);
 
             return json_decode((string) $response->getBody(), true);
