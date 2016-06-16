@@ -15,14 +15,16 @@ class SearchClient
 
     private $client;
 
-    public function __construct($base_url, $token)
+    public function __construct($client, $base_url, $token)
     {
-        $this->client = new Client([
-            'base_uri' => $base_url,
-            'headers' => [
-                'Authorization' => 'Bearer ' . $token,
-            ]
-        ]);
+        $this->client = $client;
+
+//        $this->client = new Client([
+//            'base_uri' => $base_url,
+//            'headers' => [
+//                'Authorization' => 'Bearer ' . $token,
+//            ]
+//        ]);
     }
 
     public function find($id)
@@ -50,6 +52,8 @@ class SearchClient
         try {
             $query_string = $this->buildQueryString($params);
 
+            //echo('REQUESTING: adverts/sales/search?' . $query_string);
+            //return;
             $response = $this->client->get('adverts/sales/search?' . $query_string);
 
             return json_decode((string) $response->getBody(), true);
