@@ -47,34 +47,4 @@ class CurrencyBuilderTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected_currencies, $currency_builder->requiredRates(), '', 0.0001);
     }
-
-    public function testACurrencyObjectWithTheRatesForTheRequiredCurrenciesIsReturned()
-    {
-        $currency_builder = new CurrencyBuilder($this->data_feed_downloader);
-
-        $currency_builder->requireRates(['AUD', 'CAD', 'CHF', 'GBP', 'USD', 'ZAR', 'EUR']);
-
-        $currency = $currency_builder->build();
-
-        $currency->setCurrency('AUD');
-        $this->assertEquals(156390, $currency->convertFromEuros(100000));
-
-        $currency->setCurrency('CAD');
-        $this->assertEquals(154260, $currency->convertFromEuros(100000));
-
-        $currency->setCurrency('CHF');
-        $this->assertEquals(108630, $currency->convertFromEuros(100000));
-
-        $currency->setCurrency('GBP');
-        $this->assertEquals(75210, $currency->convertFromEuros(100000));
-
-        $currency->setCurrency('USD');
-        $this->assertEquals(109190, $currency->convertFromEuros(100000));
-
-        $currency->setCurrency('ZAR');
-        $this->assertEquals(1779900, $currency->convertFromEuros(100000));
-
-        $currency->setCurrency('EUR');
-        $this->assertEquals(100000, $currency->convertFromEuros(100000));
-    }
 }
