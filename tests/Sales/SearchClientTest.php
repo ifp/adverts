@@ -246,6 +246,22 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         $this->fail('Search succeeded despite invalid search criteria - expected AdvertNotFoundException, no exception thrown');
     }
 
+    public function testItCanFindAnAdvertByReference()
+    {
+        $base_url = 'https://search.foo.bar';
+        $token = 'foobartoken';
+
+        $response = Mockery::mock('response', ['getBody' => '']);
+        $client = Mockery::spy(Client::class, ['get' => $response]);
+        $subject = new SearchClient($client, $base_url, $token);
+
+        $subject->search([
+            'reference' => 'myref'
+        ]);
+
+        $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?reference=myref'));
+    }
+
     public function testApiMatchesRealApi()
     {
         $this->markTestIncomplete(
