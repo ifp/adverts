@@ -29,6 +29,8 @@ class SearchClient
 
     public function find($id)
     {
+        //dd('search client: find id: ' . $id);
+
         try {
             $response = $this->client->get('adverts/sales/' . $id);
 
