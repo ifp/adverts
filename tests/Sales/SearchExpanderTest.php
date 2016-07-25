@@ -4,6 +4,8 @@ use IFP\Adverts\Sales\SearchExpander;
 
 class SearchExpanderTest extends PHPUnit_Framework_TestCase
 {
+
+    // minimum price
     public function testTheMinimumPriceCanBeReturned()
     {
         $subject = new SearchExpander(null, ['minimum_price' => 100000]);
@@ -49,6 +51,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    // maximum price
     public function testTheMaximumPriceCanBeReturned()
     {
         $subject = new SearchExpander(null, ['maximum_price' => 250000]);
@@ -94,6 +97,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    // minimum bedrooms
     public function testTheMinimumBedroomsCanBeReturned()
     {
         $subject = new SearchExpander(null, ['minimum_bedrooms' => 3]);
@@ -132,6 +136,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    // max bedrooms
     public function testTheMaximumBedroomsCanBeReturned()
     {
         $subject = new SearchExpander(null, ['maximum_bedrooms' => 3]);
@@ -163,6 +168,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    // minimum land
     public function testTheMinimumLandSizeCanBeReturned()
     {
         $subject = new SearchExpander(null, ['minimum_land_size' => 100000]);
@@ -208,6 +214,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    // maximum land
     public function testTheMaximumLandSizeCanBeReturned()
     {
         $subject = new SearchExpander(null, ['maximum_land_size' => 250000]);
