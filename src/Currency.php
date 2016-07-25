@@ -94,8 +94,7 @@ class Currency
 
     public function formatValueInCurrency($value_in_euros, $currency)
     {
-        //roundToNearest100 UNTESTED
-        return $this->currencies[$currency] .  $this->formatValue($this->roundToNearest100($this->convertFromEuros($value_in_euros, $currency)));
+        return $this->currencies[$currency] .  $this->formatValue($this->convertFromEuros($value_in_euros, $currency));
     }
 
     private function formatValue($value)
@@ -103,9 +102,4 @@ class Currency
         return number_format($value, 0, '.', ',');
     }
 
-    //UNTESTED
-    private function roundToNearest100($value)
-    {
-        return round($value, -2);
-    }
 }
