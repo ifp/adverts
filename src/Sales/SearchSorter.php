@@ -57,11 +57,11 @@ class SearchSorter
         return $this->base_url . '?' . $this->buildQueryString($query_vars);
     }
 
-    public function landSizeAscendingUrl()
+    public function landSizeDescendingUrl()
     {
         $query_vars = $this->search_criteria;
         $query_vars['sort_by'] = 'land_size';
-        $query_vars['sort_direction'] = 'asc';
+        $query_vars['sort_direction'] = 'desc';
         return $this->base_url . '?' . $this->buildQueryString($query_vars);
     }
 }
