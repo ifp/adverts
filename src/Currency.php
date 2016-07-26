@@ -70,7 +70,7 @@ class Currency
         if ($code === null) {
             $code = $this->code();
         }
-
+        
         return (int)round($amount / $this->rates[$code]);
     }
 
