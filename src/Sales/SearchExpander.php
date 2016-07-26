@@ -124,4 +124,133 @@ class SearchExpander
     {
         return $this->base_url . '?' . $this->buildQueryString($this->search_criteria);
     }
+
+    //UNTESTED
+    public function tryToGuessBetterMaxPrice()
+    {
+        if(!isset($this->search_criteria['maximum_price'])) {
+            return false;
+        }
+
+        //if maximum price is very low, suggest increasing it to a reasonable amount
+        if ($this->search_criteria['maximum_price'] < 25000) {
+            $this->search_criteria['maximum_price'] += 50000;
+            return $this;
+        }
+
+        return false;
+    }
+
+    //UNTESTED
+    public function tryToGuessBetterMinPrice()
+    {
+//        dd($this->search_criteria);
+
+        if(!isset($this->search_criteria['minimum_price'])) {
+            return false;
+        }
+
+        //if minimum price is very high, suggest lowering it
+        if($this->search_criteria['minimum_price'] > 1000000) {
+            $this->search_criteria['minimum_price'] = 900000;
+            return $this;
+        }
+
+        if($this->search_criteria['minimum_price'] > 500000) {
+            $this->search_criteria['minimum_price'] = 500000;
+            return $this;
+        }
+
+        return false;
+    }
+
+    //UNTESTED - test with budget 50,000-51,000 and 300,000-320,000
+    public function tryToGuessBetterPriceWindow()
+    {
+        if(!isset($this->search_criteria['minimum_price']) || !isset($this->search_criteria['maximum_price'])) {
+            return false;
+        }
+
+        //If the price is too low, widening by 15% either way will not help
+        if($this->search_criteria['maximum_price'] < 40000) {
+            return false;
+        }
+
+        //If the price is too high, widening by 15% either way will not help
+        if($this->search_criteria['maximum_price'] > 2000000) {
+            return false;
+        }
+
+        $price_bracket = $this->search_criteria['maximum_price'] - $this->search_criteria['minimum_price'];
+        //if the price window is less than 20% of the maximum price
+        if($price_bracket < $this->search_criteria['maximum_price'] * 0.2) {
+            $this->increaseMaximumPriceByPercentage(15);
+            $this->decreaseMinimumPriceByPercentage(15);
+            return $this;
+        }
+
+        return false;
+    }
+
+    //UNTESTED - assuming hectares
+    public function tryToGuessBetterMinLand()
+    {
+        if(!isset($this->search_criteria['minimum_land_size'])) {
+            return false;
+        }
+
+        //if minimum land size is very high, suggest lowering it
+        if($this->search_criteria['minimum_land_size'] > 5) {
+            $this->search_criteria['minimum_land_size'] = 5;
+            return $this;
+        }
+
+        return false;
+    }
+
+    public function stripAllCriteriaExceptBudgets()
+    {
+        $budget_min = null;
+
+        $budget_min = $this->search_criteria['minimum_price'];
+        $budget_max = $this->search_criteria['maximum_price'];
+
+        $this->search_criteria = [];
+        $this->search_criteria['minimum_price'] = $budget_min;
+        $this->search_criteria['maximum_price'] = $budget_max;
+
+        return $this;
+    }
+
+//    public function stripAllCriteriaExceptBedroomsAndMakeThemReasonable()
+//    {
+//
+//    }
+//
+//    public function stripAllCriteriaExceptLandAndMakeThemReasonable()
+//    {
+//
+//    }
+//
+//    public function stripAllCriteriaExceptRegions()
+//    {
+//
+//    }
+//
+//    public function stripAllCriteriaExceptDepartments()
+//    {
+//
+//    }
+//
+//    public function stripAllCriteriaExceptKeywords()
+//    {
+//
+//    }
+
+    //budgets
+    //bedrooms
+    //land size
+    //regions
+    //departments
+    //keywords
 }
