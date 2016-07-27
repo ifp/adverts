@@ -558,6 +558,25 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testPricesRoundedWhenOfferingExpandedPriceOnlyOption()
+    {
+        $subject = new SearchExpander('/sale-advert-search', [
+            "keywords_en_any" => "qwertykeyword",
+            "currency" => "EUR",
+            "minimum_price" => 40078,
+            "maximum_price" => 60027,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "Hectares",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+        ], new Currency($this->example_currency_rates));
+
+        $offered_options = $subject->getExpansionOptions();
+
+        $this->assertContains('/sale-advert-search?currency=EUR&minimum_price=30000&maximum_price=75000', $offered_options);
+    }
+
     // Bedroom criteria only option
     public function testComplicatedCriteriaOffersAnOptionForExpandedBedroomOnlyOptionWithMinAndMaxBedroomsSpecified()
     {

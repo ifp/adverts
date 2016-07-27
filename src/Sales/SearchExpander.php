@@ -19,6 +19,21 @@ class SearchExpander
 
     private $HIGHEST_ALLOWED_MIN_LAND_HECTARES = 50;
 
+    private function round2SignificantDigits($number)
+    {
+        $multiply_by_10_count = 0;
+        while($number > 100) {
+            $number /= 10;
+            $multiply_by_10_count++;
+        }
+
+        $number = round($number);
+
+        $number *= pow(10, $multiply_by_10_count);
+
+        return $number;
+    }
+
     public function __construct($base_url, $search_criteria, $currency)
     {
         $this->base_url = $base_url;
@@ -76,6 +91,18 @@ class SearchExpander
         if (isset($this->search_criteria['maximum_price'])) {
             $this->search_criteria['maximum_price'] = (int)ceil($this->search_criteria['maximum_price'] * ((100 + $percentage) / 100));
         }
+        return $this;
+    }
+    
+    public function roundBudgets()
+    {
+        if(isset($this->search_criteria['maximum_price'])) {
+            $this->search_criteria['maximum_price'] = $this->round2SignificantDigits($this->search_criteria['maximum_price']);
+        }
+        if(isset($this->search_criteria['minimum_price'])) {
+            $this->search_criteria['minimum_price'] = $this->round2SignificantDigits($this->search_criteria['minimum_price']);
+        }
+
         return $this;
     }
 
@@ -142,7 +169,7 @@ class SearchExpander
         $expansion_options = []; //text => url
 
         if($this->reset()->hasPriceCriteriaWhichCanBeExpanded()) {
-            $budget_options_only = $this->stripAllCriteriaExceptBudgets()->increaseMaximumPriceByPercentage(25)->decreaseMinimumPriceByPercentage(25);
+            $budget_options_only = $this->stripAllCriteriaExceptBudgets()->increaseMaximumPriceByPercentage(25)->decreaseMinimumPriceByPercentage(25)->roundBudgets();
             $expansion_options[$budget_options_only->budgetOptionText()] = $budget_options_only->url();
         }
 
