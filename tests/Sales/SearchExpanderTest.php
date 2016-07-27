@@ -304,7 +304,9 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200000, $subject->reset()->maximumPrice());
     }
 
+    //
     // Improved expansion tests
+    //
 
     private function assertStringDoesNotContain($string, $keyword, $message = "")
     {
@@ -317,17 +319,58 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 
             $this->fail("String '$string' contains '$keyword' (IFP custom assertion):\n - $message");
         }
+
+        $this->assertEquals(true, true); //Just to add to the assertion counter
+    }
+    private function assertStringContains($string, $keyword, $message = "")
+    {
+        $this->assertEquals(1,1); //Just to add to the assertion counter
+
+        $contains_string = preg_match("/$keyword/", $string);
+
+        if(!$contains_string) {
+            if($message == "") {
+                $this->fail("String '$string' does not contain '$keyword' (IFP custom assertion)");
+            }
+
+            $this->fail("String '$string' does not contain '$keyword' (IFP custom assertion):\n - $message");
+        }
+
+        $this->assertEquals(true, true); //Just to add to the assertion counter
+    }
+
+    // Temporary - ensure title_en_any keywords are passed through (ensure Lakes France only shows lakes until advert checker is in use)
+    public function testTitleEnAnyAlwaysPassedThroughForTheMoment()
+    {
+        $subject = new SearchExpander('/sale-advert-search', [
+            "title_en_any" => "foobarproperties",
+            "keywords_en_any" => "qwertykeyword",
+            "currency" => "EUR",
+            "minimum_price" => 40000,
+            "maximum_price" => 60000,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "Hectares",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+        ], new Currency($this->example_currency_rates));
+
+        $offered_options = $subject->getExpansionOptions();
+
+        foreach($offered_options as $offered_option_url) {
+            $this->assertStringContains($offered_option_url, "title_en_any=foobarproperties",
+                'title_en_any criteria stripped off which network sites currently rely on for filtering - temporary');
+        }
     }
 
     // Price criteria only option
     public function testComplicatedCriteriaOffersAnOptionForExpandedPriceOnlyOptionWithMinAndMaxPriceSpecified()
     {
         $subject = new SearchExpander('/sale-advert-search', [
-            "title_en_any" => 'lake',
             "keywords_en_any" => "qwertykeyword",
             "currency" => "EUR",
-            "minimum_price" => 20000,
-            "maximum_price" => 40000,
+            "minimum_price" => 40000,
+            "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
             "land_size_unit" => "Hectares",
@@ -337,16 +380,15 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 
         $offered_options = $subject->getExpansionOptions();
 
-        $this->assertContains('/sale-advert-search?currency=EUR&minimum_price=15000&maximum_price=50000', $offered_options);
+        $this->assertContains('/sale-advert-search?currency=EUR&minimum_price=30000&maximum_price=75000', $offered_options);
     }
 
     public function testComplicatedCriteriaOffersAnOptionForExpandedPriceOnlyOptionWithOnlyMaxPriceSpecified()
     {
         $subject = new SearchExpander('/sale-advert-search', [
-            "title_en_any" => 'lake',
             "keywords_en_any" => "qwertykeyword",
             "currency" => "EUR",
-            "maximum_price" => 40000,
+            "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
             "land_size_unit" => "Hectares",
@@ -356,16 +398,15 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 
         $offered_options = $subject->getExpansionOptions();
 
-        $this->assertContains('/sale-advert-search?currency=EUR&maximum_price=50000', $offered_options);
+        $this->assertContains('/sale-advert-search?currency=EUR&maximum_price=75000', $offered_options);
     }
 
     public function testComplicatedCriteriaOffersAnOptionForExpandedPriceOnlyOptionWithOnlyMinPriceSpecified()
     {
         $subject = new SearchExpander('/sale-advert-search', [
-            "title_en_any" => 'lake',
             "keywords_en_any" => "qwertykeyword",
             "currency" => "EUR",
-            "minimum_price" => 20000,
+            "minimum_price" => 40000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
             "land_size_unit" => "Hectares",
@@ -375,13 +416,12 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 
         $offered_options = $subject->getExpansionOptions();
 
-        $this->assertContains('/sale-advert-search?currency=EUR&minimum_price=15000', $offered_options);
+        $this->assertContains('/sale-advert-search?currency=EUR&minimum_price=30000', $offered_options);
     }
 
     public function testComplicatedCriteriaWithoutBudgetSpecifiedDoesNotOfferAnyPriceOptions()
     {
         $subject = new SearchExpander('/sale-advert-search', [
-            "title_en_any" => 'lake',
             "keywords_en_any" => "qwertykeyword",
             "currency" => "EUR",
             "minimum_bedrooms" => "1",
@@ -399,15 +439,13 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    // Bedroom criteria only option
-    public function testComplicatedCriteriaOffersAnOptionForExpandedBedroomOnlyOptionWithMinAndMaxBedroomsSpecified()
+    public function testComplicatedCriteriaWithVeryLowMaxBudgetSpecifiedDoesNotOfferRaisedMaxBudget()
     {
         $subject = new SearchExpander('/sale-advert-search', [
-            "title_en_any" => 'lake',
             "keywords_en_any" => "qwertykeyword",
             "currency" => "EUR",
-            "minimum_price" => 20000,
-            "maximum_price" => 40000,
+            "minimum_price" => 10000,
+            "maximum_price" => 20000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
             "land_size_unit" => "Hectares",
@@ -417,8 +455,129 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 
         $offered_options = $subject->getExpansionOptions();
 
-        $this->assertContains('/sale-advert-search?minimum_bedrooms=0&maximum_bedrooms=3', $offered_options);
+        foreach($offered_options as $offered_option_url) {
+            $this->assertStringDoesNotContain($offered_option_url, 'maximum_price', 'original specified budget criteria too low - should not attempt percentage increase');
+        }
+
+        ////////
+
+        $subject = new SearchExpander('/sale-advert-search', [
+            "keywords_en_any" => "qwertykeyword",
+            "currency" => "EUR",
+            "maximum_price" => 20000,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "Hectares",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+        ], new Currency($this->example_currency_rates));
+
+        $offered_options = $subject->getExpansionOptions();
+
+        foreach($offered_options as $offered_option_url) {
+            $this->assertStringDoesNotContain($offered_option_url, 'maximum_price', 'original specified max budget criteria too low - should not attempt percentage increase');
+        }
     }
+
+    public function testComplicatedCriteriaWithVeryHighMinBudgetSpecifiedDoesNotOfferLoweredMinBudget()
+    {
+        $subject = new SearchExpander('/sale-advert-search', [
+            "keywords_en_any" => "qwertykeyword",
+            "currency" => "EUR",
+            "minimum_price" => 1000000,
+            "maximum_price" => 2000000,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "Hectares",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+        ], new Currency($this->example_currency_rates));
+
+        $offered_options = $subject->getExpansionOptions();
+
+        foreach($offered_options as $offered_option_url) {
+            $this->assertStringDoesNotContain($offered_option_url, 'minimum_price', 'original specified min budget criteria too high - should not attempt percentage decrease');
+        }
+
+        ////////
+
+        $subject = new SearchExpander('/sale-advert-search', [
+            "keywords_en_any" => "qwertykeyword",
+            "currency" => "EUR",
+            "minimum_price" => 1000000,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "Hectares",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+        ], new Currency($this->example_currency_rates));
+
+        $offered_options = $subject->getExpansionOptions();
+
+        foreach($offered_options as $offered_option_url) {
+            $this->assertStringDoesNotContain($offered_option_url, 'maximum_price', 'original specified budget criteria too low - should not attempt percentage increase');
+        }
+    }
+
+    public function testComplicatedCriteriaWithVeryHighMinOrVeryLowMaxBudgetSpecifiedInUSDDoesNotOfferAdjustedBudget()
+    {
+        $subject = new SearchExpander('/sale-advert-search', [
+            "keywords_en_any" => "qwertykeyword",
+            "currency" => "USD",
+            "minimum_price" => 1000000,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "Hectares",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+        ], new Currency($this->example_currency_rates));
+
+        $offered_options = $subject->getExpansionOptions();
+
+        foreach($offered_options as $offered_option_url) {
+            $this->assertStringDoesNotContain($offered_option_url, 'minimum_price', 'original specified minimum budget criteria too high - should not attempt percentage decrease');
+        }
+
+        ////////
+
+        $subject = new SearchExpander('/sale-advert-search', [
+            "keywords_en_any" => "qwertykeyword",
+            "currency" => "USD",
+            "minimum_price" => 52000,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "Hectares",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+        ], new Currency($this->example_currency_rates));
+
+        $offered_options = $subject->getExpansionOptions();
+
+        foreach($offered_options as $offered_option_url) {
+            $this->assertStringDoesNotContain($offered_option_url, 'maximum_price', 'original specified max budget criteria too low - should not attempt percentage increase');
+        }
+    }
+
+    // Bedroom criteria only option
+    public function testComplicatedCriteriaOffersAnOptionForExpandedBedroomOnlyOptionWithMinAndMaxBedroomsSpecified()
+    {
+        $subject = new SearchExpander('/sale-advert-search', [
+            "keywords_en_any" => "qwertykeyword",
+            "currency" => "EUR",
+            "minimum_price" => 40000,
+            "maximum_price" => 60000,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "Hectares",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+        ], new Currency($this->example_currency_rates));
+
+        $offered_options = $subject->getExpansionOptions();
+
+        $this->assertContains('/sale-advert-search?minimum_bedrooms=1&maximum_bedrooms=2', $offered_options);
+    }
+
 
 //    public function testComplicatedCriteriaOffersAnOptionForExpandedPriceOnlyOptionWithOnlyMaxPriceSpecified()
 //    {
@@ -478,4 +637,5 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 //            $this->assertStringDoesNotContain($offered_option_url, 'maximum_price', 'budget criteria expansion option was given when the user did not specify a budget criteria');
 //        }
 //    }
+
 }

@@ -13,7 +13,12 @@ class SearchExpander
     private $original_search_criteria;
     /** @var Currency */
     private $currency;
-    
+
+    private $LOWEST_ALLOWED_MAX_PRICE_EUROS = 50000;
+    private $HIGHEST_ALLOWED_MIN_PRICE_EUROS = 900000;
+
+    private $HIGHEST_ALLOWED_MIN_LAND_HECTARES = 50;
+
     public function __construct($base_url, $search_criteria, $currency)
     {
         $this->base_url = $base_url;
@@ -136,13 +141,13 @@ class SearchExpander
 
         $expansion_options = []; //text => url
 
-        if($this->reset()->hasPriceCriteria()) {
+        if($this->reset()->hasPriceCriteriaWhichCanBeExpanded()) {
             $budget_options_only = $this->stripAllCriteriaExceptBudgets()->increaseMaximumPriceByPercentage(25)->decreaseMinimumPriceByPercentage(25);
             $expansion_options[$budget_options_only->budgetOptionText()] = $budget_options_only->url();
         }
 
         if($this->reset()->hasBedroomCriteria()) {
-            $bedroom_options_only = $this->stripAllCriteriaExceptBedrooms()->decreaseMinimumBedroomsByNumber(1)->increaseMaximumBedroomsByNumber(1);
+            $bedroom_options_only = $this->stripAllCriteriaExceptBedrooms();
             $expansion_options[$bedroom_options_only->bedroomsOptionText()] = $bedroom_options_only->url();
         }
 
@@ -166,30 +171,53 @@ class SearchExpander
         return isset($this->search_criteria['minimum_price']) || isset($this->search_criteria['maximum_price']);
     }
 
-    //UNTESTED
+    private function hasPriceCriteriaWhichCanBeExpanded()
+    {
+        //If max price specified only
+        if(isset($this->search_criteria['maximum_price']) && !isset($this->search_criteria['minimum_price'])) {
+            //If max price too low, cannot expand
+            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
+            if($max_price_euros < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
+                return false;
+            }
+        }
+
+        //If min price specified only
+        if(isset($this->search_criteria['minimum_price']) && !isset($this->search_criteria['maximum_price'])) {
+            //If min price too high, cannot expand
+            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
+            if($min_price_euros > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
+                return false;
+            }
+        }
+
+        return $this->hasPriceCriteria();
+    }
+
+    // UNTESTED
     private function hasBedroomCriteria()
     {
         return isset($this->search_criteria['minimum_bedrooms']) || isset($this->search_criteria['maximum_bedrooms']);
     }
 
-    //UNTESTED
+    // UNTESTED
     public function hasLandCriteria()
     {
         return isset($this->search_criteria['minimum_land_size']) || isset($this->search_criteria['maximum_land_size']);
     }
 
-    //UNTESTED
+    // UNTESTED
     public function hasLocationCriteria()
     {
         return isset($this->search_criteria['regions']) || isset($this->search_criteria['departments']);
     }
 
-    //UNTESTED
+    // UNTESTED
     public function hasKeywordCriteria()
     {
         return isset($this->search_criteria['keywords_en_any']);
     }
-    
+
     private function stripAllCriteriaExcept($criteria_keys)
     {
         $keys_array = [];
@@ -204,36 +232,60 @@ class SearchExpander
 
     private function stripAllCriteriaExceptBudgets()
     {
-        return $this->stripAllCriteriaExcept(['minimum_price', 'maximum_price', 'currency']);
+        $this->stripAllCriteriaExcept(['minimum_price', 'maximum_price', 'currency', 'title_en_any']); //title is temporary until advert checker up and running
+
+        if(isset($this->search_criteria['maximum_price'])) {
+            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
+            if($max_price_euros < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
+                unset($this->search_criteria['maximum_price']);
+            }
+        }
+
+        if(isset($this->search_criteria['minimum_price'])) {
+            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
+            if($min_price_euros > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
+                unset($this->search_criteria['minimum_price']);
+            }
+        }
+
+        return $this;
     }
 
-    //UNTESTED
+    // UNTESTED
     private function budgetOptionText()
     {
         $this->currency->setCurrency($this->search_criteria['currency']);
         $currency_symbol = $this->currency->symbol();
 
+        $min_budget_str = null;
+        $max_budget_str = null;
+        if(isset($this->search_criteria['minimum_price'])) {
+            $min_budget_str = $currency_symbol . $this->currency->formatValue($this->search_criteria['minimum_price']);
+        }
+        if(isset($this->search_criteria['maximum_price'])) {
+            $max_budget_str = $currency_symbol . $this->currency->formatValue($this->search_criteria['maximum_price']);
+        }
+
         // maximum only
         if(!isset($this->search_criteria['minimum_price'])) {
-            return 'Search only for budget ' . $currency_symbol . $this->currency->formatValue($this->search_criteria['maximum_price']) . ' maximum';
+            return "Search only for budget $max_budget_str maximum";
         }
 
         // minimum only
         if(!isset($this->search_criteria['maximum_price'])) {
-            return 'Search only for budget ' . $currency_symbol . $this->currency->formatValue($this->search_criteria['minimum_price']) . ' minimum';
+            return "Search only for budget $min_budget_str minimum";
         }
 
-        return 'Search only for budget ' . $currency_symbol . $this->currency->formatValue($this->search_criteria['minimum_price']) . ' - '
-          . $currency_symbol . $this->currency->formatValue($this->search_criteria['maximum_price']);
+        return "Search only for budget $min_budget_str - $max_budget_str";
     }
 
-    //UNTESTED
+    // UNTESTED
     private function stripAllCriteriaExceptBedrooms()
     {
-        return $this->stripAllCriteriaExcept(['minimum_bedrooms', 'maximum_bedrooms']);
+        return $this->stripAllCriteriaExcept(['minimum_bedrooms', 'maximum_bedrooms', 'title_en_any']); //title is temporary until advert checker up and running
     }
 
-    //UNTESTED
+    // UNTESTED
     private function bedroomsOptionText()
     {
         // maximum only
@@ -276,7 +328,11 @@ class SearchExpander
     //departments
     //keywords
 
-    //    //UNTESTED
+    //
+    // Andy says: I have left this commented code in below for possible future use
+    //
+
+//        //UNTESTED
 //    public function tryToGuessBetterMaxPrice()
 //    {
 //        if(!isset($this->search_criteria['maximum_price'])) {
@@ -300,7 +356,7 @@ class SearchExpander
 //        if(!isset($this->search_criteria['minimum_price'])) {
 //            return false;
 //        }
-//
+
 //        //if minimum price is very high, suggest lowering it
 //        if($this->search_criteria['minimum_price'] > 1000000) {
 //            $this->search_criteria['minimum_price'] = 900000;
@@ -315,7 +371,7 @@ class SearchExpander
 //        return false;
 //    }
 //
-//    //UNTESTED - test with budget 50,000-51,000 and 300,000-320,000
+//    //UNTESTED - e.g. test with budget 50,000-51,000 and 300,000-320,000
 //    public function tryToGuessBetterPriceWindow()
 //    {
 //        if(!isset($this->search_criteria['minimum_price']) || !isset($this->search_criteria['maximum_price'])) {
