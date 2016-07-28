@@ -20,8 +20,6 @@ class SearchExpander
 
     private $HIGHEST_ALLOWED_MIN_LAND_HECTARES = 50;
 
-    private $has_suggestions;
-
     private function roundNumberAbove100To2SignificantDigits($number_above_100)
     {
         $multiply_by_10_count = 0;
