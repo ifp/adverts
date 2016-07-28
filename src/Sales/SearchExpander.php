@@ -234,13 +234,28 @@ class SearchExpander
         return isset($this->search_criteria['minimum_price']) || isset($this->search_criteria['maximum_price']);
     }
 
+    private function minPriceEuros()
+    {
+        if(!isset($this->search_criteria['currency'])) {
+            $this->search_criteria['currency'] = 'EUR';
+        }
+        return $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
+    }
+    private function maxPriceEuros()
+    {
+        if(!isset($this->search_criteria['currency'])) {
+            $this->search_criteria['currency'] = 'EUR';
+        }
+        return $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
+    }
+
     private function hasPriceCriteriaWhichCanBeExpanded()
     {
         //If max price specified only
         if(isset($this->search_criteria['maximum_price']) && !isset($this->search_criteria['minimum_price'])) {
             //If max price too low, cannot expand
-            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
-            if($max_price_euros < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
+//            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
+            if($this->maxPriceEuros() < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
                 return false;
             }
         }
@@ -248,8 +263,11 @@ class SearchExpander
         //If min price specified only
         if(isset($this->search_criteria['minimum_price']) && !isset($this->search_criteria['maximum_price'])) {
             //If min price too high, cannot expand
-            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
-            if($min_price_euros > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
+//            if(!isset($this->search_criteria['currency'])) {
+//                $this->search_criteria['currency'] = 'EUR';
+//            }
+//            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
+            if($this->minPriceEuros() > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
                 return false;
             }
         }
@@ -320,15 +338,15 @@ class SearchExpander
         $this->stripAllCriteriaExcept(['minimum_price', 'maximum_price', 'currency', 'title_en_any']); //title is temporary until advert checker up and running
 
         if(isset($this->search_criteria['maximum_price'])) {
-            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
-            if($max_price_euros < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
+//            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
+            if($this->maxPriceEuros() < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
                 unset($this->search_criteria['maximum_price']);
             }
         }
 
         if(isset($this->search_criteria['minimum_price'])) {
-            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
-            if($min_price_euros > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
+//            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
+            if($this->minPriceEuros() > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
                 unset($this->search_criteria['minimum_price']);
             }
         }
