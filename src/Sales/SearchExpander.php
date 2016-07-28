@@ -3,6 +3,7 @@
 namespace IFP\Adverts\Sales;
 
 use IFP\Adverts\Currency;
+use IFP\Adverts\LandSize;
 
 class SearchExpander
 {
@@ -19,19 +20,19 @@ class SearchExpander
 
     private $HIGHEST_ALLOWED_MIN_LAND_HECTARES = 50;
 
-    private function round2SignificantDigits($number)
+    private function roundNumberAbove100To2SignificantDigits($number_above_100)
     {
         $multiply_by_10_count = 0;
-        while($number > 100) {
-            $number /= 10;
+        while($number_above_100 > 100) {
+            $number_above_100 /= 10;
             $multiply_by_10_count++;
         }
 
-        $number = round($number);
+        $number_above_100 = round($number_above_100);
 
-        $number *= pow(10, $multiply_by_10_count);
+        $number_above_100 *= pow(10, $multiply_by_10_count);
 
-        return $number;
+        return $number_above_100;
     }
 
     public function __construct($base_url, $search_criteria, $currency)
@@ -93,14 +94,14 @@ class SearchExpander
         }
         return $this;
     }
-    
+
     public function roundBudgets()
     {
         if(isset($this->search_criteria['maximum_price'])) {
-            $this->search_criteria['maximum_price'] = $this->round2SignificantDigits($this->search_criteria['maximum_price']);
+            $this->search_criteria['maximum_price'] = $this->roundNumberAbove100To2SignificantDigits($this->search_criteria['maximum_price']);
         }
         if(isset($this->search_criteria['minimum_price'])) {
-            $this->search_criteria['minimum_price'] = $this->round2SignificantDigits($this->search_criteria['minimum_price']);
+            $this->search_criteria['minimum_price'] = $this->roundNumberAbove100To2SignificantDigits($this->search_criteria['minimum_price']);
         }
 
         return $this;
@@ -162,32 +163,67 @@ class SearchExpander
         return $this->base_url . '?' . $this->buildQueryString($this->search_criteria);
     }
 
+    private function countTrueValues($booleans)
+    {
+        $count = 0;
+
+        return $count;
+    }
+
     public function getExpansionOptions()
     {
         //dd($this->search_criteria);
 
         $expansion_options = []; //text => url
 
-        if($this->reset()->hasPriceCriteriaWhichCanBeExpanded()) {
-            $budget_options_only = $this->stripAllCriteriaExceptBudgets()->increaseMaximumPriceByPercentage(25)->decreaseMinimumPriceByPercentage(25)->roundBudgets();
-            $expansion_options[$budget_options_only->budgetOptionText()] = $budget_options_only->url();
+        $criteria_set_count = count(array_filter([$this->hasPriceCriteria(), $this->hasBedroomCriteria(), $this->hasLandCriteria()
+            , $this->hasLocationCriteria(), $this->hasKeywordCriteria()]));
+
+        // Multiple criteria sets - suggest reduce to just one
+        if($criteria_set_count > 1) {
+            if($this->reset()->hasPriceCriteriaWhichCanBeExpanded()) {
+                $budget_options_only = $this->stripAllCriteriaExceptBudgets()->increaseMaximumPriceByPercentage(25)->decreaseMinimumPriceByPercentage(25)->roundBudgets();
+                $expansion_options[$budget_options_only->budgetOnlyOptionText()] = $budget_options_only->url();
+            }
+
+            if($this->reset()->hasBedroomCriteria()) {
+                $bedroom_options_only = $this->stripAllCriteriaExcept(['minimum_bedrooms', 'maximum_bedrooms', 'title_en_any', 'currency']);
+                $expansion_options[$bedroom_options_only->bedroomsOnlyOptionText()] = $bedroom_options_only->url();
+            }
+
+            if($this->reset()->hasLandCriteriaWhichCanBeExpanded()) {
+                $land_options_only = $this->stripAllCriteriaExceptLand()->increaseMaximumLandSizeByPercentage(25)->decreaseMinimumLandSizeByPercentage(25);
+                $expansion_options[$land_options_only->landOnlyOptionText()] = $land_options_only->url();
+            }
+
+            if($this->reset()->hasLocationCriteria()) {
+                $location_options_only = $this->stripAllCriteriaExcept(['regions', 'departments', 'title_en_any', 'currency']);
+                $expansion_options[$location_options_only->locationsOnlyOptionText()] = $location_options_only->url();
+            }
+
+            if($this->reset()->hasKeywordCriteria()) {
+                $location_options_only = $this->stripAllCriteriaExcept(['keywords_en_any', 'title_en_any', 'currency']);
+                $expansion_options[$location_options_only->keywordsOnlyOptionText()] = $location_options_only->url();
+            }
         }
 
-        if($this->reset()->hasBedroomCriteria()) {
-            $bedroom_options_only = $this->stripAllCriteriaExceptBedrooms();
-            $expansion_options[$bedroom_options_only->bedroomsOptionText()] = $bedroom_options_only->url();
-        }
-
-        if($this->reset()->hasLandCriteria()) {
-            //TODO
-        }
-
-        if($this->reset()->hasLocationCriteria()) {
-            //TODO
-        }
-
-        if($this->reset()->hasKeywordCriteria()) {
-            //TODO
+        // Single criteria only - suggest to remove
+        if($criteria_set_count == 1) {
+            if($this->reset()->hasPriceCriteria()) {
+                $expansion_options['Remove your price criteria'] = $this->stripAllCriteriaExcept(['currency', 'title_en_any'])->url();
+            }
+            if($this->reset()->hasBedroomCriteria()) {
+                $expansion_options['Remove your bedroom criteria'] = $this->stripAllCriteriaExcept(['currency', 'title_en_any'])->url();
+            }
+            if($this->reset()->hasLandCriteria()) {
+                $expansion_options['Remove your land criteria'] = $this->stripAllCriteriaExcept(['currency', 'title_en_any'])->url();
+            }
+            if($this->reset()->hasLocationCriteria()) {
+                $expansion_options['Remove your location criteria'] = $this->stripAllCriteriaExcept(['currency', 'title_en_any'])->url();
+            }
+            if($this->reset()->hasKeywordCriteria()) {
+                $expansion_options['Remove your keyword criteria'] = $this->stripAllCriteriaExcept(['currency', 'title_en_any'])->url();
+            }
         }
 
         return $expansion_options;
@@ -228,9 +264,31 @@ class SearchExpander
     }
 
     // UNTESTED
-    public function hasLandCriteria()
+    private function hasLandCriteria()
     {
         return isset($this->search_criteria['minimum_land_size']) || isset($this->search_criteria['maximum_land_size']);
+    }
+
+    private function minLandHectares()
+    {
+        $land_size = new LandSize();
+        $land_size->from($this->search_criteria['minimum_land_size'], $this->search_criteria['land_size_unit']);
+
+        return $land_size->toHectares();
+    }
+
+    private function hasLandCriteriaWhichCanBeExpanded()
+    {
+        //If min land specified only
+        if(isset($this->search_criteria['minimum_land_size']) && !isset($this->search_criteria['maximum_land_size'])) {
+
+            //If min land too high, cannot expand
+            if($this->minLandHectares() > $this->HIGHEST_ALLOWED_MIN_LAND_HECTARES) {
+                return false;
+            }
+        }
+
+        return $this->hasLandCriteria();
     }
 
     // UNTESTED
@@ -278,8 +336,20 @@ class SearchExpander
         return $this;
     }
 
+    private function stripAllCriteriaExceptLand()
+    {
+        $this->stripAllCriteriaExcept(['minimum_land_size', 'maximum_land_size', 'land_size_unit', 'currency', 'title_en_any']); //title is temporary until advert checker up and running
+
+        if(isset($this->search_criteria['minimum_land_size'])) {
+            if($this->minLandHectares() > $this->HIGHEST_ALLOWED_MIN_LAND_HECTARES) {
+                unset($this->search_criteria['minimum_land_size']);
+            }
+        }
+        return $this;
+    }
+
     // UNTESTED
-    private function budgetOptionText()
+    private function budgetOnlyOptionText()
     {
         $this->currency->setCurrency($this->search_criteria['currency']);
         $currency_symbol = $this->currency->symbol();
@@ -307,139 +377,88 @@ class SearchExpander
     }
 
     // UNTESTED
-    private function stripAllCriteriaExceptBedrooms()
+    private function landOnlyOptionText()
     {
-        return $this->stripAllCriteriaExcept(['minimum_bedrooms', 'maximum_bedrooms', 'title_en_any']); //title is temporary until advert checker up and running
+        $land_unit = mb_convert_case($this->search_criteria['land_size_unit'], MB_CASE_LOWER);
+
+        // maximum only
+        if(!isset($this->search_criteria['minimum_land_size'])) {
+            return "Search only for " . $this->search_criteria['maximum_land_size'] . " " . $land_unit . " land maximum";
+        }
+
+        // minimum only
+        if(!isset($this->search_criteria['maximum_land_size'])) {
+            return "Search only for " . $this->search_criteria['minimum_land_size'] . " " . $land_unit . " land minimum";
+        }
+
+        return "Search only for " . $this->search_criteria['minimum_land_size'] . " - " . $this->search_criteria['maximum_land_size'] . " " . $land_unit . " land";
     }
 
     // UNTESTED
-    private function bedroomsOptionText()
+    private function bedroomsOnlyOptionText()
     {
+        //print_r($this->search_criteria);
+
         // maximum only
-        if(!isset($this->search_criteria['maximum_bedrooms'])) {
+        if(!isset($this->search_criteria['minimum_bedrooms'])) {
             return 'Search only for ' . $this->search_criteria['maximum_bedrooms'] . ' bedrooms maximum';
         }
 
         // minimum only
-        if(!isset($this->search_criteria['minimum_bedrooms'])) {
+        if(!isset($this->search_criteria['maximum_bedrooms'])) {
             return 'Search only for ' . $this->search_criteria['minimum_bedrooms'] . ' bedrooms minimum';
+        }
+
+        // The same
+        if($this->search_criteria['minimum_bedrooms'] == $this->search_criteria['maximum_bedrooms']) {
+            return 'Search only for ' . $this->search_criteria['maximum_bedrooms'] . ' bedrooms';
         }
 
         return 'Search only for ' . $this->search_criteria['minimum_bedrooms'] . ' - ' . $this->search_criteria['maximum_bedrooms'] . ' bedrooms';
     }
 
-//    public function stripAllCriteriaExceptLand()
-//    {
-//
-//    }
-//
-//    public function stripAllCriteriaExceptRegions()
-//    {
-//
-//    }
-//
-//    public function stripAllCriteriaExceptDepartments()
-//    {
-//
-//    }
-//
-//    public function stripAllCriteriaExceptKeywords()
-//    {
-//
-//    }
+    //UNTESTED
+    private function locationsOnlyOptionText()
+    {
+        $location_option_text = 'Search only for ';
 
-    //budgets
-    //bedrooms
-    //land size
-    //regions
-    //departments
-    //keywords
+        $regions_specified = false;
+        $departments_specified = false;
 
-    //
-    // Andy says: I have left this commented code in below for possible future use
-    //
+        if(isset($this->search_criteria['regions'])) {
+            $regions_specified = (count($this->search_criteria['regions']) > 0);
+        }
+        if(isset($this->search_criteria['departments'])) {
+            $departments_specified = (count($this->search_criteria['departments']) > 0);
+        }
 
-//        //UNTESTED
-//    public function tryToGuessBetterMaxPrice()
-//    {
-//        if(!isset($this->search_criteria['maximum_price'])) {
-//            return false;
-//        }
-//
-//        //if maximum price is very low, suggest increasing it to a reasonable amount
-//        if ($this->search_criteria['maximum_price'] < 25000) {
-//            $this->search_criteria['maximum_price'] += 50000;
-//            return $this;
-//        }
-//
-//        return false;
-//    }
-//
-//    //UNTESTED
-//    public function tryToGuessBetterMinPrice()
-//    {
-////        dd($this->search_criteria);
-//
-//        if(!isset($this->search_criteria['minimum_price'])) {
-//            return false;
-//        }
+        if($regions_specified) {
+            $region_names = array_map(function($region_tag) {
+                // Temporary hack until we have an object to convert between region names and region tags
+                return mb_convert_case($region_tag, MB_CASE_UPPER);
+            }, $this->search_criteria['regions']);
 
-//        //if minimum price is very high, suggest lowering it
-//        if($this->search_criteria['minimum_price'] > 1000000) {
-//            $this->search_criteria['minimum_price'] = 900000;
-//            return $this;
-//        }
-//
-//        if($this->search_criteria['minimum_price'] > 500000) {
-//            $this->search_criteria['minimum_price'] = 500000;
-//            return $this;
-//        }
-//
-//        return false;
-//    }
-//
-//    //UNTESTED - e.g. test with budget 50,000-51,000 and 300,000-320,000
-//    public function tryToGuessBetterPriceWindow()
-//    {
-//        if(!isset($this->search_criteria['minimum_price']) || !isset($this->search_criteria['maximum_price'])) {
-//            return false;
-//        }
-//
-//        //If the price is too low, widening by 15% either way will not help
-//        if($this->search_criteria['maximum_price'] < 40000) {
-//            return false;
-//        }
-//
-//        //If the price is too high, widening by 15% either way will not help
-//        if($this->search_criteria['maximum_price'] > 2000000) {
-//            return false;
-//        }
-//
-//        $price_bracket = $this->search_criteria['maximum_price'] - $this->search_criteria['minimum_price'];
-//        //if the price window is less than 20% of the maximum price
-//        if($price_bracket < $this->search_criteria['maximum_price'] * 0.2) {
-//            $this->increaseMaximumPriceByPercentage(15);
-//            $this->decreaseMinimumPriceByPercentage(15);
-//            return $this;
-//        }
-//
-//        return false;
-//    }
-//
-//    //UNTESTED - assuming hectares
-//    public function tryToGuessBetterMinLand()
-//    {
-//        if(!isset($this->search_criteria['minimum_land_size'])) {
-//            return false;
-//        }
-//
-//        //if minimum land size is very high, suggest lowering it
-//        if($this->search_criteria['minimum_land_size'] > 5) {
-//            $this->search_criteria['minimum_land_size'] = 5;
-//            return $this;
-//        }
-//
-//        return false;
-//    }
+            $location_option_text .= implode(', ', $region_names );
+        }
+        if($regions_specified && $departments_specified) {
+            $location_option_text .= ' and ';
+        }
+        if($departments_specified) {
+            $department_names = array_map(function($department_tag) {
+                // Temporary hack until we have an object to convert between region names and region tags
+                return mb_convert_case($department_tag, MB_CASE_UPPER);
+            }, $this->search_criteria['departments']);
 
+            $location_option_text .= implode(', ', $department_names);
+        }
+
+        return $location_option_text;
+    }
+
+    private function keywordsOnlyOptionText()
+    {
+        $keyword_option_text = 'Search only for keywords: ' . $this->search_criteria['keywords_en_any'];
+
+        return $keyword_option_text;
+    }
 }
