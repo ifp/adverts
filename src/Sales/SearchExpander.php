@@ -20,6 +20,8 @@ class SearchExpander
 
     private $HIGHEST_ALLOWED_MIN_LAND_HECTARES = 50;
 
+    private $has_suggestions;
+
     private function roundNumberAbove100To2SignificantDigits($number_above_100)
     {
         $multiply_by_10_count = 0;
@@ -254,7 +256,6 @@ class SearchExpander
         //If max price specified only
         if(isset($this->search_criteria['maximum_price']) && !isset($this->search_criteria['minimum_price'])) {
             //If max price too low, cannot expand
-//            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
             if($this->maxPriceEuros() < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
                 return false;
             }
@@ -263,10 +264,6 @@ class SearchExpander
         //If min price specified only
         if(isset($this->search_criteria['minimum_price']) && !isset($this->search_criteria['maximum_price'])) {
             //If min price too high, cannot expand
-//            if(!isset($this->search_criteria['currency'])) {
-//                $this->search_criteria['currency'] = 'EUR';
-//            }
-//            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
             if($this->minPriceEuros() > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
                 return false;
             }
@@ -338,14 +335,12 @@ class SearchExpander
         $this->stripAllCriteriaExcept(['minimum_price', 'maximum_price', 'currency', 'title_en_any']); //title is temporary until advert checker up and running
 
         if(isset($this->search_criteria['maximum_price'])) {
-//            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
             if($this->maxPriceEuros() < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
                 unset($this->search_criteria['maximum_price']);
             }
         }
 
         if(isset($this->search_criteria['minimum_price'])) {
-//            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
             if($this->minPriceEuros() > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
                 unset($this->search_criteria['minimum_price']);
             }
@@ -478,5 +473,10 @@ class SearchExpander
         $keyword_option_text = 'Search only for keywords: ' . $this->search_criteria['keywords_en_any'];
 
         return $keyword_option_text;
+    }
+
+    public function removeCriteriaUrl()
+    {
+        return $this->stripAllCriteriaExcept(['title_en_any', 'currency'])->url();
     }
 }

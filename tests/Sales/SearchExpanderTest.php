@@ -1101,4 +1101,23 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 
         $this->assertContains('/sale-advert-search?currency=EUR', $offered_options);
     }
+
+    public function testRemoveCriteriaUrl()
+    {
+        $subject = new SearchExpander('/sale-advert-search', [
+            "keywords_en_any" => "qwertykeyword,abckeyword",
+            "currency" => "EUR",
+            "minimum_price" => 40000,
+            "maximum_price" => 60000,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "Hectares",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+            "regions" => ["alsace"],
+        ], new Currency($this->example_currency_rates));
+
+        $this->assertEquals('/sale-advert-search?currency=EUR', $subject->removeCriteriaUrl());
+    }
+
 }
