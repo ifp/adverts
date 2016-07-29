@@ -16,6 +16,8 @@ class AreaConverter
         if (in_array($unit, $this->unit_symbols)) {
             $this->conversion_unit_symbol = $unit;
         }
+
+        return $this;
     }
 
     public function baseUnitName()
@@ -71,8 +73,7 @@ class AreaConverter
             return $this->toAcres();
         }
 
-        $base_amount = 'unknown';
-        $base_unit = 'unknown';
+        $this->conversion_unit_symbol = $unit;
 
         return $this;
     }

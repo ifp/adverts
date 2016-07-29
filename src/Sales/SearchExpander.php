@@ -2,6 +2,7 @@
 
 namespace IFP\Adverts\Sales;
 
+use IFP\Adverts\AreaConverter;
 use IFP\Adverts\Currency;
 use IFP\Adverts\LandSize;
 
@@ -390,7 +391,9 @@ class SearchExpander
     // UNTESTED
     private function landOnlyOptionText()
     {
-        $land_unit = mb_convert_case($this->search_criteria['land_size_unit'], MB_CASE_LOWER);
+        $area_converter = new AreaConverter();
+        $land_unit = $area_converter->selectConversionUnit($this->search_criteria['land_size_unit'])->conversionUnitName();
+
 
         // maximum only
         if(!isset($this->search_criteria['minimum_land_size'])) {

@@ -329,4 +329,13 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals("(blank)", $area_converter->formattedValueAndUnit());
     }
+
+    // A slightly contrived test, but this should be tested somehow just in case
+    public function testInstanceReturnedByselectConversionUnitMethod()
+    {
+        $area_converter = new AreaConverter();
+
+        $this->assertEquals('hectares',
+            $area_converter->selectConversionUnit('ha')->conversionUnitName());
+    }
 }
