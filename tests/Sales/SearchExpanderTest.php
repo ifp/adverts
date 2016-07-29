@@ -348,7 +348,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -393,7 +393,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -410,7 +410,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -427,7 +427,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "minimum_price" => 40000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -445,7 +445,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "currency" => "EUR",
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -467,7 +467,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 20000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -486,7 +486,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 20000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -507,7 +507,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 2000000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -526,7 +526,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "minimum_price" => 1000000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -546,7 +546,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "minimum_price" => 1000000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -565,7 +565,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "minimum_price" => 52000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -586,7 +586,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60027,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -608,7 +608,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -625,7 +625,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "minimum_price" => 40000,
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -642,7 +642,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "minimum_price" => 40000,
             "maximum_price" => 60000,
             "maximum_bedrooms" => "1",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -662,14 +662,14 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
 
         $offered_options = $subject->getExpansionOptions();
 
-        $this->assertContains('/sale-advert-search?currency=EUR&land_size_unit=Hectares&minimum_land_size=0&maximum_land_size=4', $offered_options);
+        $this->assertContains('/sale-advert-search?currency=EUR&land_size_unit=ha&minimum_land_size=0&maximum_land_size=4', $offered_options);
     }
 
     public function testMultipleCriteriaSetsDoesNotOffersALandOnlyOptionWhenMinimumLandVeryHigh()
@@ -683,7 +683,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 200000.0,
             "maximum_land_size" => 100000.0,
         ], new Currency($this->example_currency_rates));
@@ -703,7 +703,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 200000.0,
         ], new Currency($this->example_currency_rates));
 
@@ -782,14 +782,14 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Acres",
+            "land_size_unit" => "ac",
             "minimum_land_size" => 100, //45 hectares - below limit - should offer to expand this
             "maximum_land_size" => 150,
         ], new Currency($this->example_currency_rates));
 
         $offered_options = $subject->getExpansionOptions();
 
-        $this->assertContains('/sale-advert-search?currency=EUR&land_size_unit=Acres&minimum_land_size=75&maximum_land_size=188', $offered_options);
+        $this->assertContains('/sale-advert-search?currency=EUR&land_size_unit=ac&minimum_land_size=75&maximum_land_size=188', $offered_options);
 
         //////// Min only, in m²:
 
@@ -800,13 +800,13 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Acres",
+            "land_size_unit" => "ac",
             "minimum_land_size" => 100, //45 hectares - below limit - should offer to expand this
         ], new Currency($this->example_currency_rates));
 
         $offered_options = $subject->getExpansionOptions();
 
-        $this->assertContains('/sale-advert-search?currency=EUR&land_size_unit=Acres&minimum_land_size=75', $offered_options);
+        $this->assertContains('/sale-advert-search?currency=EUR&land_size_unit=ac&minimum_land_size=75', $offered_options);
 
         //////// Min only, in acres, too high:
 
@@ -817,7 +817,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Acres",
+            "land_size_unit" => "ac",
             "minimum_land_size" => 200, //80 hectares - above limit - should not offer an expanded option as the minimum is too high
         ], new Currency($this->example_currency_rates));
 
@@ -840,7 +840,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
             "regions" => ["alsace"],
@@ -860,7 +860,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
             "regions" => ["alsace"],
@@ -879,7 +879,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
             "departments" => ["landes"],
@@ -902,7 +902,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
             "regions" => ["alsace"],
@@ -922,7 +922,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
             "maximum_price" => 60000,
             "minimum_bedrooms" => "1",
             "maximum_bedrooms" => "2",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
             "regions" => ["alsace"],
@@ -1010,7 +1010,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
     {
         $subject = new SearchExpander('/sale-advert-search', [
             "currency" => "EUR",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "maximum_land_size" => 1.0,
         ], new Currency($this->example_currency_rates));
 
@@ -1022,7 +1022,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 
         $subject = new SearchExpander('/sale-advert-search', [
             "currency" => "EUR",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
 
@@ -1034,7 +1034,7 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 
         $subject = new SearchExpander('/sale-advert-search', [
             "currency" => "EUR",
-            "land_size_unit" => "Hectares",
+            "land_size_unit" => "ha",
             "minimum_land_size" => 1.0,
             "maximum_land_size" => 3.0,
         ], new Currency($this->example_currency_rates));
@@ -1101,4 +1101,33 @@ class SearchExpanderTest extends PHPUnit_Framework_TestCase
 
         $this->assertContains('/sale-advert-search?currency=EUR', $offered_options);
     }
+
+    public function testRemoveCriteriaUrl()
+    {
+        $subject = new SearchExpander('/sale-advert-search', [
+            "keywords_en_any" => "qwertykeyword,abckeyword",
+            "currency" => "EUR",
+            "minimum_price" => 40000,
+            "maximum_price" => 60000,
+            "minimum_bedrooms" => "1",
+            "maximum_bedrooms" => "2",
+            "land_size_unit" => "ha",
+            "minimum_land_size" => 1.0,
+            "maximum_land_size" => 3.0,
+            "regions" => ["alsace"],
+        ], new Currency($this->example_currency_rates));
+
+        $this->assertEquals('/sale-advert-search?currency=EUR', $subject->removeCriteriaUrl());
+    }
+
+    public function testCurrencyAlwaysPassedThroughOnAllSuggestedOptions()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testLandUnitAlwaysPassedThroughOnAllSuggestedOptions()
+    {
+        $this->markTestIncomplete();
+    }
+
 }

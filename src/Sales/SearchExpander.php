@@ -2,6 +2,7 @@
 
 namespace IFP\Adverts\Sales;
 
+use IFP\Adverts\AreaConverter;
 use IFP\Adverts\Currency;
 use IFP\Adverts\LandSize;
 
@@ -254,7 +255,6 @@ class SearchExpander
         //If max price specified only
         if(isset($this->search_criteria['maximum_price']) && !isset($this->search_criteria['minimum_price'])) {
             //If max price too low, cannot expand
-//            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
             if($this->maxPriceEuros() < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
                 return false;
             }
@@ -263,10 +263,6 @@ class SearchExpander
         //If min price specified only
         if(isset($this->search_criteria['minimum_price']) && !isset($this->search_criteria['maximum_price'])) {
             //If min price too high, cannot expand
-//            if(!isset($this->search_criteria['currency'])) {
-//                $this->search_criteria['currency'] = 'EUR';
-//            }
-//            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
             if($this->minPriceEuros() > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
                 return false;
             }
@@ -292,7 +288,7 @@ class SearchExpander
         $land_size = new LandSize();
         $land_size->from($this->search_criteria['minimum_land_size'], $this->search_criteria['land_size_unit']);
 
-        return $land_size->toHectares();
+        return $land_size->toHectares()->value();
     }
 
     private function hasLandCriteriaWhichCanBeExpanded()
@@ -338,14 +334,12 @@ class SearchExpander
         $this->stripAllCriteriaExcept(['minimum_price', 'maximum_price', 'currency', 'title_en_any']); //title is temporary until advert checker up and running
 
         if(isset($this->search_criteria['maximum_price'])) {
-//            $max_price_euros = $this->currency->convertToEuros($this->search_criteria['maximum_price'], $this->search_criteria['currency']);
             if($this->maxPriceEuros() < $this->LOWEST_ALLOWED_MAX_PRICE_EUROS) {
                 unset($this->search_criteria['maximum_price']);
             }
         }
 
         if(isset($this->search_criteria['minimum_price'])) {
-//            $min_price_euros = $this->currency->convertToEuros($this->search_criteria['minimum_price'], $this->search_criteria['currency']);
             if($this->minPriceEuros() > $this->HIGHEST_ALLOWED_MIN_PRICE_EUROS) {
                 unset($this->search_criteria['minimum_price']);
             }
@@ -397,7 +391,9 @@ class SearchExpander
     // UNTESTED
     private function landOnlyOptionText()
     {
-        $land_unit = mb_convert_case($this->search_criteria['land_size_unit'], MB_CASE_LOWER);
+        $area_converter = new AreaConverter();
+        $land_unit = $area_converter->selectConversionUnit($this->search_criteria['land_size_unit'])->conversionUnitName();
+
 
         // maximum only
         if(!isset($this->search_criteria['minimum_land_size'])) {
@@ -478,5 +474,10 @@ class SearchExpander
         $keyword_option_text = 'Search only for keywords: ' . $this->search_criteria['keywords_en_any'];
 
         return $keyword_option_text;
+    }
+
+    public function removeCriteriaUrl()
+    {
+        return $this->stripAllCriteriaExcept(['title_en_any', 'currency'])->url();
     }
 }
