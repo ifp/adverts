@@ -287,7 +287,7 @@ class SearchExpander
         $land_size = new LandSize();
         $land_size->from($this->search_criteria['minimum_land_size'], $this->search_criteria['land_size_unit']);
 
-        return $land_size->toHectares();
+        return $land_size->toHectares()->value();
     }
 
     private function hasLandCriteriaWhichCanBeExpanded()
