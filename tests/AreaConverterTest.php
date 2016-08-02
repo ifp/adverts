@@ -294,6 +294,20 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
             $area_converter->from(40468.6, 'm²')->to('ac')->formattedValueAndUnit());
     }
 
+    public function testPreciseFormattedValue()
+    {
+        $area_converter = new AreaConverter();
+
+        $this->assertEquals('56780 m²',
+            $area_converter->from(5.678, 'ha')->to('m²')->formattedValueAndUnit());
+
+        $this->assertEquals('5.67 hectares',
+            $area_converter->from(56789, 'm²')->to('ha')->formattedValueAndUnit());
+
+        $this->assertEquals('1.23 acres',
+            $area_converter->from(4996, 'm²')->to('ac')->formattedValueAndUnit()); //4996 m² = 1.2345 acre
+    }
+
     public function testFormattedValueSingular()
     {
         $area_converter = new AreaConverter();
@@ -330,6 +344,17 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("(blank)", $area_converter->formattedValueAndUnit());
     }
 
+    public function testFormattedValueAndUnitOfAreaUnder1HectareShowsBothUnitsWithOptionSet()
+    {
+        $area_converter = new AreaConverter();
+
+        $this->assertEquals('0.5 hectares (5000 m²)',
+            $area_converter->from(5000, 'm²')->to('ha')->formattedValueAndUnit(['show_additional_conversion_under_1' => true]));
+
+        $this->assertEquals('0.5 acres (2024 m²)',
+            $area_converter->from(2024, 'm²')->to('ac')->formattedValueAndUnit(['show_additional_conversion_under_1' => true]));
+    }
+
     // A slightly contrived test, but this should be tested somehow just in case
     public function testInstanceReturnedByselectConversionUnitMethod()
     {
@@ -338,4 +363,6 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hectares',
             $area_converter->selectConversionUnit('ha')->conversionUnitName());
     }
+
+    //public function test
 }
