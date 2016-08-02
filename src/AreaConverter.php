@@ -159,17 +159,51 @@ class AreaConverter
         return $this->converted_value;
     }
 
-    public function formattedValueAndUnit()
+    private function makeFormattedStringWithAdditionalConversionIfUnder1($value, $unit)
     {
+        if($unit == 'm²') {
+            return $value . " " . $this->unitName($value, $unit);
+        }
+
+        if($unit == 'ha' || $unit == 'ac') {
+            $formatted_desired_unit = $value . " " . $this->unitName($value, $unit);
+            if($value < 1 && $this->base_unit_symbol == 'm²') {
+                return "$formatted_desired_unit (" . $this->base_value . " m²)";
+            }
+            return $formatted_desired_unit;
+        }
+
+        return $value . " " . $this->unitName($value, $unit);
+    }
+
+    public function formattedValueAndUnit($options = [])
+    {
+        $default_options = [
+            'show_additional_conversion_under_1' => false
+        ];
+
+        $options = array_merge($default_options, $options);
+
         if($this->base_value === null) {
             return "(blank)";
         }
 
+        $value_to_format = null;
+        $unit_to_format = null;
+
         if($this->converted_value === null) {
-            return $this->base_value . ' ' . $this->baseUnitName();
+            $value_to_format = $this->base_value;
+            $unit_to_format = $this->base_unit_symbol;
+        } else {
+            $value_to_format = $this->converted_value;
+            $unit_to_format = $this->conversion_unit_symbol;
         }
 
-        return $this->converted_value . ' ' . $this->conversionUnitName();
+        if($options['show_additional_conversion_under_1']) {
+            return $this->makeFormattedStringWithAdditionalConversionIfUnder1($value_to_format, $unit_to_format);
+        }
+
+        return $value_to_format . " " . $this->unitName($value_to_format, $unit_to_format);
     }
 
     //
