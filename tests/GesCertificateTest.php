@@ -15,10 +15,10 @@ class GesCertificateTest extends PHPUnit_Framework_TestCase
 
     public function testGesNumberIsSetWithValidGesNumber()
     {
-        $subject = new GesCertificate(['number' => 500]);
-        $this->assertEquals(500, $subject->number());
+        $subject = new GesCertificate(['number' => 600]);
+        $this->assertEquals(600, $subject->number());
 
-        $subject = new GesCertificate(['number' => 501]);
+        $subject = new GesCertificate(['number' => 601]);
         $this->assertEquals('?', $subject->number());
     }
 

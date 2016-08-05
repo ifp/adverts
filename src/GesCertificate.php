@@ -32,6 +32,6 @@ class GesCertificate extends EnergyCertificate
         $this->letter_thresholds['end']['F'] = 81;
 
         $this->letter_thresholds['start']['G'] = 81;
-        $this->letter_thresholds['end']['G'] = 500;
+        $this->letter_thresholds['end']['G'] = 600;
     }
 }
