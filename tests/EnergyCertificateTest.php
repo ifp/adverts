@@ -22,10 +22,10 @@ class EnergyCertificateTest extends PHPUnit_Framework_TestCase
     public function testEnergyNumberIsSetWithValidEnergyNumber()
     {
         $subject = new DpeCertificate(['number' => -1]);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
 
         $subject = new DpeCertificate(['number' => 0]);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
 
         $subject = new DpeCertificate(['number' => 0.1]);
         $this->assertEquals(0.1, $subject->number());
@@ -49,25 +49,25 @@ class EnergyCertificateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(60.7, $subject->number());
 
         $subject = new DpeCertificate(['number' => null]);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
 
         $subject = new DpeCertificate(['number' => '']);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
 
         $subject = new DpeCertificate(['number' => 'foo']);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
 
         $subject = new DpeCertificate(['number' => true]);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
 
         $subject = new DpeCertificate(['number' => false]);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
 
         $subject = new DpeCertificate(['number' => []]);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
 
         $subject = new DpeCertificate(['number' => new stdClass()]);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
     }
 
     public function testEnergyLetterIsSetToAWhenTheEnergyLetterIsA()
@@ -115,35 +115,35 @@ class EnergyCertificateTest extends PHPUnit_Framework_TestCase
     public function testEnergyLetterIsSetToUnknownWhenTheEnergyLetterIsInvalid()
     {
         $subject = new DpeCertificate(['letter' => null]);
-        $this->assertEquals('?', $subject->letter());
+        $this->assertEquals('', $subject->letter());
 
         $subject = new DpeCertificate(['letter' => false]);
-        $this->assertEquals('?', $subject->letter());
+        $this->assertEquals('', $subject->letter());
 
         $subject = new DpeCertificate(['letter' => '']);
-        $this->assertEquals('?', $subject->letter());
+        $this->assertEquals('', $subject->letter());
 
         $subject = new DpeCertificate(['letter' => 'foo']);
-        $this->assertEquals('?', $subject->letter());
+        $this->assertEquals('', $subject->letter());
 
         $subject = new DpeCertificate(['letter' => []]);
-        $this->assertEquals('?', $subject->letter());
+        $this->assertEquals('', $subject->letter());
 
         $subject = new DpeCertificate(['letter' => 10]);
-        $this->assertEquals('?', $subject->letter());
+        $this->assertEquals('', $subject->letter());
 
         $subject = new DpeCertificate(['letter' => true]);
-        $this->assertEquals('?', $subject->letter());
+        $this->assertEquals('', $subject->letter());
 
         $subject = new DpeCertificate(['letter' => new stdClass()]);
-        $this->assertEquals('?', $subject->letter());
+        $this->assertEquals('', $subject->letter());
     }
 
     public function testEnergyLetterAndNumberIsSetToUnknownWhenNeitherTheEnergyLetterOrNumberIsGiven()
     {
         $subject = new DpeCertificate(['letter' => '', 'number' => '']);
-        $this->assertEquals('?', $subject->letter());
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->letter());
+        $this->assertEquals('', $subject->number());
     }
 
 }
