@@ -9,11 +9,12 @@ class CurrencyBuilder
     private $rates_with_currency_code_keys;
     private $required_currency_codes;
 
-    public function __construct(DataFeedDownloader $data_feed_downloader)
+    public function __construct(DataFeedDownloader $data_feed_downloader, $currency_class = Currency::class)
     {
         $this->data_feed_downloader = $data_feed_downloader;
         $this->rates = json_decode($this->data_feed_downloader->data(), true);
         $this->mapRateKeys();
+        $this->currency_class = $currency_class;
     }
 
     public function getRates()
@@ -60,6 +61,6 @@ class CurrencyBuilder
 
     public function build()
     {
-        return new Currency($this->requiredRates());
+        return new $this->currency_class($this->requiredRates());
     }
 }
