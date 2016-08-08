@@ -225,7 +225,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
 
         $area_converter->selectConversionUnit('ha');
 
-        $this->assertEquals('hectares', $area_converter->conversionUnitName());
+        $this->assertEquals('ha', $area_converter->conversionUnitName());
         $this->assertEquals('ha', $area_converter->conversionUnitSymbol());
         $this->assertEquals(true, $area_converter->isUnit('ha'));
     }
@@ -237,7 +237,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $area_converter->selectConversionUnit('ha');
         $area_converter->from(1, 'ha');
 
-        $this->assertEquals('hectare', $area_converter->conversionUnitName());
+        $this->assertEquals('ha', $area_converter->conversionUnitName());
         $this->assertEquals('ha', $area_converter->conversionUnitSymbol());
         $this->assertEquals(true, $area_converter->isUnit('ha'));
     }
@@ -287,7 +287,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('10000 m²',
             $area_converter->from(1, 'ha')->to('m²')->formattedValueAndUnit());
 
-        $this->assertEquals('10 hectares',
+        $this->assertEquals('10 ha',
             $area_converter->from(100000, 'm²')->to('ha')->formattedValueAndUnit());
 
         $this->assertEquals('10 acres',
@@ -301,11 +301,23 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('56780 m²',
             $area_converter->from(5.678, 'ha')->to('m²')->formattedValueAndUnit());
 
-        $this->assertEquals('5.67 hectares',
+        $this->assertEquals('5.67 ha',
             $area_converter->from(56789, 'm²')->to('ha')->formattedValueAndUnit());
 
         $this->assertEquals('1.23 acres',
             $area_converter->from(4996, 'm²')->to('ac')->formattedValueAndUnit()); //4996 m² = 1.2345 acre
+    }
+
+    public function test2DigitAcresAndHectaresValuesGetFormattedWith1DecimalPlace()
+    {
+        //$this->assertEquals('56.6 hectares')
+    }
+
+    public function testFormattedValueIsUnknownWhenValueNotSetYet()
+    {
+        $area_converter = new AreaConverter();
+
+        $this->assertEquals("unknown", $area_converter->formattedValueAndUnit());
     }
 
     public function testFormattedValueSingular()
@@ -315,7 +327,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('1 m²',
             $area_converter->from(1, 'm²')->to('m²')->formattedValueAndUnit());
 
-        $this->assertEquals('1 hectare',
+        $this->assertEquals('1 ha',
             $area_converter->from(10000, 'm²')->to('ha')->formattedValueAndUnit());
 
         $this->assertEquals('1 acre',
@@ -329,7 +341,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('100 m²',
             $area_converter->from(100, 'm²')->formattedValueAndUnit());
 
-        $this->assertEquals('20 hectares',
+        $this->assertEquals('20 ha',
             $area_converter->from(20, 'ha')->formattedValueAndUnit());
 
         $this->assertEquals('100 acres',
@@ -341,14 +353,14 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         //Consider throwing an exception here...
         $area_converter = new AreaConverter();
 
-        $this->assertEquals("(blank)", $area_converter->formattedValueAndUnit());
+        $this->assertEquals("unknown", $area_converter->formattedValueAndUnit());
     }
 
     public function testFormattedValueAndUnitOfAreaUnder1HectareShowsBothUnitsWithOptionSet()
     {
         $area_converter = new AreaConverter();
 
-        $this->assertEquals('0.5 hectares (5000 m²)',
+        $this->assertEquals('0.5 ha (5000 m²)',
             $area_converter->from(5000, 'm²')->to('ha')->formattedValueAndUnit(['show_additional_conversion_under_1' => true]));
 
         $this->assertEquals('0.5 acres (2024 m²)',
@@ -360,7 +372,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
     {
         $area_converter = new AreaConverter();
 
-        $this->assertEquals('hectares',
+        $this->assertEquals('ha',
             $area_converter->selectConversionUnit('ha')->conversionUnitName());
     }
 

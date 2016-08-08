@@ -178,14 +178,16 @@ class AreaConverter
 
     public function formattedValueAndUnit($options = [])
     {
+        //return "unknown";
+
         $default_options = [
             'show_additional_conversion_under_1' => false
         ];
 
         $options = array_merge($default_options, $options);
 
-        if($this->base_value === null) {
-            return "(blank)";
+        if(!is_numeric($this->base_value)) {
+            return "unknown";
         }
 
         $value_to_format = null;
@@ -220,10 +222,8 @@ class AreaConverter
         }
 
         if($unit_symbol == 'ha') {
-            if($value == 1) {
-                return 'hectare';
-            }
-            return 'hectares';
+            //In future, might make "long" and "short" formatted string methods to be used for desktop/mobile view respectively
+            return 'ha';
         }
 
         // There is no reason to display 'square metres' anywhere on the site - m² is preferred

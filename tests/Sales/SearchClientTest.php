@@ -261,10 +261,4 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
         $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?reference=myref'));
     }
-
-    public function testApiMatchesRealApi()
-    {
-        $this->markTestIncomplete(
-            'Someone please check request parameters in the tests above to see that they match the real API (not installed on my machine at time of writing)');
-    }
 }
