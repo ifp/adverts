@@ -22,7 +22,7 @@ abstract class EnergyCertificate
         if (isset($values['letter']) && in_array($values['letter'], ['A', 'B', 'C', 'D', 'E', 'F', 'G'], true)) {
             $this->letter = $values['letter'];
         } else {
-            $this->letter = '?';
+            $this->letter = '';
         }
     }
 
@@ -47,7 +47,7 @@ abstract class EnergyCertificate
                 $this->letter = 'G';
             }
         } else {
-            $this->number = '?';
+            $this->number = '';
         }
     }
 
