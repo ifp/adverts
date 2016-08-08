@@ -82,25 +82,17 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
         $this->assertNumber(15, $area_converter->from(15, 'ac')->to('ac')->value());
     }
 
-    public function testTheAreaCanBeConvertedFromAcresToAcresAndRoundedDownToNearestTwoDecimalPlaces()
+    public function testTheAreaCanBeConvertedFromAcresToAcresAndRoundedDownToNearestOneOrTwoDecimalPlacesDependingOnValue()
     {
         $area_converter = new AreaConverter();
 
-        $this->assertNumber(15.76, $area_converter->from(15.769, 'ac')->to('ac')->value());
-    }
+        //Changed to smarter decimal places depending on value, to avoid wrapping onto new lines on mobile view
+//        $this->assertNumber(15.76, $area_converter->from(15.769, 'ac')->to('ac')->value());
+        $this->assertNumber(1.57, $area_converter->from(1.5769, 'ac')->to('ac')->value());
+        $this->assertNumber(15.7, $area_converter->from(15.769, 'ac')->to('ac')->value());
+        $this->assertNumber(157,  $area_converter->from(157.69, 'ac')->to('ac')->value());
+        $this->assertNumber(1578, $area_converter->from(1578.769, 'ac')->to('ac')->value());
 
-    public function testTheAreaCanBeConvertedFromAcresToAcresAndRoundedDownToNearestTwoDecimalPlaces2()
-    {
-        $area_converter = new AreaConverter();
-
-        $this->assertNumber(1578.76, $area_converter->from(1578.769, 'ac')->to('ac')->value());
-    }
-
-    public function testTheAreaCanBeConvertedFromAcresToAcresAndRoundedDownToNearestTwoDecimalPlaces3()
-    {
-        $area_converter = new AreaConverter();
-
-        $this->assertNumber(1578.76, $area_converter->from(1578.761, 'ac')->to('ac')->value());
     }
 
     // m² -> ac
@@ -149,7 +141,12 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
     {
         $area_converter = new AreaConverter();
 
-        $this->assertNumber(15.76, $area_converter->from(15.769, 'ha')->to('ha')->value());
+        //Changed to smarter decimal places depending on value, to avoid wrapping onto new lines on mobile view
+//        $this->assertNumber(15.76, $area_converter->from(15.769, 'ha')->to('ha')->value());
+        $this->assertNumber(1.57, $area_converter->from(1.5769, 'ha')->to('ha')->value());
+        $this->assertNumber(15.7, $area_converter->from(15.769, 'ha')->to('ha')->value());
+        $this->assertNumber(157,  $area_converter->from(157.69, 'ha')->to('ha')->value());
+        $this->assertNumber(1576, $area_converter->from(1576.9, 'ha')->to('ha')->value());
     }
 
     // m² -> ha
@@ -298,19 +295,15 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
     {
         $area_converter = new AreaConverter();
 
-        $this->assertEquals('56780 m²',
-            $area_converter->from(5.678, 'ha')->to('m²')->formattedValueAndUnit());
+        $this->assertEquals('56780 m²', $area_converter->from(5.678, 'ha')->to('m²')->formattedValueAndUnit());
 
-        $this->assertEquals('5.67 ha',
-            $area_converter->from(56789, 'm²')->to('ha')->formattedValueAndUnit());
+        $this->assertEquals('5.67 ha', $area_converter->from(56789, 'm²')->to('ha')->formattedValueAndUnit());
+        $this->assertEquals('56.7 ha', $area_converter->from(567890, 'm²')->to('ha')->formattedValueAndUnit());
+        $this->assertEquals('567 ha', $area_converter->from(5678900, 'm²')->to('ha')->formattedValueAndUnit());
 
-        $this->assertEquals('1.23 acres',
-            $area_converter->from(4996, 'm²')->to('ac')->formattedValueAndUnit()); //4996 m² = 1.2345 acre
-    }
-
-    public function test2DigitAcresAndHectaresValuesGetFormattedWith1DecimalPlace()
-    {
-        //$this->assertEquals('56.6 hectares')
+        $this->assertEquals('1.23 acres', $area_converter->from(4996, 'm²')->to('ac')->formattedValueAndUnit()); //4996 m² = 1.2345 acre
+        $this->assertEquals('12.3 acres', $area_converter->from(49960, 'm²')->to('ac')->formattedValueAndUnit()); //= 12.345 acre
+        $this->assertEquals('123 acres', $area_converter->from(499600, 'm²')->to('ac')->formattedValueAndUnit()); //= 123.45 acre
     }
 
     public function testFormattedValueIsUnknownWhenValueNotSetYet()

@@ -112,6 +112,22 @@ class AreaConverter
         return $this;
     }
 
+    //100+: 0 decimal places
+    // 10+: 1 decimal places
+    //under 10: 2 decimal places
+    private function roundValueTo3DigitsTotalIfPossible($value)
+    {
+        if($value >= 100) {
+            return $this->roundDown($value, 0);
+        }
+
+        if($value >= 10) {
+            return $this->roundDown($value, 1);
+        }
+
+        return $this->roundDown($value, 2);
+    }
+
     public function toAcres()
     {
         $this->conversion_unit_symbol = 'ac';
@@ -122,14 +138,14 @@ class AreaConverter
         }
 
         if ($this->base_unit_symbol == 'm²') {
-            $this->converted_value = $this->roundDown($this->base_value / 4046.86, 2);
+            $this->converted_value = $this->roundValueTo3DigitsTotalIfPossible($this->base_value / 4046.86);
             return $this;
         } elseif ($this->base_unit_symbol == 'ha') {
-            $this->converted_value = $this->roundDown($this->base_value * 2.47105, 2);
+            $this->converted_value = $this->roundValueTo3DigitsTotalIfPossible($this->base_value * 2.47105);
             return $this;
         }
 
-        $this->converted_value = $this->roundDown($this->base_value, 2);
+        $this->converted_value = $this->roundValueTo3DigitsTotalIfPossible($this->base_value);
         return $this;
     }
 
@@ -143,14 +159,14 @@ class AreaConverter
         }
 
         if ($this->base_unit_symbol == 'm²') {
-            $this->converted_value = $this->roundDown($this->base_value / 10000, 2);
+            $this->converted_value = $this->roundValueTo3DigitsTotalIfPossible($this->base_value / 10000);
             return $this;
         } elseif ($this->base_unit_symbol == 'ac') {
-            $this->converted_value = $this->roundDown($this->base_value / 2.47105, 2);
+            $this->converted_value = $this->roundValueTo3DigitsTotalIfPossible($this->base_value / 2.47105);
             return $this;
         }
 
-        $this->converted_value = $this->roundDown($this->base_value, 2);
+        $this->converted_value = $this->roundValueTo3DigitsTotalIfPossible($this->base_value);
         return $this;
     }
 
