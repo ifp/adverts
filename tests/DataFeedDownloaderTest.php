@@ -68,6 +68,7 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
             'curl' => $this->curl,
             'url' => 'http://www.example.com',
             'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
+            //Validator not passed in - set to null
         ]);
 
         $this->assertEquals('foo', $data_feed_downloader->data());
