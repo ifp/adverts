@@ -24,6 +24,9 @@ class CurrencyDataValidatorTest extends PHPUnit_Framework_TestCase
     {
         $this->currency_data_validator = new CurrencyDataValidator([]);
         $this->assertEquals(false, $this->currency_data_validator->validate('foo'));
+
+        $this->currency_data_validator = new CurrencyDataValidator(['foocurrency']);
+        $this->assertEquals(false, $this->currency_data_validator->validate('foo'));
     }
 
     public function testSingleCurrencyValidates()
