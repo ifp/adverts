@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: andy
- * Date: 10/08/16
- * Time: 11:38
- */
-
 namespace IFP\Adverts;
 
 

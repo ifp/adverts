@@ -58,6 +58,8 @@ class DataFeedDownloader
             }
         }
 
+        // NOTE currently every test run from lakesfrance root will save the feed as the cache is always cleared
+        // Although this only takes 8 seconds extra (21 vs 13 seconds for 95 tests at time of writing, 2016-08-11)
         $this->saveDownloadedFile($data);
 
         return $data;
