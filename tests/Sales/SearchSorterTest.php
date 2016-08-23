@@ -10,7 +10,6 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
     public function testSorterCanCreateASortByPriceAscendingUrlForTheCurrentSearch()
     {
         $search_criteria = [
-            "title_en_any" => "lake",
             "start_page" => 1,
             "page_size" => 15,
             "minimum_price" => 100000,
@@ -36,13 +35,12 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
 
         $subject = new SearchSorter($base_url, $search_criteria);
 
-        $this->assertEquals('/sale-advert-search?title_en_any=lake&minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=price&sort_direction=asc', $subject->priceAscendingUrl());
+        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=price&sort_direction=asc', $subject->priceAscendingUrl());
     }
 
     public function testSorterCanCreateASortByPriceDescendingUrlForTheCurrentSearch()
     {
         $search_criteria = [
-            "title_en_any" => "lake",
             "start_page" => 1,
             "page_size" => 15,
             "minimum_price" => 100000,
@@ -68,13 +66,12 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
 
         $subject = new SearchSorter($base_url, $search_criteria);
 
-        $this->assertEquals('/sale-advert-search?title_en_any=lake&minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=price&sort_direction=desc', $subject->priceDescendingUrl());
+        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=price&sort_direction=desc', $subject->priceDescendingUrl());
     }
 
     public function testSorterCanCreateASortByDateDescendingUrlForTheCurrentSearch()
     {
         $search_criteria = [
-            "title_en_any" => "lake",
             "start_page" => 1,
             "page_size" => 15,
             "minimum_price" => 100000,
@@ -100,13 +97,12 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
 
         $subject = new SearchSorter($base_url, $search_criteria);
 
-        $this->assertEquals('/sale-advert-search?title_en_any=lake&minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=date&sort_direction=desc', $subject->dateDescendingUrl());
+        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=date&sort_direction=desc', $subject->dateDescendingUrl());
     }
 
-    public function testSorterCanCreateASortByLandSizeAscendingUrlForTheCurrentSearch()
+    public function testSorterCanCreateASortByLandSizeDescendingUrlForTheCurrentSearch()
     {
         $search_criteria = [
-            "title_en_any" => "lake",
             "start_page" => 1,
             "page_size" => 15,
             "minimum_price" => 100000,
@@ -132,13 +128,12 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
 
         $subject = new SearchSorter($base_url, $search_criteria);
 
-        $this->assertEquals('/sale-advert-search?title_en_any=lake&minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=land_size&sort_direction=asc', $subject->landSizeAscendingUrl());
+        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=land_size&sort_direction=desc', $subject->landSizeDescendingUrl());
     }
 
     public function testSorterCanIdentifyPriceAscendingSortIsCurrentlySelected()
     {
         $search_criteria = [
-            "title_en_any" => "lake",
             "start_page" => 1,
             "page_size" => 15,
             "minimum_price" => 100000,
@@ -170,7 +165,6 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
     public function testSorterCanIdentifyPriceDescendingSortIsCurrentlySelected()
     {
         $search_criteria = [
-            "title_en_any" => "lake",
             "start_page" => 1,
             "page_size" => 15,
             "minimum_price" => 100000,
@@ -202,7 +196,6 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
     public function testSorterCanIdentifyDateDescendingSortIsCurrentlySelected()
     {
         $search_criteria = [
-            "title_en_any" => "lake",
             "start_page" => 1,
             "page_size" => 15,
             "minimum_price" => 100000,
@@ -231,10 +224,9 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('date_desc', $subject->currentSort());
     }
 
-    public function testSorterCanIdentifyLandSizeAscendingSortIsCurrentlySelected()
+    public function testSorterCanIdentifyLandSizeDescendingSortIsCurrentlySelected()
     {
         $search_criteria = [
-            "title_en_any" => "lake",
             "start_page" => 1,
             "page_size" => 15,
             "minimum_price" => 100000,
@@ -244,7 +236,7 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
             "minimum_land_size" => 300,
             "maximum_land_size" => 400000,
             "sort_by" => "land_size",
-            "sort_direction" => "asc",
+            "sort_direction" => "desc",
             "regions" => [
                 "aquitaine",
                 "centre",
@@ -260,6 +252,6 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
 
         $subject = new SearchSorter($base_url, $search_criteria);
 
-        $this->assertEquals('land_size_asc', $subject->currentSort());
+        $this->assertEquals('land_size_desc', $subject->currentSort());
     }
 }

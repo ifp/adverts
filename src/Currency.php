@@ -70,7 +70,7 @@ class Currency
         if ($code === null) {
             $code = $this->code();
         }
-
+        
         return (int)round($amount / $this->rates[$code]);
     }
 
@@ -97,7 +97,7 @@ class Currency
         return $this->currencies[$currency] .  $this->formatValue($this->convertFromEuros($value_in_euros, $currency));
     }
 
-    private function formatValue($value)
+    public function formatValue($value)
     {
         return number_format($value, 0, '.', ',');
     }

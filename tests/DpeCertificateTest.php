@@ -19,7 +19,7 @@ class DpeCertificateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(9999, $subject->number());
 
         $subject = new DpeCertificate(['number' => 10000]);
-        $this->assertEquals('?', $subject->number());
+        $this->assertEquals('', $subject->number());
     }
 
     public function testDpeLetterIsSetToAWhenTheDpeNumberIsUnder51()

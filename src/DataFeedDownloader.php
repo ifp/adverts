@@ -10,15 +10,20 @@ class DataFeedDownloader
     private $curl;
     private $data;
     private $downloaded_file_save_location;
+    private $data_validator;
     private $bugsnag_client;
 
-    public function __construct(Curl $curl, $url, $downloaded_file_save_location, $bugsnag_api_key = null)
+    public function __construct($options) //Curl $curl, $url, $downloaded_file_save_location, $bugsnag_api_key = null)
     {
-        $this->curl = $curl;
-        $this->curl->init($url);
-        $this->url = $url;
-        $this->downloaded_file_save_location = $downloaded_file_save_location;
-        $this->loadBugsnag($bugsnag_api_key);
+        $defaults = ['bugsnag_api_key' => null, 'data_validator' => null];
+        $options = array_merge($defaults, $options);
+
+        $this->curl = $options['curl'];
+        $this->curl->init($options['url']);
+        $this->url = $options['url'];
+        $this->downloaded_file_save_location = $options['downloaded_file_save_location'];
+        $this->data_validator = $options['data_validator'];
+        $this->loadBugsnag($options['bugsnag_api_key']);
     }
 
     public function data()
@@ -47,6 +52,14 @@ class DataFeedDownloader
             throw new UnableToDownloadDataException('Unable to download data feed ' . $this->url . ', see exception code for http status code. Last php error message: ' . error_get_last()['message'], $http_code);
         }
 
+        if($this->data_validator !== null) {
+            if($this->data_validator->validate($data) == false) {
+                throw new UnableToDownloadDataException('Unable to download data feed ' . $this->url . ' as the data is invalid (JSON fields missing, etc)');
+            }
+        }
+
+        // NOTE currently every test run from lakesfrance root will save the feed as the cache is always cleared
+        // Although this only takes 8 seconds extra (21 vs 13 seconds for 95 tests at time of writing, 2016-08-11)
         $this->saveDownloadedFile($data);
 
         return $data;
