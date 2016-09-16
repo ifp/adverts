@@ -41,10 +41,18 @@ class DataFeedDownloader
     {
         $this->curl->setOpt(CURLOPT_HEADER, false);
         $this->curl->setOpt(CURLOPT_RETURNTRANSFER, true);
+        $this->curl->setOpt(CURLOPT_TIMEOUT, 2);
+        $this->curl->setOpt(CURLOPT_CONNECTTIMEOUT, 1);
 
         $data = $this->curl->execute();
 
-        $http_code = $this->curl->getInfo(CURLINFO_HTTP_CODE);
+        $error_no = $this->curl->errorNo();
+
+        if ($error_no == 0) {
+            $http_code = $this->curl->getInfo(CURLINFO_HTTP_CODE);
+        } else {
+            throw new UnableToDownloadDataException('Unable to download data feed ' . $this->url . ', curl error number' . $error_no);
+        }
 
         $this->curl->close();
 
