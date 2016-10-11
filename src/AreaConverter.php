@@ -221,7 +221,7 @@ class AreaConverter
             return $this->makeFormattedStringWithAdditionalConversionIfUnder1($value_to_format, $unit_to_format);
         }
 
-        return $value_to_format . " " . $this->unitName($value_to_format, $unit_to_format);
+        return $this->addThousandsSeparators($value_to_format) . " " . $this->unitName($value_to_format, $unit_to_format);
     }
 
     //
@@ -255,5 +255,10 @@ class AreaConverter
         $fig = (int) str_pad('1', $precision + 1, '0');
 
         return (floor($amount * $fig) / $fig);
+    }
+
+    private function addThousandsSeparators($amount)
+    {
+        return number_format($amount);
     }
 }

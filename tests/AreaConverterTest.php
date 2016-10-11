@@ -327,6 +327,23 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
             $area_converter->from(0.4047, 'ha')->to('ac')->formattedValueAndUnit());
     }
 
+    public function testFormattedValueZero()
+    {
+        $area_converter = new AreaConverter();
+
+        $this->assertEquals('0 m²',
+            $area_converter->from(0, 'm²')->formattedValueAndUnit());
+
+        $this->assertEquals('0 m²',
+            $area_converter->from(0, 'm²')->to('m²')->formattedValueAndUnit());
+
+        $this->assertEquals('0 ha',
+            $area_converter->from(0, 'm²')->to('ha')->formattedValueAndUnit());
+
+        $this->assertEquals('0 acres',
+            $area_converter->from(0, 'ha')->to('ac')->formattedValueAndUnit());
+    }
+
     public function testFormattedValueWhenNotConvertedYet()
     {
         $area_converter = new AreaConverter();
@@ -358,6 +375,23 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('0.5 acres (2024 m²)',
             $area_converter->from(2024, 'm²')->to('ac')->formattedValueAndUnit(['show_additional_conversion_under_1' => true]));
+    }
+
+    public function testFormattedValueHasThousandSeparatorsWhenLargeEnough()
+    {
+        $area_converter = new AreaConverter();
+
+        $this->assertEquals('1,000 m²',
+            $area_converter->from(1000, 'm²')->formattedValueAndUnit());
+
+        $this->assertEquals('1,000 ha',
+            $area_converter->from(1000, 'ha')->formattedValueAndUnit());
+
+        $this->assertEquals('1,000 acres',
+            $area_converter->from(1000, 'ac')->formattedValueAndUnit());
+
+        $this->assertEquals('10,000,000 m²',
+            $area_converter->from(1000, 'ha')->to('m²')->formattedValueAndUnit());
     }
 
     // A slightly contrived test, but this should be tested somehow just in case
