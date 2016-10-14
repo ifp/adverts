@@ -20,6 +20,6 @@
         </whitelist>
     </filter>
     <php>
-        <env name="FPAPI_SEARCH_CLIENT_TOKEN" value="Ay58tmYPOhnZXHDNKb3AT5BGv0FT9tVz"/>
+        <env name="IFP_SEARCH_CLIENT_TOKEN" value="Ay58tmYPOhnZXHDNKb3AT5BGv0FT9tVz"/>
     </php>
 </phpunit>
