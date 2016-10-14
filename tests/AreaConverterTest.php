@@ -281,7 +281,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
     {
         $area_converter = new AreaConverter();
 
-        $this->assertEquals('10000 m²',
+        $this->assertEquals('10,000 m²',
             $area_converter->from(1, 'ha')->to('m²')->formattedValueAndUnit());
 
         $this->assertEquals('10 ha',
@@ -295,7 +295,7 @@ class AreaConverterTest extends PHPUnit_Framework_TestCase
     {
         $area_converter = new AreaConverter();
 
-        $this->assertEquals('56780 m²', $area_converter->from(5.678, 'ha')->to('m²')->formattedValueAndUnit());
+        $this->assertEquals('56,780 m²', $area_converter->from(5.678, 'ha')->to('m²')->formattedValueAndUnit());
 
         $this->assertEquals('5.67 ha', $area_converter->from(56789, 'm²')->to('ha')->formattedValueAndUnit());
         $this->assertEquals('56.7 ha', $area_converter->from(567890, 'm²')->to('ha')->formattedValueAndUnit());

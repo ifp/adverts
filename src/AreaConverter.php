@@ -259,6 +259,6 @@ class AreaConverter
 
     private function addThousandsSeparators($amount)
     {
-        return number_format($amount);
+        return preg_replace("/\.?0*$/",'', number_format($amount, 2));
     }
 }
