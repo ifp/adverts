@@ -8,7 +8,6 @@ use IFP\Adverts\DataFeedDownloader;
 use Mockery\Mock;
 use org\bovigo\vfs\vfsStream;
 
-
 class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
 {
     private $curl;
@@ -42,6 +41,7 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
     public function testTheLastDownloadedFileCanBeRetrievedFromTheFileSystemIfTheLiveDataFileWasNotDownloaded()
     {
         $this->curl->shouldReceive('getInfo')->andReturn(404);
+
         vfsStream::newFile('foo.txt', 0755)
             ->withContent('bar')
             ->at($this->root);
@@ -49,6 +49,24 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
         $data_feed_downloader = new DataFeedDownloader([
             'curl' => $this->curl,
             'url' => 'http://www.example.com',
+            'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
+            'data_validator' => Mockery::mock()->shouldReceive('validate')->andReturn(true)->getMock()
+        ]);
+
+        $this->assertEquals('bar', $data_feed_downloader->data());
+    }
+
+    public function testTheLastDownloadedFileCanBeRetrievedFromTheFileSystemIfTheLiveDataFileWasNotDownloadedDueToTimeout()
+    {
+        $this->curl = new Curl();
+
+        vfsStream::newFile('foo.txt', 0755)
+            ->withContent('bar')
+            ->at($this->root);
+
+        $data_feed_downloader = new DataFeedDownloader([
+            'curl' => $this->curl,
+            'url' => 'https://www.french-property.com/timeout.php',
             'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
             'data_validator' => Mockery::mock()->shouldReceive('validate')->andReturn(true)->getMock()
         ]);

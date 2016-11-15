@@ -21,6 +21,11 @@ class Curl
         return curl_exec($this->handle);
     }
 
+    public function errorNo()
+    {
+        return curl_errno($this->handle);
+    }
+
     public function getInfo($name)
     {
         return curl_getinfo($this->handle, $name);
