@@ -40,12 +40,16 @@ class SearchClient
         }
     }
 
-    public function search($params)
+    public function search($params, $method)
     {
         try {
             $query_string = $this->buildQueryString($params);
 
-            $response = $this->client->get('adverts/sales/search?' . $query_string);
+            if ($method == 'POST') {
+                $response = $this->client->request('POST', 'adverts/sales/search', $params);
+            } else {
+                $response = $this->client->get('adverts/sales/search?' . $query_string);
+            }
 
             return json_decode((string) $response->getBody(), true);
         } catch (ClientException $e) {
