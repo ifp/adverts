@@ -53,7 +53,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         $subject = new SearchClient($client, $base_url, $token);
 
         try {
-            $subject->search([]);
+            $subject->search([], 'GET');
         } catch (InvalidApiTokenException $e) {
             return;
         }
@@ -74,7 +74,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
         $client->shouldReceive('get')->with(MockeryHelper::expectedParameterContains('/search'))->andReturn($client_response);
 
-        $subject->search([]);
+        $subject->search([], 'GET');
     }
 
     public function testItCanSearchWithSimpleValueConstraints()
@@ -89,7 +89,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
         $subject->search([
             'minimum_price' => 150000,
-        ]);
+        ], 'GET');
 
         $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?minimum_price=150000'));
     }
@@ -105,7 +105,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
         $subject->search([
             'keywords_en_all' => ['bar', 'full'],
-        ]);
+        ], 'GET');
 
         $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?keywords_en_all=bar,full'));
     }
@@ -125,7 +125,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
                 'lon' => '3.221313',
                 'distance' => '100km',
             ]
-        ]);
+        ], 'GET');
 
         $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?geo[lat]=47.385781&geo[lon]=3.221313&geo[distance]=100km'));
     }
@@ -143,7 +143,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
             'sort_by' => 'price',
             'sort_direction' => 'desc',
             'maximum_price' => 17900000,
-        ]);
+        ], 'GET');
 
         $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?sort_by=price&sort_direction=desc&maximum_price=17900000'));
     }
@@ -160,7 +160,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         $subject->search([
             'start_page' => 2000,
             'page_size' => 5,
-        ]);
+        ], 'GET');
 
         $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?start_page=2000&page_size=5'));
     }
@@ -179,7 +179,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         try {
             $subject->search([
                 'minimum_price' => 'bananas',
-            ]);
+            ], 'GET');
         } catch (InvalidSearchCriteriaException $e) {
             $this->assertCount(1, $e->getErrors());
             return;
@@ -203,7 +203,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
                 'minimum_price' => '1000000',
                 'page_size' => 100,
                 'start_page' => 100
-            ]);
+            ], 'GET');
         } catch (StartPageOutOfBoundsException $e) {
             $this->assertEquals('foo_page_count', $e->lastPage());
             return;
@@ -257,7 +257,7 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
         $subject->search([
             'reference' => 'myref'
-        ]);
+        ], 'GET');
 
         $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?reference=myref'));
     }
