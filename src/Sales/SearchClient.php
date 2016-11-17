@@ -46,9 +46,26 @@ class SearchClient
             $query_string = $this->buildQueryString($params);
 
             if ($method == 'POST') {
+
+                $params = array_map(function ($param) {
+                    if (is_array($param)) {
+                        return implode(',', $param);
+                    }
+
+                    return $param;
+                }, $params);
+
+                $params = [
+                    'form_params' => $params,
+                    //'debug' => true
+                ];
+
                 $response = $this->client->request('POST', 'adverts/sales/search', $params);
+
             } else {
-                $response = $this->client->get('adverts/sales/search?' . $query_string);
+                $response = $this->client->get('adverts/sales/search?' . $query_string
+                    //['debug' => true]
+                );
             }
 
             return json_decode((string) $response->getBody(), true);
