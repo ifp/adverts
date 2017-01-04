@@ -2,7 +2,8 @@
 
 namespace IFP\Adverts;
 
-use Bugsnag_Client;
+use Bugsnag\Client as BugsnagClient;
+use Exception;
 
 class DataFeedDownloader
 {
@@ -23,7 +24,7 @@ class DataFeedDownloader
         $this->url = $options['url'];
         $this->downloaded_file_save_location = $options['downloaded_file_save_location'];
         $this->data_validator = $options['data_validator'];
-        $this->loadBugsnag($options['bugsnag_api_key']);
+        $this->bugsnag_client = $options['bugsnag_client'];
     }
 
     public function data()
@@ -99,26 +100,22 @@ class DataFeedDownloader
         return $data;
     }
 
-    private function loadBugsnag($bugsnag_api_key)
-    {
-        $this->bugsnag_client = null;
-
-        if (class_exists('Bugsnag_Client')) {
-            $this->bugsnag_client = new Bugsnag_Client($bugsnag_api_key);
-        }
-    }
+//    private function loadBugsnag($bugsnag_api_key)
+//    {
+//        $this->bugsnag_client = null;
+//
+//        if (class_exists('Bugsnag_Client')) {
+//            $this->bugsnag_client = new Bugsnag_Client($bugsnag_api_key);
+//        }
+//    }
 
     private function bugsnagNotifyException($e)
     {
-        if($this->bugsnag_client) {
-            $this->bugsnag_client->notifyException($e);
-        }
+        $this->bugsnag_client->notifyException($e);
     }
 
     private function bugsnagNotifyError($error_type, $error_message)
     {
-        if($this->bugsnag_client) {
-            $this->bugsnag_client->notifyError($error_type, $error_message);
-        }
+        $this->bugsnag_client->notifyError($error_type, $error_message);
     }
 }
