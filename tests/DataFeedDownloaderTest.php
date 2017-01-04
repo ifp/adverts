@@ -32,7 +32,8 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
             'curl' => $this->curl,
             'url' => 'http://www.example.com',
             'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
-            'data_validator' => Mockery::mock()->shouldReceive('validate')->andReturn(true)->getMock()
+            'data_validator' => Mockery::mock()->shouldReceive('validate')->andReturn(true)->getMock(),
+            'bugsnag_client' => Mockery::mock()
         ]);
 
         $this->assertEquals('foo', $data_feed_downloader->data());
@@ -46,14 +47,18 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
             ->withContent('bar')
             ->at($this->root);
 
+        $bugsnag_client_fake = new BugsnagClientFake();
+
         $data_feed_downloader = new DataFeedDownloader([
             'curl' => $this->curl,
             'url' => 'http://www.example.com',
             'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
-            'data_validator' => Mockery::mock()->shouldReceive('validate')->andReturn(true)->getMock()
+            'data_validator' => Mockery::mock()->shouldReceive('validate')->andReturn(true)->getMock(),
+            'bugsnag_client' => $bugsnag_client_fake
         ]);
 
         $this->assertEquals('bar', $data_feed_downloader->data());
+        $this->assertEquals(['DataFileLoadedFromDisk'], $bugsnag_client_fake->recievedErrors());
     }
 
     public function testTheLastDownloadedFileCanBeRetrievedFromTheFileSystemIfTheLiveDataFileWasNotDownloadedDueToTimeout()
@@ -64,14 +69,19 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
             ->withContent('bar')
             ->at($this->root);
 
+        $bugsnag_client_fake = new BugsnagClientFake();
+
         $data_feed_downloader = new DataFeedDownloader([
             'curl' => $this->curl,
             'url' => 'https://www.french-property.com/timeout.php',
             'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
-            'data_validator' => Mockery::mock()->shouldReceive('validate')->andReturn(true)->getMock()
+            'data_validator' => Mockery::mock()->shouldReceive('validate')->andReturn(true)->getMock(),
+            'bugsnag_client' => $bugsnag_client_fake
         ]);
 
         $this->assertEquals('bar', $data_feed_downloader->data());
+        $this->assertEquals(['DataFileLoadedFromDisk'], $bugsnag_client_fake->recievedErrors());
+
     }
 
     public function testFileIsModifiedWhenDataValidatorIsNull()
@@ -87,6 +97,7 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
             'url' => 'http://www.example.com',
             'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
             //Validator not passed in - set to null
+            'bugsnag_client' => Mockery::mock()
         ]);
 
         $this->assertEquals('foo', $data_feed_downloader->data());
@@ -100,13 +111,37 @@ class DataFeedDownloaderTest extends PHPUnit_Framework_TestCase
 
         $this->curl->shouldReceive(['execute' => '{foo}', 'getInfo' => 200]);
 
+        $bugsnag_client_fake = new BugsnagClientFake();
+
         $data_feed_downloader = new DataFeedDownloader([
             'curl' => $this->curl,
             'url' => 'http://www.example.com',
             'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
-            'data_validator' => Mockery::mock()->shouldReceive('validate')->with('{foo}')->andReturn(false)->getMock()
+            'data_validator' => Mockery::mock()->shouldReceive('validate')->with('{foo}')->andReturn(false)->getMock(),
+            'bugsnag_client' => $bugsnag_client_fake
         ]);
 
         $this->assertEquals('bar', $data_feed_downloader->data());
+        $this->assertEquals(['DataFileLoadedFromDisk'], $bugsnag_client_fake->recievedErrors());
+    }
+}
+
+class BugsnagClientFake
+{
+    private $recieved_errors;
+
+    public function __construct()
+    {
+        $this->recieved_errors = [];
+    }
+
+    public function notifyError($error_type)
+    {
+        $this->recieved_errors[] = $error_type;
+    }
+
+    public function recievedErrors()
+    {
+        return $this->recieved_errors;
     }
 }
