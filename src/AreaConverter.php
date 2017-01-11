@@ -24,6 +24,10 @@ class AreaConverter
     {
         return $this->unitName($this->base_value, $this->base_unit_symbol);
     }
+    public function baseUnitSymbol()
+    {
+        return $this->base_unit_symbol;
+    }
 
     public function conversionUnitName()
     {
