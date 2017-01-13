@@ -58,4 +58,50 @@ class EnquiriesClientTest extends PHPUnit_Framework_TestCase
 
         $this->fail("Expected InvalidApiTokenException not thrown");
     }
+
+    public function testItThrowsClientExceptionWhenReponseCodeNot401()
+    {
+        $form_data = $this->exampleEnquiryFormData();
+
+        $guzzle_exception_double = new ClientExceptionDouble(400, 'something happened');
+
+        $mock_guzzle_client = Mockery::mock()
+            ->shouldReceive('post')->once()->with('api/enquiries', ['json' => $form_data])
+            ->andThrow($guzzle_exception_double)
+            ->getMock();
+
+        $enquiries_client = new EnquiriesClient($mock_guzzle_client);
+
+        try {
+            $enquiries_client->send($form_data);
+        } catch (Exception $e) {
+            $this->assertEquals($guzzle_exception_double, $e);
+            return;
+        }
+
+        $this->fail("Expected ClientException not thrown");
+    }
+
+    public function testItThrowsOtherExceptions()
+    {
+        $form_data = $this->exampleEnquiryFormData();
+
+        $some_exception = new InvalidArgumentException("you made a mistake somewhere");
+
+        $mock_guzzle_client = Mockery::mock()
+            ->shouldReceive('post')->once()->with('api/enquiries', ['json' => $form_data])
+            ->andThrow($some_exception)
+            ->getMock();
+
+        $enquiries_client = new EnquiriesClient($mock_guzzle_client);
+
+        try {
+            $enquiries_client->send($form_data);
+        } catch (Exception $e) {
+            $this->assertEquals($some_exception, $e);
+            return;
+        }
+
+        $this->fail("Expected InvalidArgumentException not thrown");
+    }
 }
