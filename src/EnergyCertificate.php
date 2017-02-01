@@ -22,7 +22,7 @@ abstract class EnergyCertificate
         if (isset($values['letter']) && in_array($values['letter'], ['A', 'B', 'C', 'D', 'E', 'F', 'G'], true)) {
             $this->letter = $values['letter'];
         } else {
-            $this->letter = '';
+            $this->letter = 'Unknown';
         }
     }
 
@@ -47,7 +47,7 @@ abstract class EnergyCertificate
                 $this->letter = 'G';
             }
         } else {
-            $this->number = '';
+            $this->number = 'Unknown';
         }
     }
 
@@ -74,14 +74,14 @@ abstract class EnergyCertificate
         return $this->numberIsSet() || $this->letterIsSet();
     }
 
-    private function numberIsSet()
+    public function numberIsSet()
     {
-        return ($this->number() != false) && ($this->number() != '?');
+        return ($this->number() != false) && ($this->number() != 'Unknown');
     }
 
-    private function letterIsSet()
+    public function letterIsSet()
     {
-        return ($this->letter() != false) && ($this->letter() != '?');
+        return ($this->letter() != false) && ($this->letter() != 'Unknown');
     }
 
     public function number()
