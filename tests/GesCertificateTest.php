@@ -19,7 +19,7 @@ class GesCertificateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(600, $subject->number());
 
         $subject = new GesCertificate(['number' => 601]);
-        $this->assertEquals('', $subject->number());
+        $this->assertEquals('Unknown', $subject->number());
     }
 
 
