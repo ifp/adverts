@@ -2,6 +2,8 @@
 
 namespace IFP\Adverts;
 
+use IFP\Data\DataFeedDownloader;
+
 class CurrencyBuilder
 {
     private $data_feed_downloader;

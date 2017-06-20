@@ -63,6 +63,8 @@ class SearchClient
                 $response = $this->client->request('POST', 'adverts/sales/search', $params);
 
             } else {
+//                dd($query_string);
+
                 $response = $this->client->get('adverts/sales/search?' . $query_string
                     //['debug' => true]
                 );
