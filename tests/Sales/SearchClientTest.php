@@ -1,10 +1,10 @@
 <?php
 
-use IFP\Adverts\AdvertNotFoundException;
-use IFP\Adverts\InvalidApiTokenException;
-use IFP\Adverts\InvalidSearchCriteriaException;
+use IFP\Adverts\Exceptions\AdvertNotFoundException;
+use IFP\Adverts\Exceptions\InvalidApiTokenException;
+use IFP\Adverts\Exceptions\InvalidSearchCriteriaException;
 use IFP\Adverts\Sales\SearchClient;
-use IFP\Adverts\StartPageOutOfBoundsException;
+use IFP\Adverts\Exceptions\StartPageOutOfBoundsException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
@@ -43,14 +43,13 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionWhenUsingAnInvalidApiToken()
     {
-        $base_url = 'http://search.french-property.app';
-        $token = 'invalid-api-token';
+        $search_path = 'adverts/sales/search';
 
         $client = Mockery::mock(Client::class);
         $client->shouldReceive('get')->andThrow(
             new ClientExceptionDouble(401, '{"errors":[{"title":"Start Page Out Of Bounds","meta":{"total_pages":"foo_page_count"}}]}'));
 
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         try {
             $subject->search([], 'GET');
@@ -63,14 +62,13 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItCanSearchWithNoConstraints()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $client_response = Mockery::mock();
         $client_response->shouldReceive('getBody')->andReturn('["foodata"]');
         $client = Mockery::mock(Client::class);
 
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         $client->shouldReceive('get')->with(MockeryHelper::expectedParameterContains('/search'))->andReturn($client_response);
 
@@ -79,13 +77,12 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItCanSearchWithSimpleValueConstraints()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $response = Mockery::mock('response', ['getBody' => '']);
         $client = Mockery::spy(Client::class, ['get' => $response]);
 
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         $subject->search([
             'minimum_price' => 150000,
@@ -96,12 +93,11 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItCanSearchWithArrayConstraints()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $response = Mockery::mock('response', ['getBody' => '']);
         $client = Mockery::spy(Client::class, ['get' => $response]);
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         $subject->search([
             'keywords_en_all' => ['bar', 'full'],
@@ -112,12 +108,11 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItCanSearchWithGeoConstraints()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $response = Mockery::mock('response', ['getBody' => '']);
         $client = Mockery::spy(Client::class, ['get' => $response]);
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         $subject->search([
             'geo' => [
@@ -132,12 +127,11 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItCanSortTheResults()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $response = Mockery::mock('response', ['getBody' => '']);
         $client = Mockery::spy(Client::class, ['get' => $response]);
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         $subject->search([
             'sort_by' => 'price',
@@ -150,12 +144,11 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItCanSpecifyPageSizeAndStartPage()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $response = Mockery::mock('response', ['getBody' => '']);
         $client = Mockery::spy(Client::class, ['get' => $response]);
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         $subject->search([
             'start_page' => 2000,
@@ -167,14 +160,13 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionWhenSearchingWithInvalidCriteria2()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $client = Mockery::mock(Client::class);
         $client->shouldReceive('get')->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?minimum_price=bananas'))->andThrow(
             new ClientExceptionDouble(400, '{"errors":[{"title":"fooerror","meta":{}}]}'));
 
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         try {
             $subject->search([
@@ -190,13 +182,12 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionWhenTheSearchEngineReturnsA404()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $client = Mockery::mock(Client::class);
         $client->shouldReceive('get')->andThrow( new ClientExceptionDouble(404, '{"errors":[{"title":"Start Page Out Of Bounds","meta":{"total_pages":"foo_page_count"}}]}') );
 
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         try {
             $subject->search([
@@ -214,12 +205,11 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItCanFindAnAdvertById()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $response = Mockery::mock('response', ['getBody' => '']);
         $client = Mockery::spy(Client::class, ['get' => $response]);
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         $subject->find('leggett-FP-56593DSE53');
 
@@ -228,14 +218,13 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionWhenAnAdvertCannotBeFoundById()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $client = Mockery::mock(Client::class);
         $client->shouldReceive('get')->with(MockeryHelper::expectedParameterEquals('adverts/sales/non-existent-id'))
             ->andThrow( new ClientExceptionDouble(404, '{"foo"}') );
 
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         try {
             $subject->find('non-existent-id');
@@ -248,12 +237,11 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
 
     public function testItCanFindAnAdvertByReference()
     {
-        $base_url = 'https://search.foo.bar';
-        $token = 'foobartoken';
+        $search_path = 'adverts/sales/search';
 
         $response = Mockery::mock('response', ['getBody' => '']);
         $client = Mockery::spy(Client::class, ['get' => $response]);
-        $subject = new SearchClient($client, $base_url, $token);
+        $subject = new SearchClient($client, $search_path);
 
         $subject->search([
             'reference' => 'myref'

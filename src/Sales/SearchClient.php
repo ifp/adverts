@@ -2,22 +2,25 @@
 
 namespace IFP\Adverts\Sales;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use IFP\Adverts\AdvertNotFoundException;
-use IFP\Adverts\InvalidApiTokenException;
-use IFP\Adverts\InvalidSearchCriteriaException;
-use IFP\Adverts\StartPageOutOfBoundsException;
+use GuzzleHttp\Exception\ConnectException;
+use IFP\Adverts\Exceptions\AdvertNotFoundException;
+use IFP\Adverts\Exceptions\InvalidApiTokenException;
+use IFP\Adverts\Exceptions\InvalidSearchCriteriaException;
+use IFP\Adverts\Exceptions\StartPageOutOfBoundsException;
+use IFP\Adverts\Exceptions\UnableToConnectToSearchException;
 
 class SearchClient
 {
     use QueryStringTrait;
 
     private $client;
+    private $search_path;
 
-    public function __construct($client, $base_url, $token)
+    public function __construct($client, $search_path)
     {
         $this->client = $client;
+        $this->search_path = $search_path;
     }
 
     public function find($id)
@@ -60,17 +63,18 @@ class SearchClient
                     //'debug' => true
                 ];
 
-                $response = $this->client->request('POST', 'adverts/sales/search', $params);
+                $response = $this->client->request('POST', $this->search_path, $params);
 
             } else {
-//                dd($query_string);
-
-                $response = $this->client->get('adverts/sales/search?' . $query_string
-                    //['debug' => true]
+                $response = $this->client->get($this->search_path . '?' . $query_string
+                //['debug' => true]
                 );
             }
 
-            return json_decode((string) $response->getBody(), true);
+            return json_decode((string)$response->getBody(), true);
+        } catch (ConnectException $e) {
+            throw new UnableToConnectToSearchException;
+
         } catch (ClientException $e) {
             switch ($e->getCode()) {
                 case 400:

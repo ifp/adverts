@@ -2,10 +2,8 @@
 
 namespace IFP\Adverts;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use IFP\Adverts\InvalidApiTokenException;
-use IFP\Adverts\InvalidSearchCriteriaException;
+use IFP\Adverts\Exceptions\InvalidApiTokenException;
 
 class EnquiriesClient
 {

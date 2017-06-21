@@ -1,6 +1,6 @@
 <?php
 
-use IFP\Adverts\InvalidPaginationDataException;
+use IFP\Adverts\Exceptions\InvalidPaginationDataException;
 use IFP\Adverts\Sales\SearchPaginator;
 
 class SearchPaginatorTest extends PHPUnit_Framework_TestCase
