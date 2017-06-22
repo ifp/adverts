@@ -30,6 +30,7 @@ class SearchClient
 
             return json_decode((string) $response->getBody(), true);
         } catch (ClientException $e) {
+
             switch ($e->getCode()) {
                 case 401:
                     throw new InvalidApiTokenException;
