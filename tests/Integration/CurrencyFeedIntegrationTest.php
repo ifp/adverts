@@ -1,14 +1,15 @@
 <?php
 
+require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/DataFeedDownloader.php');
+require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/Exceptions/UnableToDownloadDataException.php');
+require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/Exceptions/UnableToWriteDataToDiskException.php');
+require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/Exceptions/UnableToReadFileFromDiskException.php');
+
 use IFP\Adverts\Curl;
 use IFP\Adverts\CurrencyDataValidator;
-use IFP\Adverts\DataFeedDownloader;
-//use IFP\Adverts\UnableToDownloadDataException;
-//use IFP\Adverts\UnableToReadFileFromDiskException;
-//use IFP\Adverts\UnableToWriteDataToDiskException;
+use IFP\Data\DataFeedDownloader;
 use Mockery\Mock;
 use org\bovigo\vfs\vfsStream;
-
 
 class CurrencyFeedIntegrationTest extends PHPUnit_Framework_TestCase
 {

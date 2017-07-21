@@ -15,7 +15,7 @@ class SearchClient
 
     private $client;
 
-    public function __construct($client, $base_url, $token)
+    public function __construct($client, $base_url)
     {
         $this->client = $client;
     }
