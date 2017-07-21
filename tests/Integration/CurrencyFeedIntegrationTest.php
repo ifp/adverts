@@ -5,7 +5,7 @@ require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/Exceptions/UnableTo
 require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/Exceptions/UnableToWriteDataToDiskException.php');
 require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/Exceptions/UnableToReadFileFromDiskException.php');
 
-use IFP\Adverts\Curl;
+use IFP\Data\Curl;
 use IFP\Adverts\CurrencyDataValidator;
 use IFP\Data\DataFeedDownloader;
 use Mockery\Mock;

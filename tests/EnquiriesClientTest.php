@@ -1,9 +1,7 @@
 <?php
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use IFP\Adverts\EnquiriesClient;
-use IFP\Adverts\InvalidApiTokenException;
+use IFP\Adverts\Exceptions\InvalidApiTokenException;
 
 class EnquiriesClientTest extends PHPUnit_Framework_TestCase
 {
