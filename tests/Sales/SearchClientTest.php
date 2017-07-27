@@ -100,10 +100,10 @@ class SearchClientTest extends PHPUnit_Framework_TestCase
         $subject = new SearchClient($client, $search_path);
 
         $subject->search([
-            'keywords_en_all' => ['bar', 'full'],
+            'keywords_all' => ['bar', 'full'],
         ], 'GET');
 
-        $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?keywords_en_all=bar,full'));
+        $client->shouldHaveReceived("get")->with(MockeryHelper::expectedParameterEquals('adverts/sales/search?keywords_all=bar,full'));
     }
 
     public function testItCanSearchWithGeoConstraints()
