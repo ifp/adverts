@@ -2,6 +2,7 @@
 
 namespace IFP\Adverts\Sales;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use IFP\Adverts\Exceptions\AdvertNotFoundException;
@@ -17,7 +18,7 @@ class SearchClient
     private $client;
     private $search_path;
 
-    public function __construct($client, $search_path)
+    public function __construct(Client $client, $search_path)
     {
         $this->client = $client;
         $this->search_path = $search_path;
@@ -68,9 +69,11 @@ class SearchClient
 
             } else {
                 $response = $this->client->get($this->search_path . '?' . $query_string
-                //['debug' => true]
+//                , ['debug' => true]
                 );
             }
+
+//            dd(json_decode((string)$response->getBody(), true));
 
             return json_decode((string)$response->getBody(), true);
         } catch (ConnectException $e) {
