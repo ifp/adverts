@@ -14,8 +14,7 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.1",
-        "ifp/data": "dev-master"
+        "guzzlehttp/guzzle": "^6.1"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",
