@@ -28,14 +28,14 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
                 "dordogne",
                 "haute-loire",
             ],
-            "keywords_en_any" => "swimming pool",
+            "keywords_any" => "swimming pool",
         ];
 
         $base_url = '/sale-advert-search';
 
         $subject = new SearchSorter($base_url, $search_criteria);
 
-        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=price&sort_direction=asc', $subject->priceAscendingUrl());
+        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_any=swimming+pool&sort_by=price&sort_direction=asc', $subject->priceAscendingUrl());
     }
 
     public function testSorterCanCreateASortByPriceDescendingUrlForTheCurrentSearch()
@@ -59,14 +59,14 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
                 "dordogne",
                 "haute-loire",
             ],
-            "keywords_en_any" => "swimming pool",
+            "keywords_any" => "swimming pool",
         ];
 
         $base_url = '/sale-advert-search';
 
         $subject = new SearchSorter($base_url, $search_criteria);
 
-        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=price&sort_direction=desc', $subject->priceDescendingUrl());
+        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_any=swimming+pool&sort_by=price&sort_direction=desc', $subject->priceDescendingUrl());
     }
 
     public function testSorterCanCreateASortByDateDescendingUrlForTheCurrentSearch()
@@ -90,14 +90,14 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
                 "dordogne",
                 "haute-loire",
             ],
-            "keywords_en_any" => "swimming pool",
+            "keywords_any" => "swimming pool",
         ];
 
         $base_url = '/sale-advert-search';
 
         $subject = new SearchSorter($base_url, $search_criteria);
 
-        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=date&sort_direction=desc', $subject->dateDescendingUrl());
+        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_any=swimming+pool&sort_by=date&sort_direction=desc', $subject->dateDescendingUrl());
     }
 
     public function testSorterCanCreateASortByLandSizeDescendingUrlForTheCurrentSearch()
@@ -121,14 +121,14 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
                 "dordogne",
                 "haute-loire",
             ],
-            "keywords_en_any" => "swimming pool",
+            "keywords_any" => "swimming pool",
         ];
 
         $base_url = '/sale-advert-search';
 
         $subject = new SearchSorter($base_url, $search_criteria);
 
-        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_en_any=swimming+pool&sort_by=land_size&sort_direction=desc', $subject->landSizeDescendingUrl());
+        $this->assertEquals('/sale-advert-search?minimum_price=100000&maximum_price=2000000&minimum_bedrooms=1&maximum_bedrooms=6&minimum_land_size=300&maximum_land_size=400000&regions=aquitaine,centre&departments=dordogne,haute-loire&keywords_any=swimming+pool&sort_by=land_size&sort_direction=desc', $subject->landSizeDescendingUrl());
     }
 
     public function testSorterCanIdentifyPriceAscendingSortIsCurrentlySelected()
@@ -152,7 +152,7 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
                 "dordogne",
                 "haute-loire",
             ],
-            "keywords_en_any" => "swimming pool",
+            "keywords_any" => "swimming pool",
         ];
 
         $base_url = '/sale-advert-search';
@@ -183,7 +183,7 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
                 "dordogne",
                 "haute-loire",
             ],
-            "keywords_en_any" => "swimming pool",
+            "keywords_any" => "swimming pool",
         ];
 
         $base_url = '/sale-advert-search';
@@ -214,7 +214,7 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
                 "dordogne",
                 "haute-loire",
             ],
-            "keywords_en_any" => "swimming pool",
+            "keywords_any" => "swimming pool",
         ];
 
         $base_url = '/sale-advert-search';
@@ -245,7 +245,7 @@ class SearchSorterTest extends PHPUnit_Framework_TestCase
                 "dordogne",
                 "haute-loire",
             ],
-            "keywords_en_any" => "swimming pool",
+            "keywords_any" => "swimming pool",
         ];
 
         $base_url = '/sale-advert-search';

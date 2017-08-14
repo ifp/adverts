@@ -2,7 +2,7 @@
 
 namespace IFP\Adverts\Sales;
 
-use IFP\Adverts\InvalidPaginationDataException;
+use IFP\Adverts\Exceptions\InvalidPaginationDataException;
 
 class SearchPaginator
 {

@@ -1,7 +1,7 @@
 <?php
 
 use IFP\Adverts\CurrencyBuilder;
-use IFP\Adverts\DataFeedDownloader;
+use IFP\Data\DataFeedDownloader;
 
 class CurrencyBuilderTest extends PHPUnit_Framework_TestCase
 {
