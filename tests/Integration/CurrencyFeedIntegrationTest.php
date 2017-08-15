@@ -41,7 +41,7 @@ class CurrencyFeedIntegrationTest extends PHPUnit_Framework_TestCase
             'url' => 'http://www.example.com',
             'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
             'data_validator' => new CurrencyDataValidator(['foocurrency', 'barcurrency', 'abccurrency']),
-            'bugsnag_client' => Mockery::mock()->shouldReceive('notifyError')->once()->getMock()
+            'bugsnag_client' => Mockery::mock()->shouldReceive('notifyException')->once()->shouldReceive('notifyError')->once()->getMock()
         ]);
 
         $this->assertEquals('bar', $data_feed_downloader->data());
