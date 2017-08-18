@@ -7,6 +7,12 @@
             "email": "ingram.monk@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ifp/data"
+        }
+    ],
     "require": {
         "guzzlehttp/guzzle": "^6.1"
     },

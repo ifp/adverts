@@ -1,14 +1,15 @@
 <?php
 
-use IFP\Adverts\Curl;
+require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/DataFeedDownloader.php');
+require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/Exceptions/UnableToDownloadDataException.php');
+require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/Exceptions/UnableToWriteDataToDiskException.php');
+require_once(dirname(dirname(dirname(__DIR__))) . '/data/src/Exceptions/UnableToReadFileFromDiskException.php');
+
+use IFP\Data\Curl;
 use IFP\Adverts\CurrencyDataValidator;
-use IFP\Adverts\DataFeedDownloader;
-//use IFP\Adverts\UnableToDownloadDataException;
-//use IFP\Adverts\UnableToReadFileFromDiskException;
-//use IFP\Adverts\UnableToWriteDataToDiskException;
+use IFP\Data\DataFeedDownloader;
 use Mockery\Mock;
 use org\bovigo\vfs\vfsStream;
-
 
 class CurrencyFeedIntegrationTest extends PHPUnit_Framework_TestCase
 {
@@ -40,7 +41,7 @@ class CurrencyFeedIntegrationTest extends PHPUnit_Framework_TestCase
             'url' => 'http://www.example.com',
             'downloaded_file_save_location' => $this->root->url() . '/foo.txt',
             'data_validator' => new CurrencyDataValidator(['foocurrency', 'barcurrency', 'abccurrency']),
-            'bugsnag_client' => Mockery::mock()->shouldReceive('notifyError')->once()->getMock()
+            'bugsnag_client' => Mockery::mock()->shouldReceive('notifyException')->once()->shouldReceive('notifyError')->once()->getMock()
         ]);
 
         $this->assertEquals('bar', $data_feed_downloader->data());
