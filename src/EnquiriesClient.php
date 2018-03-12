@@ -16,6 +16,8 @@ class EnquiriesClient
 
     public function send($form_data)
     {
+        $form_data['enquirer']['user_id'] = null;
+
         try {
             $this->client->post('api/enquiries', ['json' => $form_data]);
         } catch (ClientException $e) {
