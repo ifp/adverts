@@ -35,33 +35,39 @@ class SearchSorter
 
     public function priceAscendingUrl()
     {
-        $query_vars = $this->search_criteria;
-        $query_vars['sort_by'] = 'price';
-        $query_vars['sort_direction'] = 'asc';
-        return $this->base_url . '?' . $this->buildQueryString($query_vars);
+        return $this->sortUrl('price', 'asc');
     }
 
     public function priceDescendingUrl()
     {
-        $query_vars = $this->search_criteria;
-        $query_vars['sort_by'] = 'price';
-        $query_vars['sort_direction'] = 'desc';
-        return $this->base_url . '?' . $this->buildQueryString($query_vars);
+        return $this->sortUrl('price', 'desc');
     }
 
     public function dateDescendingUrl()
     {
-        $query_vars = $this->search_criteria;
-        $query_vars['sort_by'] = 'date';
-        $query_vars['sort_direction'] = 'desc';
-        return $this->base_url . '?' . $this->buildQueryString($query_vars);
+        return $this->sortUrl('date', 'desc');
     }
 
     public function landSizeDescendingUrl()
     {
+        return $this->sortUrl('land_size', 'desc');
+    }
+
+    public function savedAtDescendingUrl()
+    {
+        return $this->sortUrl('saved_at', 'desc');
+    }
+
+    public function savedAtAscendingUrl()
+    {
+        return $this->sortUrl('saved_at', 'asc');
+    }
+
+    private function sortUrl($sort_by, $sort_direction)
+    {
         $query_vars = $this->search_criteria;
-        $query_vars['sort_by'] = 'land_size';
-        $query_vars['sort_direction'] = 'desc';
+        $query_vars['sort_by'] = $sort_by;
+        $query_vars['sort_direction'] = $sort_direction;
         return $this->base_url . '?' . $this->buildQueryString($query_vars);
     }
 }
