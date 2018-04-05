@@ -68,6 +68,11 @@ class SearchSorter
         $query_vars = $this->search_criteria;
         $query_vars['sort_by'] = $sort_by;
         $query_vars['sort_direction'] = $sort_direction;
-        return $this->base_url . '?' . $this->buildQueryString($query_vars);
+        return $this->base_url . '?' . $this->decodeUrlEncodedCommas($this->buildQueryString($query_vars));
+    }
+
+    private function decodeUrlEncodedCommas($string)
+    {
+        return str_replace('%2C', ',', $string);
     }
 }

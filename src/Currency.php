@@ -10,6 +10,7 @@ class Currency
 
     public function __construct($rates)
     {
+        //dd($rates);
         $this->rates = $rates;
 
         $this->code = 'EUR';
