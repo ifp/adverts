@@ -251,9 +251,14 @@ class SearchPaginator
             $query_vars = $this->search_criteria;
             unset($query_vars['start_page']);
             $query_vars['start_page'] = $start_page;
-            return $this->base_url . '?' . $this->buildQueryString($query_vars);
+            return $this->base_url . '?' . $this->decodeUrlEncodedCommas($this->buildQueryString($query_vars));
         }
 
         return false;
+    }
+
+    private function decodeUrlEncodedCommas($string)
+    {
+        return str_replace('%2C', ',', $string);
     }
 }
