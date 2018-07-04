@@ -63,7 +63,7 @@ class Currency
             $code = $this->code();
         }
 
-        return (int)floor($amount * $this->rates[$code]);
+        return (int)floor((int)$amount * $this->rates[$code]);
     }
 
     public function convertToEuros($amount = 0, $code = null)
