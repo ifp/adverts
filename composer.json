@@ -23,8 +23,8 @@
     },
     "autoload": {
         "psr-4": {
-            "IFP\\Adverts\\": "src/",
-            "IFP\\Adverts\\Tests\\": "tests/"
+            "IFP\\Adverts\\": "src/adverts/",
+            "IFP\\Adverts\\Tests\\": "tests/adverts/"
         }
     }
 }
