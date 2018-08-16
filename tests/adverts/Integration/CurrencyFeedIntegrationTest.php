@@ -1,9 +1,9 @@
 <?php
 
-require_once(dirname(dirname(dirname(dirname(__DIR__)))) . '/data/src/DataFeedDownloader.php');
-require_once(dirname(dirname(dirname(dirname(__DIR__)))) . '/data/src/Exceptions/UnableToDownloadDataException.php');
-require_once(dirname(dirname(dirname(dirname(__DIR__)))) . '/data/src/Exceptions/UnableToWriteDataToDiskException.php');
-require_once(dirname(dirname(dirname(dirname(__DIR__)))) . '/data/src/Exceptions/UnableToReadFileFromDiskException.php');
+require_once(dirname(dirname(dirname(dirname(__DIR__)))) . '/data/src/data/DataFeedDownloader.php');
+require_once(dirname(dirname(dirname(dirname(__DIR__)))) . '/data/src/data/Exceptions/UnableToDownloadDataException.php');
+require_once(dirname(dirname(dirname(dirname(__DIR__)))) . '/data/src/data/Exceptions/UnableToWriteDataToDiskException.php');
+require_once(dirname(dirname(dirname(dirname(__DIR__)))) . '/data/src/data/Exceptions/UnableToReadFileFromDiskException.php');
 
 use IFP\Data\Curl;
 use IFP\Adverts\CurrencyDataValidator;
